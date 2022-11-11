@@ -1,0 +1,17 @@
+1 - Assistant that help visually imparied people with multiple modules (check money, clothes color, health, location detector, ...) through a chatbot.
+
+2 - Gym trainer: check through a video a specific exercise and tell the user about inaccuracies in the exercise movement.
+
+3 - VR Supermarket : online store + physical store + invitation + (like a videogame. i.e. moving avatars)  + cutomised for a certain user + check for cheapest price
+
+4 - Teaching Arabic language (Or other languages): customise pronounciation (تشكيل).
+
+5 - How to build a QA model : MCQ + TF + Essay question.
+
+6 - Football player analyser : To categorise players based on a video of the player
+
+7 - How to interpert deep learning model
+
+8 - Educational games (e.g. teach a programming language)
+
+9 - Programming by voice (customised voice to text (for higher accuraccies)+ compiler + error correction + suggestion )
