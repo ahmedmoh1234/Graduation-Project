@@ -1,0 +1,35 @@
+1 - Assistant that helps visually impaired people with multiple modules 
+	- Check Money
+	- Scene descriptor
+	- Face and emotions detector
+	- Chatbot (Input: speech, Output: speech)
+		- Main features of a chatbot:
+		- Open application
+		- Call people
+		- Take notes
+		- Schedule events
+		- Messages reader/sender
+	- Navigator (?)
+
+2 - Spoilers blocker
+
+3 - Sentiment analysis (Monitor screen, psychological analysis (depression detection))
+(Could be added as an extra module to the virtual assistant w/out monitoring the screen)
+
+4 - Fake news detector
+
+5 - Music recommendation based on:
+	- Mood from facial expressions
+	- User's playlists/likes
+
+6 - Programming by voice (customised voice to text (for higher accuraccies)+ compiler + error correction + suggestion )
+
+7 - Time scheduler + notifier
+
+---------------------------------------------------------------------------------------------------------------------
+
+8 - Gym trainer: check through a video a specific exercise and tell the user about inaccuracies in the exercise movement.
+
+9 - Teaching Arabic language (Or other languages): customise pronounciation (تشكيل).
+
+10 - Football player analyser : To categorise players based on a video of the player
