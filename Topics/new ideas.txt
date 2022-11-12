@@ -10,6 +10,7 @@
 		- Schedule events
 		- Messages reader/sender
 	- Navigator (?)
+	- Scanner a paper and text to speech
 
 2 - Spoilers blocker
 
