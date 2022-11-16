@@ -1,0 +1,21 @@
+5:23 PM 16-Nov-22
+
+-Categorise the features into main and secondary features
+	Main features:
+	1- Get distance from images and walking 
+	2-
+	3-
+	4-
+
+	Secondary features:
+	-
+	-
+	-
+
+- Create an initial main design (a block diagram for each main feature)
+
+- Create a secondary design ( a block diagram with all features)
+
+- Start implementing a prototype
+
+- Write the report based on the template the Dr. will send
