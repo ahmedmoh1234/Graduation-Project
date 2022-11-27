@@ -3,18 +3,13 @@
 -Categorise the features into main and secondary features
 	Main features:
 	1- Get distance from images and walking 
-	2-
-	3-
-	4-
-
-	Secondary features:
-	-
-	-
-	-
+	2- Recognizes friends and describes people around you, including their emotions
+	3- Provides audio guidance to capture a printed page and recognizes the text, along with its original formatting then speaks the document
+	
 
 - Create an initial main design (a block diagram for each main feature)
 
-- Create a secondary design ( a block diagram with all features)
+- Create a secondary design (a block diagram with all features)
 
 - Start implementing a prototype
 
