@@ -27,7 +27,8 @@ while True:
 
     #Draw a rectangle around the detected faces
     for (x, y, w, h) in faces:
-        cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+        drawColor = (0, 255, 0)
+        cv2.rectangle(frame, (x, y), (x+w, y+h), drawColor, 2)
 
     #Display the video
     cv2.imshow('Video', frame)
