@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
+import 'dart:convert';
 import 'config.dart';
 
 void main() {
@@ -54,7 +55,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   /// Each time to start a speech recognition session
   void _startListening() async {
-    await _speechToText.listen(onResult: _onSpeechResult);
+    await _speechToText.listen(
+      onResult: _onSpeechResult,
+    );
     setState(() {});
   }
 
@@ -72,10 +75,11 @@ class _MyHomePageState extends State<MyHomePage> {
   void _onSpeechResult(SpeechRecognitionResult result) {
     setState(() {
       _lastWords = result.recognizedWords;
+      _sendText(_lastWords);
     });
   }
 
-  Future<String> _httpRequest() async {
+  Future<String> _test() async {
     var url = Uri.parse('http://$IP_ADDRESS/test');
     var response = await http.post(
       url,
@@ -90,10 +94,22 @@ class _MyHomePageState extends State<MyHomePage> {
     return response.body;
   }
 
-  void _changeText() {
-    setState(() {
-      _httpRequest().then((value) => _text = value);
-    });
+  Future<void> _sendText(String text) async {
+    var url = Uri.parse('http://$IP_ADDRESS/command');
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(
+        <String, String>{
+          "command": text,
+        },
+      ),
+    );
+
+    // print('Response status: ${response.statusCode}');
+    // print('Response body: ${response.body}');
   }
 
   @override
