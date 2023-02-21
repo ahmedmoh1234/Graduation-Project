@@ -27,9 +27,6 @@ class _HomeState extends State<Home> {
   void _initSpeech() async {
     print("Initializing speech");
     _speechEnabled = await _speechToText.initialize();
-    // _speechToText.initialize().then((value) {
-    //   print('DEBUG Speech enabled: $value');
-    // });
     setState(() {});
   }
 

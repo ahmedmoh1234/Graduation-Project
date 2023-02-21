@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:nerdo/home.dart';
-// import 'ContactUs.dart';
-// import 'Settings.dart';
-// import 'profile.dart';
-// import 'booking_history.dart';
-// import 'how_it_works.dart';
+import 'chatbot.dart';
 
 class Menu extends StatefulWidget {
   String token = "";
@@ -31,6 +26,16 @@ class Menu extends StatefulWidget {
 
   @override
   State<Menu> createState() => _MenuState();
+}
+
+void _goToChatbot(BuildContext ctx) {
+  Navigator.of(ctx).push(
+    MaterialPageRoute(
+      builder: (_) {
+        return ChatBot();
+      },
+    ),
+  );
 }
 
 class _MenuState extends State<Menu> {
@@ -131,7 +136,9 @@ class _MenuState extends State<Menu> {
           ),
 
           ListTile(
-            onTap: () {},
+            onTap: () {
+              _goToChatbot(context);
+            },
             leading: const Icon(
               Icons.textsms_rounded,
               size: 27,
