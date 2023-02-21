@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'chatbot.dart';
+import 'TTSTest.dart';
 
 class Menu extends StatefulWidget {
   String token = "";
@@ -8,20 +9,11 @@ class Menu extends StatefulWidget {
   final String name;
   final String email;
   final String gender;
-  final String phone;
-  final String carLicense;
-  final String carBrand;
-  final String carColour;
 
   Menu({
     required this.name,
     required this.email,
     required this.gender,
-    required this.token,
-    required this.phone,
-    required this.carLicense,
-    required this.carBrand,
-    required this.carColour,
   });
 
   @override
@@ -38,17 +30,17 @@ void _goToChatbot(BuildContext ctx) {
   );
 }
 
+void _goToTTS(BuildContext ctx) {
+  Navigator.of(ctx).push(
+    MaterialPageRoute(
+      builder: (_) {
+        return TTSTest();
+      },
+    ),
+  );
+}
+
 class _MenuState extends State<Menu> {
-  bool _usernameIsEntered = false;
-  bool _passwordIsEntered = false;
-  String _username = '';
-  String _password = '';
-
-  double screenWidth = 0;
-  double screenHeight = 0;
-
-  final String title = "Rakeny";
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -327,6 +319,22 @@ class _MenuState extends State<Menu> {
             ),
             onTap: () {
               SystemNavigator.pop();
+            },
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.thermostat,
+              size: 27,
+            ),
+            title: const Text(
+              'Text To Speech Widget (Test))',
+              style: TextStyle(
+                fontSize: 17,
+                fontFamily: 'RalewayMedium',
+              ),
+            ),
+            onTap: () {
+              _goToTTS(context);
             },
           ),
         ],
