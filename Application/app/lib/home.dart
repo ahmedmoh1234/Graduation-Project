@@ -4,6 +4,8 @@ import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'dart:convert';
 import 'config.dart';
+import 'menu.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -94,48 +96,73 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Speech Demo'),
+        centerTitle: true,
+        title: const Text('This is the Home Page'),
+        backgroundColor: const Color(0xFF106cb5),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(16),
-              child: Text(
-                'Recognized words:',
-                style: TextStyle(fontSize: 20.0),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.all(16),
-                child: Text(
-                  // If listening is active show the recognized words
-                  _speechToText.isListening
-                      ? '$_lastWords'
-                      // If listening isn't active but could be tell the user
-                      // how to start it, otherwise indicate that speech
-                      // recognition is not yet ready or not supported on
-                      // the target device
-                      : _speechEnabled
-                          ? _lastWords == ''
-                              ? 'Tap the microphone to start listening...'
-                              : _lastWords
-                          : 'Speech not available',
-                ),
-              ),
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Image.asset(
+              iconImagePath,
+              color: Colors.white.withOpacity(0.2),
+              colorBlendMode: BlendMode.modulate,
             ),
           ],
         ),
+        // child: Column(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: <Widget>[
+        //     Container(
+        //       padding: EdgeInsets.all(16),
+        //       child: Text(
+        //         'Recognized words:',
+        //         style: TextStyle(fontSize: 20.0),
+        //       ),
+        //     ),
+        //     Expanded(
+        //       child: Container(
+        //         padding: EdgeInsets.all(16),
+        //         child: Text(
+        //           // If listening is active show the recognized words
+        //           _speechToText.isListening
+        //               ? '$_lastWords'
+        //               // If listening isn't active but could be tell the user
+        //               // how to start it, otherwise indicate that speech
+        //               // recognition is not yet ready or not supported on
+        //               // the target device
+        //               : _speechEnabled
+        //                   ? _lastWords == ''
+        //                       ? 'Tap the microphone to start listening...'
+        //                       : _lastWords
+        //                   : 'Speech not available',
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed:
-            // If not yet listening for speech start, otherwise stop
-            _speechToText.isNotListening ? _startListening : _stopListening,
-        tooltip: 'Listen',
-        child: Icon(_speechToText.isNotListening ? Icons.mic_off : Icons.mic),
+
+      drawer: Menu(
+        name: 'Nader',
+        email: 'naderyouhanna@gmail.com',
+        gender: 'Male',
+        token: 'aa',
+        phone: '+201285003523',
+        carLicense: '3015GD',
+        carBrand: 'Renault',
+        carColour: 'Red',
       ),
+
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed:
+      //       // If not yet listening for speech start, otherwise stop
+      //       _speechToText.isNotListening ? _startListening : _stopListening,
+      //   tooltip: 'Listen',
+      //   child: Icon(_speechToText.isNotListening ? Icons.mic_off : Icons.mic),
+      // ),
     );
   }
 }
