@@ -17,7 +17,7 @@ class _HomeState extends State<Home> {
   double volume = 0.5;
   double pitch = 1.0;
   double rate = 0.5;
-  String? _newVoiceText = '''Hi, this is the Home Page
+  final String _voiceText = '''Hi, this is the Home Page
   Please speak the module name to navigate to it''';
   TtsState ttsState = TtsState.stopped;
 
@@ -36,25 +36,11 @@ class _HomeState extends State<Home> {
     await flutterTts.setSpeechRate(rate);
     await flutterTts.setPitch(pitch);
 
-    if (_newVoiceText != null) {
-      if (_newVoiceText!.isNotEmpty) {
-        await flutterTts.speak(_newVoiceText!);
-      }
-    }
+    await flutterTts.speak(_voiceText);
   }
 
   Future _setAwaitOptions() async {
     await flutterTts.awaitSpeakCompletion(true);
-  }
-
-  Future _stop() async {
-    var result = await flutterTts.stop();
-    if (result == 1) setState(() => ttsState = TtsState.stopped);
-  }
-
-  Future _pause() async {
-    var result = await flutterTts.pause();
-    if (result == 1) setState(() => ttsState = TtsState.paused);
   }
 
   @override
@@ -128,10 +114,6 @@ class _HomeState extends State<Home> {
     });
   }
 
-  Future<dynamic> _getLanguages() async => await flutterTts.getLanguages;
-
-  Future<dynamic> _getEngines() async => await flutterTts.getEngines;
-
   Future _getDefaultEngine() async {
     var engine = await flutterTts.getDefaultEngine;
     if (engine != null) {
@@ -150,7 +132,9 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     initTts();
-    _speak();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _speak(),
+    );
   }
 
   @override

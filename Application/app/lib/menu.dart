@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'chatbot.dart';
 import 'TTSTest.dart';
+import 'scene_descriptor.dart';
 
-class Menu extends StatefulWidget {
+class Menu extends StatelessWidget {
   String token = "";
 
   final String name;
@@ -15,32 +16,36 @@ class Menu extends StatefulWidget {
     required this.email,
     required this.gender,
   });
+  void _goToChatbot(BuildContext ctx) {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return ChatBot();
+        },
+      ),
+    );
+  }
 
-  @override
-  State<Menu> createState() => _MenuState();
-}
+  void _goToTTS(BuildContext ctx) {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return TTSTest();
+        },
+      ),
+    );
+  }
 
-void _goToChatbot(BuildContext ctx) {
-  Navigator.of(ctx).push(
-    MaterialPageRoute(
-      builder: (_) {
-        return ChatBot();
-      },
-    ),
-  );
-}
+  void _goToSceneDescriptor(BuildContext ctx) {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return SceneDescriptor();
+        },
+      ),
+    );
+  }
 
-void _goToTTS(BuildContext ctx) {
-  Navigator.of(ctx).push(
-    MaterialPageRoute(
-      builder: (_) {
-        return TTSTest();
-      },
-    ),
-  );
-}
-
-class _MenuState extends State<Menu> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -58,13 +63,13 @@ class _MenuState extends State<Menu> {
               ),
             ),
             accountName: Text(
-              widget.name,
+              name,
               style: const TextStyle(
                 fontSize: 18,
               ),
             ),
             accountEmail: Text(
-              widget.email,
+              email,
             ),
             currentAccountPicture: CircleAvatar(
               child: ClipOval(
@@ -113,7 +118,9 @@ class _MenuState extends State<Menu> {
             },
           ),
           ListTile(
-            onTap: () {},
+            onTap: () {
+              _goToSceneDescriptor(context);
+            },
             leading: const Icon(
               Icons.camera_alt_rounded,
               size: 27,

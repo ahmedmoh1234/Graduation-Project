@@ -13,15 +13,24 @@ class _StartUpState extends State<StartUp> {
       MaterialPageRoute(builder: (_) {
         return Home();
       }),
+    ).then((_) {
+      _goToHomeDelayed(context);
+    });
+  }
+
+  void _goToHomeDelayed(BuildContext ctx) {
+    Future.delayed(
+      const Duration(seconds: 3),
+      () => _goToHome(ctx),
     );
   }
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(
-      Duration(seconds: 2),
-      () => _goToHome(context),
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _goToHomeDelayed(context),
     );
   }
 
