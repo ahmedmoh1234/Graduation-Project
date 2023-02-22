@@ -1,22 +1,31 @@
-import 'package:flutter/material.dart';
-import 'config.dart';
 import 'package:camera/camera.dart';
-import 'main.dart';
+import 'package:flutter/material.dart';
 
-class SceneDescriptor extends StatefulWidget {
-  const SceneDescriptor({super.key});
+late List<CameraDescription> _cameras;
 
-  @override
-  State<SceneDescriptor> createState() => _SceneDescriptorState();
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  _cameras = await availableCameras();
+  runApp(const CameraApp());
 }
 
-class _SceneDescriptorState extends State<SceneDescriptor> {
+/// CameraApp is the Main Application.
+class CameraApp extends StatefulWidget {
+  /// Default Constructor
+  const CameraApp({Key? key}) : super(key: key);
+
+  @override
+  State<CameraApp> createState() => _CameraAppState();
+}
+
+class _CameraAppState extends State<CameraApp> {
   late CameraController controller;
 
   @override
   void initState() {
     super.initState();
-    controller = CameraController(cameras[0], ResolutionPreset.max);
+    controller = CameraController(_cameras[0], ResolutionPreset.max);
     controller.initialize().then((_) {
       if (!mounted) {
         return;
@@ -44,13 +53,11 @@ class _SceneDescriptorState extends State<SceneDescriptor> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Scene Descriptor'),
-        backgroundColor: const Color(0xFF106cb5),
-      ),
-      body: CameraPreview(controller),
+    if (!controller.value.isInitialized) {
+      return Container();
+    }
+    return MaterialApp(
+      home: CameraPreview(controller),
     );
   }
 }
