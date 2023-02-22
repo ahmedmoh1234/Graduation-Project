@@ -183,6 +183,7 @@ class _TTSTestState extends State<TTSTest> {
   void changedLanguageDropDownItem(String? selectedType) {
     setState(() {
       language = selectedType;
+      print('LANGUAGE: $language');
       flutterTts.setLanguage(language!);
       if (isAndroid) {
         flutterTts
