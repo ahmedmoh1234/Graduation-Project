@@ -3,3 +3,5 @@ Face recognition
 https://machinelearningmastery.com/how-to-develop-a-face-recognition-system-using-facenet-in-keras-and-an-svm-classifier/
 
 https://github.com/davidsandberg/facenet
+
+https://github.com/biplob004/pytorch_face_recognition/blob/main/example1.ipynb

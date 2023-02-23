@@ -13,35 +13,51 @@ class FaceDetector:
     # Both pretrained models were trained on 160x160 px images, so will perform best if applied to images resized to this shape. For best results, images should also be cropped to the face using MTCNN
     pretrainedModel = InceptionResnetV1(pretrained='vggface2').eval()
 
+    trainedModelPath = ""
 
-    
+    def __init__(self) :
+        if "trainedModel" in os.listdir():
+            if os.listdir("trainedModel") != []:
+                self.trainedModelPath = "trainedModel/" + os.listdir("trainedModel")[0]
+            else:
+                self.trainedModelPath = self.train()
+        else:
+            os.mkdir("trainedModel")
+            self.trainedModelPath = self.train()
 
-    def train(self):
+
+    def train(self, trainingOutput="./trainedModel", datasetPath = "./images"):
         def collate_fn(x):
             return x[0]
         #This will load images into dataset.
         #Images should be in a folder named "images" in the same directory as this file.
         #inside the "images" folder, there should be a folder for each person with their name as the folder name, and each person's folder should contain their images.
-        dataset = datasets.ImageFolder("images")
+        dataset = datasets.ImageFolder(datasetPath)
         #dataset is a dictionary with the key being the name of the person and the value being their ID
-
+        
         names = list(dataset.class_to_idx.keys()) #list of names of people in the photos folder
         namesStr = "" #string of names of people in the photos folder
         for name in names:
             namesStr += name + "_"
+            #Add the no of photos of each person to the trained model file name
+            namesStr += str(len(os.listdir(datasetPath + "/" + name))) + "_"
+            
+
+        namesStr = namesStr.rstrip("_")
 
         namesStr += ".pt"
 
         # print(f"namesStr: {namesStr}")
 
-        if namesStr in os.listdir(): #if the file name is already created, then no need to create it again
-            return
+        if namesStr in os.listdir(trainingOutput): #if the file name is already created, then no need to create it again
+            return ""
+        
+        # print("Training...")
 
         #Swap the key and value of the dictionary
         id_to_name = {v: k for k, v in dataset.class_to_idx.items()}
         loader = DataLoader(dataset, collate_fn=collate_fn)
 
-        face_list = [] # list of cropped faces from photos folder
         name_list = [] # list of names corrospoing to cropped photos
         embedding_list = [] # list of embeding matrix after conversion from cropped faces to embedding matrix using resnet
 
@@ -54,34 +70,38 @@ class FaceDetector:
 
         data = [embedding_list, name_list]
 
-        #Creating a file name from names of people in the photos folder
-        fileName = ""
-        #remove duplicates from name_list
-        name_list = list(dict.fromkeys(name_list))
+        # #Creating a file name from names of people in the photos folder
+        # fileName = ""
+        # #remove duplicates from name_list
+        # name_list = list(dict.fromkeys(name_list))
 
-        for name in name_list:
-            fileName += name + "_" 
-        torch.save(data, fileName + ".pt" ) # saving data.pt file
+        # for name in name_list:
+        #     fileName += name + "_" 
 
-    
+        # fileName = fileName.rstrip("_")
+
+        outputFinal = trainingOutput +"/" +  namesStr
+        # print(f"fileName: {outputFinal}")
+        torch.save(data, outputFinal ) # saving data.pt file
+
+        return outputFinal
 
 
-    
-
-
-    
-
-    def face_match(self,img_path, data_path): # img_path= lcation of photo, data_path= location of data.pt 
-
-        self.train()
-
+    def faceMatch(self,img_path, threshold): # img_path= lcation of photo, data_path= location of data.pt 
         # getting embedding matrix of the given img
         img = Image.open(img_path)
         face, prob = self.mtcnn(img, return_prob=True) # returns cropped face and probability
         emb = self.pretrainedModel(face.unsqueeze(0)).detach() # detech is to make required gradient false
         
+        # print(f"Loading {data_path}")
         # load the .pt file
-        saved_data = torch.load(data_path)
+        if self.trainedModelPath != "":
+            saved_data = torch.load(self.trainedModelPath)
+        else:
+            # print("No trained model found, training...")
+            self.trainedModelPath = self.train()
+            saved_data = torch.load(self.trainedModelPath)
+
         embedding_list = saved_data[0] # getting embedding data
         name_list = saved_data[1] # getting list of names
         dist_list = [] # list of matched distances, minimum distance is used to identify the person
@@ -91,14 +111,27 @@ class FaceDetector:
             dist_list.append(dist)
             
         idx_min = dist_list.index(min(dist_list))
-        return (name_list[idx_min], min(dist_list))
+
+        if min(dist_list)>threshold:
+            return "Unknown"
+        else:
+            return str(name_list[idx_min])
 
 
+    def getAvailableFaces(self):    #Returns a string of all the available faces separated by commas
+        names = ""
+        for name in os.listdir("./images"):
+            names += name + ","
+        names = names.rstrip(",")
+        return names
 
 
+if __name__ == "__main__":
+    fd = FaceDetector()
+    
+    result = fd.faceMatch('naderTest.jpg',1)
 
-fd = FaceDetector()
-result = fd.face_match('moazTest.jpg', 'Ismail_Moaz_Mostafa_Nader_.pt')
+    print(f"Faced matched with {result}")
 
-print(f"Faced matched with {result[0]} with a distance of {result[1]}")
+    print(fd.getAvailableFaces())
 
