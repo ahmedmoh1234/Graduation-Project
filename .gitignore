@@ -1,3 +1,4 @@
-*.pt
+Datasets/
 *.pkl
+*.pt
 predictions/
