@@ -1,4 +1,5 @@
-import cv2.cv2 as cv2
+# import cv2.cv2 as cv2
+import cv2
 import numpy as np
 
 from utils.image_classifier import ImageClassifier, NO_FACE_LABEL
@@ -57,13 +58,14 @@ class RealTimeEmotionDetector:
     vidCapture = None
 
     def __init__(self, classifier_model: ImageClassifier):
-        self.__init_video_capture(camera_idx=0, frame_w=FRAME_WIDTH, frame_h=FRAME_HEIGHT)
+        # self.__init_video_capture(camera_idx=0, frame_w=FRAME_WIDTH, frame_h=FRAME_HEIGHT)
         self.classifier = classifier_model
 
     def __init_video_capture(self, camera_idx: int, frame_w: int, frame_h: int):
         self.vidCapture = cv2.VideoCapture(camera_idx)
         self.vidCapture.set(cv2.CAP_PROP_FRAME_WIDTH, frame_w)
         self.vidCapture.set(cv2.CAP_PROP_FRAME_HEIGHT, frame_h)
+
 
     def read_frame(self) -> np.ndarray:
         rect, frame = self.vidCapture.read()
@@ -104,6 +106,19 @@ class RealTimeEmotionDetector:
         cv2.destroyAllWindows()
         self.vidCapture.release()
 
+    def executeWithImage(self, img):
+        predicted_labels = self.classifier.classify(img=self.transform_img(img=img))
+        rectangles = self.classifier.extract_face_rectangle(img=img)
+        landmark_points_list = self.classifier.extract_landmark_points(img=img)
+        for lbl, rectangle, lm_points in zip(predicted_labels, rectangles, landmark_points_list):
+            draw_face_rectangle(BoundingBox(*rectangle), img)
+            draw_landmark_points(points=lm_points, img=img)
+            write_label(rectangle[0], rectangle[1], label=lbl, img=img)
+            print('[INFO] Predicted Labels:', predicted_labels)
+
+        while(cv2.waitKey(1) != ord('q')):
+            cv2.imshow('Emotion Detection', img)
+        return img
 
 def run_real_time_emotion_detector(
         classifier_algorithm: str,
@@ -127,13 +142,50 @@ def run_real_time_emotion_detector(
     print('[INFO] Opening camera, press "q" to exit..')
     RealTimeEmotionDetector(classifier_model=classifier).execute()
 
+def runEmotionDetectionImg(classifier_algorithm: str,
+        predictor_path: str,
+        dataset_csv: str,
+        img,
+        dataset_images_dir: str = None):
+    from utils.data_land_marker import LandMarker
+    from utils.image_classifier import ImageClassifier
+    from os.path import isfile
 
-if __name__ == "__main__":
-    """The value of the parameters can change depending on the case."""
-    run_real_time_emotion_detector(
+    land_marker = LandMarker(landmark_predictor_path=predictor_path)
+
+    if not isfile(dataset_csv):  # If data-set not built before.
+        print('[INFO]', f'Dataset file: "{dataset_csv}" could not found.')
+        from data_preparer import run_data_preparer
+        run_data_preparer(land_marker, dataset_images_dir, dataset_csv)
+    else:
+        print('[INFO]', f'Dataset file: "{dataset_csv}" found.')
+
+    classifier = ImageClassifier(csv_path=dataset_csv, algorithm=classifier_algorithm, land_marker=land_marker)
+    print('[INFO] Opening camera, press "q" to exit..')
+    RealTimeEmotionDetector(classifier_model=classifier).executeWithImage(img)
+
+
+def emoDetection(img):
+    runEmotionDetectionImg(
         classifier_algorithm='RandomForest',  # Alternatively 'SVM'.
         predictor_path='utils/shape_predictor_68_face_landmarks.dat',
         dataset_csv='data/csv/dataset.csv',
+        img=img,
         dataset_images_dir='data/raw'
     )
+
+
+
+if __name__ == "__main__":
+    """The value of the parameters can change depending on the case."""
+    # run_real_time_emotion_detector(
+    #     classifier_algorithm='RandomForest',  # Alternatively 'SVM'.
+    #     predictor_path='utils/shape_predictor_68_face_landmarks.dat',
+    #     dataset_csv='data/csv/dataset.csv',
+    #     dataset_images_dir='data/raw'
+    # )
+
+    img = cv2.imread('./moazTest.jpg')
+    emoDetection(img)
+
     print('Successfully terminated.')
