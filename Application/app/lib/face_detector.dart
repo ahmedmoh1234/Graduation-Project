@@ -24,7 +24,7 @@ class _FaceDetectorState extends State<FaceDetector> {
     stream.cast();
 
     var length = await image.length();
-    var url = Uri.parse('http://$IP_ADDRESS/face-detector');
+    var url = Uri.parse('http://$IP_ADDRESS/emotion-recognizer');
     var request = http.MultipartRequest('POST', url);
     var multipartFile = await http.MultipartFile(
       'image',
@@ -84,7 +84,7 @@ class _FaceDetectorState extends State<FaceDetector> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Scene Descriptor'),
+        title: const Text('Face Recognizer'),
         backgroundColor: const Color(0xFF106cb5),
       ),
       body: FutureBuilder<void>(

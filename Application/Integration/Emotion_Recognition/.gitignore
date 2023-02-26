@@ -1,0 +1,9 @@
+# [EXTRA IGNORED FILES IN GIT] 
+# Virtual Environment
+venv/
+
+# Cached Python Files
+__pycache__
+
+# [STANDARD IGNORED FILES IN GIT] 
+.idea

@@ -153,7 +153,7 @@ class Menu extends StatelessWidget {
               size: 27,
             ),
             title: const Text(
-              'Scene Descriptor',
+              'Face Recognizer',
               style: TextStyle(
                 fontSize: 17,
                 fontFamily: 'RalewayMedium',
