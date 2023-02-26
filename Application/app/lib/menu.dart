@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'chatbot.dart';
 import 'TTSTest.dart';
 import 'scene_descriptor.dart';
+import 'face_detector.dart';
 
 class Menu extends StatelessWidget {
   String token = "";
@@ -41,6 +42,16 @@ class Menu extends StatelessWidget {
       MaterialPageRoute(
         builder: (_) {
           return SceneDescriptor();
+        },
+      ),
+    );
+  }
+
+  void _goToFaceDetector(BuildContext ctx) {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return FaceDetector();
         },
       ),
     );
@@ -133,7 +144,22 @@ class Menu extends StatelessWidget {
               ),
             ),
           ),
-
+          ListTile(
+            onTap: () {
+              _goToFaceDetector(context);
+            },
+            leading: const Icon(
+              Icons.face,
+              size: 27,
+            ),
+            title: const Text(
+              'Scene Descriptor',
+              style: TextStyle(
+                fontSize: 17,
+                fontFamily: 'RalewayMedium',
+              ),
+            ),
+          ),
           ListTile(
             onTap: () {
               _goToChatbot(context);

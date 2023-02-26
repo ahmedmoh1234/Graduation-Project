@@ -5,6 +5,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import skimage
 from PIL import Image
+from Face_Recognition.test import FaceDetector
+import os
 
 # Run ipconfig in command prompt to get IP Address
 IP_ADDRESS = '192.168.1.8'
@@ -33,6 +35,20 @@ def scene_descriptor():
     PILImage = Image.open(file.stream)
     PILImage.show()
     return 'Success'
+
+
+
+@app.route('/face-detector', methods=['POST'])
+def face_detector():    
+    file = request.files['image']
+    img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
+    print(img.shape)
+    PILImage = Image.open(file.stream)
+    PILImage.show()
+    fd = FaceDetector()
+    result = fd.faceMatch(PILImage, 1)
+    print(f"Faced matched with {result}")
+    return 'Ok'
 
 if __name__ == "__main__":
     app.run(debug = True, host = IP_ADDRESS)
