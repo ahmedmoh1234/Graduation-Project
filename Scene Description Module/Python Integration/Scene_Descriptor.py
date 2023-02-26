@@ -8,9 +8,9 @@ def detect_obj(image):
     task="detect",
     source= image,
     conf=0.5,
-    save=True,
-    save_txt=True,
-    save_crop=True,
+    # save=True,
+    # save_txt=True,
+    # save_crop=True,
     line_thickness=1,
     hide_labels=False,
     hide_conf=False,
@@ -33,7 +33,9 @@ def detect_obj(image):
         else:
             results[classes[int(box[5])]] = 1
             
-    str =""
+    str ="There are "
     for key in results:
-        str  +=  f"There are {results[key]} {key} in the image. \n"
+        str  +=  f"{results[key]} {key} ,"
+    str+="in the image."
+    print(str)
     return str
