@@ -49,7 +49,10 @@ def face_detector():
     fd = FaceDetector()
     result = fd.faceMatch(PILImage, 1)
     print(f"Faced matched with {result}")
-    return result
+    # response = dict()
+    # response['result'] = result
+    # return jsonify(response)
+    return response
 
 @app.route('/emotion-recognizer', methods=['POST'])
 def emotion_recognizer():    
