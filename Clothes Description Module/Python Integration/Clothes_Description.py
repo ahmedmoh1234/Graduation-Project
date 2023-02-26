@@ -62,7 +62,7 @@ def describe_clothes(image):
     predicted = model.predict(image)
     predicted = np.argmax(predicted)
     result = classes[predicted]
-    str = "The clothes is a " + result + "."
+    str = "The cloth is a " + result + "."
     print(str)
     return str
 
