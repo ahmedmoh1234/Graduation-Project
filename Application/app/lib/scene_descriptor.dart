@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'config.dart';
 import 'package:camera/camera.dart';
 import 'main.dart';
-import 'dart:async';
 import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'package:async/async.dart';
+import 'package:path/path.dart';
 
 class SceneDescriptor extends StatefulWidget {
   const SceneDescriptor({super.key});
@@ -16,6 +18,30 @@ class _SceneDescriptorState extends State<SceneDescriptor> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   late CameraDescription camera;
+
+  Future<void> sendImagetoServer(XFile image) async {
+    var stream = http.ByteStream(image.openRead());
+    stream.cast();
+
+    var length = await image.length();
+    var url = Uri.parse('http://$IP_ADDRESS/scene-descriptor');
+    var request = http.MultipartRequest('POST', url);
+    var multipartFile = await http.MultipartFile(
+      'image',
+      stream,
+      length,
+      filename: basename(image.path),
+    );
+    var pic = await http.MultipartFile.fromPath(
+      'image',
+      image.path,
+    );
+    request.files.add(multipartFile);
+    request.files.add(pic);
+
+    var response = await request.send();
+    print(response.statusCode);
+  }
 
   @override
   void initState() {
@@ -55,44 +81,12 @@ class _SceneDescriptorState extends State<SceneDescriptor> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Scene Descriptor'),
         backgroundColor: const Color(0xFF106cb5),
       ),
-      // body: Column(
-      //   children: [
-      //     CameraPreview(
-      //       _controller,
-      //     ),
-      //     const SizedBox(height: 50),
-      //     FloatingActionButton(
-      //       // Provide an onPressed callback.
-      //       onPressed: () async {
-      //         print('HERE');
-      //         // Take the Picture in a try / catch block. If anything goes wrong,
-      //         // catch the error.
-      //         try {
-      //           // Ensure that the camera is initialized.
-      //           await _initializeControllerFuture;
-
-      //           // Attempt to take a picture and then get the location
-      //           // where the image file is saved.
-      //           final image = await _controller.takePicture();
-      //         } catch (e) {
-      //           // If an error occurs, log the error to the console.
-      //           print(e);
-      //         }
-      //       },
-      //       backgroundColor: Colors.grey,
-      //       child: const Icon(
-      //         Icons.camera_alt,
-      //         size: 27,
-      //         color: Colors.white,
-      //       ),
-      //     )
-      //   ],
-      // ),
       body: FutureBuilder<void>(
         future: _initializeControllerFuture,
         builder: (context, snapshot) {
@@ -117,6 +111,12 @@ class _SceneDescriptorState extends State<SceneDescriptor> {
             // Attempt to take a picture and get the file `image`
             // where it was saved.
             final image = await _controller.takePicture();
+            //image.saveTo('data/assets/images/scene.jpg');
+
+            //print('IMAGE PATH: ${image.path}');
+
+            //Send image to server
+            sendImagetoServer(image);
 
             if (!mounted) return;
 
