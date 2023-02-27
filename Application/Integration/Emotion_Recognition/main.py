@@ -1,16 +1,12 @@
 
-# import cv2.cv2 as cv2
 import cv2
 import numpy as np
 import os
-# os.chdir(os.getcwd() + '\Emotion_Recognition\\')
-# print('MY PATH: ' + os.getcwd())
 import sys
-sys.path.append('Emotion_Recognition\\')
-sys.path.append('Emotion_Recognition\\utils\\')
-# os.chdir('D:\Senior II\Graduation Project\Graduation-Project\Application\Integration\Emotion_Recognition')
+
+sys.path.insert(0, os.path.dirname(__file__))
+
 from utils.image_classifier import ImageClassifier, NO_FACE_LABEL
-# sys.path.pop()
 
 
 relativePath = ''
@@ -128,9 +124,8 @@ class RealTimeEmotionDetector:
             write_label(rectangle[0], rectangle[1], label=lbl, img=img)
             print('[INFO] Predicted Labels:', predicted_labels)
 
-        while(cv2.waitKey(1) != ord('q')):
-            cv2.imshow('Emotion Detection', img)
-        return img
+        
+        return (img , predicted_labels)
 
 def run_real_time_emotion_detector(
         classifier_algorithm: str,
@@ -173,21 +168,26 @@ def runEmotionDetectionImg(classifier_algorithm: str,
         print('[INFO]', f'Dataset file: "{dataset_csv}" found.')
 
     classifier = ImageClassifier(csv_path=dataset_csv, algorithm=classifier_algorithm, land_marker=land_marker)
-    print('[INFO] Opening camera, press "q" to exit..')
-    RealTimeEmotionDetector(classifier_model=classifier).executeWithImage(img)
+    return RealTimeEmotionDetector(classifier_model=classifier).executeWithImage(img)
 
 
 def emoDetection(img):
-    runEmotionDetectionImg(
+    return runEmotionDetectionImg(
         classifier_algorithm= 'RandomForest',  # Alternatively 'SVM'.
-        predictor_path=relativePath + 'utils\shape_predictor_68_face_landmarks.dat',
+        predictor_path= createAbsolutePaths('/utils/shape_predictor_68_face_landmarks.dat'),
         # predictor_path=relativePath + 'utils\sharks.dat',
-        dataset_csv=relativePath + 'data/csv/dataset.csv',
+        dataset_csv= createAbsolutePaths('/data/csv/dataset.csv'),
         img=img,
-        dataset_images_dir=relativePath + 'data/raw'
+        dataset_images_dir= createAbsolutePaths('/data/raw')
     )
 
 
+
+def createAbsolutePaths( relativePath):
+    absPath = os.path.dirname(__file__)
+    absPath = absPath.replace('\\', '/')
+    absPath = absPath + relativePath
+    return absPath
 
 if __name__ == "__main__":
     """The value of the parameters can change depending on the case."""

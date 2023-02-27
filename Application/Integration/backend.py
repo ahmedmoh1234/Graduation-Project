@@ -10,7 +10,7 @@ from Emotion_Recognition.main import emoDetection
 import os
 
 # Run ipconfig in command prompt to get IP Address
-IP_ADDRESS = '192.168.1.8'
+IP_ADDRESS = '192.168.1.22'
 
 app = Flask(__name__)
 
@@ -40,8 +40,13 @@ def scene_descriptor():
 
 
 @app.route('/face-detector', methods=['POST'])
-def face_detector():    
-    file = request.files['image']
+def face_detector():   
+    try:
+        file = request.files['image']
+
+    except:
+        print('No image')
+        return 'No image'
     img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
     print(img.shape)
     PILImage = Image.open(file.stream)
@@ -52,7 +57,7 @@ def face_detector():
     # response = dict()
     # response['result'] = result
     # return jsonify(response)
-    return response
+    return result
 
 @app.route('/emotion-recognizer', methods=['POST'])
 def emotion_recognizer():    
@@ -61,8 +66,9 @@ def emotion_recognizer():
     print(img.shape)
     # PILImage = Image.open(file.stream)
     # PILImage.show()
-    emoDetection(img)
-    return 'Ok'
+    img, result = emoDetection(img)
+    return result
+    
 
 
 if __name__ == "__main__":
