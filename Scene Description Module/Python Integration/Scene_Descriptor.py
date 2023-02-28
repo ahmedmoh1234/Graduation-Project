@@ -36,6 +36,8 @@ def detect_obj(image):
     str ="There are "
     for key in results:
         str  +=  f"{results[key]} {key} ,"
+    # remove the last comma
+    str = str[:-1]
     str+="in the image."
     print(str)
     return str
