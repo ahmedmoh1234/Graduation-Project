@@ -10,7 +10,6 @@ def createAbsolutePaths(relativePath):
     absPath = absPath + relativePath
     return absPath
 
-
 def detect_obj(image):
     model = YOLO("yolov8m.pt")
     results = model.predict(
@@ -29,9 +28,7 @@ def detect_obj(image):
     )
     
     # Load the pickle file
-    path = createAbsolutePaths("/classes.pkl")
-    print(path)
-    with open(path, "rb") as f:
+    with open(createAbsolutePaths("/classes.pkl"), "rb") as f:
         classes = pickle.load(f)
     
     boxes = ((results[0].boxes)).boxes.numpy()

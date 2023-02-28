@@ -183,7 +183,7 @@ def emoDetection(img):
 
 
 
-def createAbsolutePaths( relativePath):
+def createAbsolutePaths(relativePath):
     absPath = os.path.dirname(__file__)
     absPath = absPath.replace('\\', '/')
     absPath = absPath + relativePath

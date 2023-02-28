@@ -7,6 +7,8 @@ import skimage
 from PIL import Image
 from Face_Recognition.test import FaceDetector
 from Emotion_Recognition.main import emoDetection
+from Scene_Descriptor.Scene_Descriptor import detect_obj
+from Clothes_Descriptor.Clothes_Description import describe_clothes
 import os
 
 # Run ipconfig in command prompt to get IP Address
@@ -33,11 +35,23 @@ def scene_descriptor():
     file = request.files['image']
     img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
     print(img.shape)
+    response = detect_obj(img)
     PILImage = Image.open(file.stream)
     PILImage.show()
-    return 'Success'
+    print(f"Scene Descriptor: {response}")
+    return response
 
 
+@app.route('/clothes-descriptor', methods=['POST'])
+def clothes_descriptor():    
+    file = request.files['image']
+    img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
+    print(img.shape)
+    response = describe_clothes(img)
+    PILImage = Image.open(file.stream)
+    PILImage.show()
+    print(f"Clothes Descriptor: {response}")
+    return response
 
 @app.route('/face-detector', methods=['POST'])
 def face_detector():   
