@@ -1,9 +1,11 @@
+import 'package:app/emotion_recognizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'chatbot.dart';
 import 'TTSTest.dart';
 import 'scene_descriptor.dart';
 import 'face_detector.dart';
+import 'emotion_recognizer.dart';
 
 class Menu extends StatelessWidget {
   String token = "";
@@ -41,7 +43,7 @@ class Menu extends StatelessWidget {
     Navigator.of(ctx).push(
       MaterialPageRoute(
         builder: (_) {
-          return SceneDescriptor();
+          return const SceneDescriptor();
         },
       ),
     );
@@ -51,7 +53,17 @@ class Menu extends StatelessWidget {
     Navigator.of(ctx).push(
       MaterialPageRoute(
         builder: (_) {
-          return FaceDetector();
+          return const FaceDetector();
+        },
+      ),
+    );
+  }
+
+  void _goToEmotionRecognizer(BuildContext ctx) {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return const EmotionRecognizer();
         },
       ),
     );
@@ -154,6 +166,22 @@ class Menu extends StatelessWidget {
             ),
             title: const Text(
               'Face Recognizer',
+              style: TextStyle(
+                fontSize: 17,
+                fontFamily: 'RalewayMedium',
+              ),
+            ),
+          ),
+          ListTile(
+            onTap: () {
+              _goToEmotionRecognizer(context);
+            },
+            leading: const Icon(
+              Icons.favorite,
+              size: 27,
+            ),
+            title: const Text(
+              'Emotion Recognizer',
               style: TextStyle(
                 fontSize: 17,
                 fontFamily: 'RalewayMedium',

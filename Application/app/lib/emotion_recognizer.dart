@@ -13,14 +13,14 @@ import 'package:flutter_tts/flutter_tts.dart';
 
 enum TtsState { playing, stopped, paused, continued }
 
-class FaceDetector extends StatefulWidget {
-  const FaceDetector({super.key});
+class EmotionRecognizer extends StatefulWidget {
+  const EmotionRecognizer({super.key});
 
   @override
-  State<FaceDetector> createState() => _FaceDetectorState();
+  State<EmotionRecognizer> createState() => _EmotionRecognizerState();
 }
 
-class _FaceDetectorState extends State<FaceDetector> {
+class _EmotionRecognizerState extends State<EmotionRecognizer> {
   late CameraController _controller;
   late FlutterTts flutterTts;
   double volume = 2.5;
@@ -143,7 +143,7 @@ class _FaceDetectorState extends State<FaceDetector> {
     stream.cast();
 
     var length = await image.length();
-    var url = Uri.parse('http://$IP_ADDRESS/face-detector');
+    var url = Uri.parse('http://$IP_ADDRESS/emotion-recognizer');
     var request = http.MultipartRequest('POST', url);
     var multipartFile = await http.MultipartFile(
       'image',
@@ -151,16 +151,12 @@ class _FaceDetectorState extends State<FaceDetector> {
       length,
       filename: basename(image.path),
     );
-    // var pic = await http.MultipartFile.fromPath(
-    //   'image',
-    //   image.path,
-    // );
+
     request.files.add(multipartFile);
-    // request.files.add(pic);
 
     var response = await request.send();
     final respStr = await response.stream.bytesToString();
-    _speak('This is a photo of $respStr');
+    _speak('This person is feeling $respStr');
   }
 
   @override
@@ -200,7 +196,7 @@ class _FaceDetectorState extends State<FaceDetector> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Face Recognizer'),
+        title: const Text('Emotion Recognizer'),
         backgroundColor: const Color(0xFF106cb5),
       ),
       body: FutureBuilder<void>(
