@@ -1,3 +1,4 @@
+import 'package:app/clothes_descriptor.dart';
 import 'package:app/emotion_recognizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -64,6 +65,16 @@ class Menu extends StatelessWidget {
       MaterialPageRoute(
         builder: (_) {
           return const EmotionRecognizer();
+        },
+      ),
+    );
+  }
+
+  void _goToClothesDescriptor(BuildContext ctx) {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return const ClothesDescriptor();
         },
       ),
     );
@@ -190,6 +201,22 @@ class Menu extends StatelessWidget {
           ),
           ListTile(
             onTap: () {
+              _goToClothesDescriptor(context);
+            },
+            leading: const Icon(
+              Icons.man,
+              size: 27,
+            ),
+            title: const Text(
+              'Clothes Descriptor',
+              style: TextStyle(
+                fontSize: 17,
+                fontFamily: 'RalewayMedium',
+              ),
+            ),
+          ),
+          ListTile(
+            onTap: () {
               _goToChatbot(context);
             },
             leading: const Icon(
@@ -232,20 +259,7 @@ class Menu extends StatelessWidget {
               ),
             ),
           ),
-          ListTile(
-            onTap: () {},
-            leading: const Icon(
-              Icons.man,
-              size: 27,
-            ),
-            title: const Text(
-              'Clothes Descriptor',
-              style: TextStyle(
-                fontSize: 17,
-                fontFamily: 'RalewayMedium',
-              ),
-            ),
-          ),
+
           ListTile(
             onTap: () {},
             leading: const Icon(

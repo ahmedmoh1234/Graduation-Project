@@ -14,7 +14,7 @@ enum TtsState { playing, stopped, paused, continued }
 
 class _HomeState extends State<Home> {
   late FlutterTts flutterTts;
-  double volume = 2.5;
+  double volume = 3;
   double pitch = 1.0;
   double rate = 0.5;
   final String _voiceText = '''Hi, this is the Home Page

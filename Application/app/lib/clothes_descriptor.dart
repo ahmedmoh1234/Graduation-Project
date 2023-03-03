@@ -13,14 +13,14 @@ import 'package:flutter_tts/flutter_tts.dart';
 
 enum TtsState { playing, stopped, paused, continued }
 
-class SceneDescriptor extends StatefulWidget {
-  const SceneDescriptor({super.key});
+class ClothesDescriptor extends StatefulWidget {
+  const ClothesDescriptor({super.key});
 
   @override
-  State<SceneDescriptor> createState() => _SceneDescriptorState();
+  State<ClothesDescriptor> createState() => _ClothesDescriptorState();
 }
 
-class _SceneDescriptorState extends State<SceneDescriptor> {
+class _ClothesDescriptorState extends State<ClothesDescriptor> {
   late CameraController _controller;
   late FlutterTts flutterTts;
   double volume = 3;
@@ -143,7 +143,7 @@ class _SceneDescriptorState extends State<SceneDescriptor> {
     stream.cast();
 
     var length = await image.length();
-    var url = Uri.parse('http://$IP_ADDRESS/scene-descriptor');
+    var url = Uri.parse('http://$IP_ADDRESS/clothes-descriptor');
     var request = http.MultipartRequest('POST', url);
     var multipartFile = await http.MultipartFile(
       'image',
