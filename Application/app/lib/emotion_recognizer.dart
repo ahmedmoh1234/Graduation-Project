@@ -144,6 +144,7 @@ class _EmotionRecognizerState extends State<EmotionRecognizer> {
 
     var length = await image.length();
     var url = Uri.parse('http://$IP_ADDRESS/emotion-recognizer');
+    print('URL: $url');
     var request = http.MultipartRequest('POST', url);
     var multipartFile = await http.MultipartFile(
       'image',

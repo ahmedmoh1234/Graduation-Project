@@ -1,3 +1,4 @@
+import 'package:app/ChangeIPAddress.dart';
 import 'package:app/clothes_descriptor.dart';
 import 'package:app/emotion_recognizer.dart';
 import 'package:flutter/material.dart';
@@ -55,6 +56,16 @@ class Menu extends StatelessWidget {
       MaterialPageRoute(
         builder: (_) {
           return const FaceDetector();
+        },
+      ),
+    );
+  }
+
+  void _goToChangeIPAddress(BuildContext ctx) {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return ChangeIPAddress();
         },
       ),
     );
@@ -366,6 +377,22 @@ class Menu extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(
+              Icons.info,
+              size: 27,
+            ),
+            title: const Text(
+              'Change IP Address',
+              style: TextStyle(
+                fontSize: 17,
+                fontFamily: 'RalewayMedium',
+              ),
+            ),
+            onTap: () {
+              _goToChangeIPAddress(context);
+            },
+          ),
+          ListTile(
+            leading: const Icon(
               Icons.logout,
               size: 27,
             ),
@@ -396,22 +423,22 @@ class Menu extends StatelessWidget {
               SystemNavigator.pop();
             },
           ),
-          ListTile(
-            leading: const Icon(
-              Icons.thermostat,
-              size: 27,
-            ),
-            title: const Text(
-              'Text To Speech Widget (Test))',
-              style: TextStyle(
-                fontSize: 17,
-                fontFamily: 'RalewayMedium',
-              ),
-            ),
-            onTap: () {
-              _goToTTS(context);
-            },
-          ),
+          // ListTile(
+          //   leading: const Icon(
+          //     Icons.thermostat,
+          //     size: 27,
+          //   ),
+          //   title: const Text(
+          //     'Text To Speech Widget (Test))',
+          //     style: TextStyle(
+          //       fontSize: 17,
+          //       fontFamily: 'RalewayMedium',
+          //     ),
+          //   ),
+          //   onTap: () {
+          //     _goToTTS(context);
+          //   },
+          // ),
         ],
       ),
     );

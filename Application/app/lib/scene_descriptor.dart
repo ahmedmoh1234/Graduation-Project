@@ -139,6 +139,8 @@ class _SceneDescriptorState extends State<SceneDescriptor> {
   }
 
   Future<void> sendImagetoServer(XFile image) async {
+    print('IP ADDRESS = $IP_ADDRESS');
+
     var stream = http.ByteStream(image.openRead());
     stream.cast();
 
@@ -153,10 +155,11 @@ class _SceneDescriptorState extends State<SceneDescriptor> {
     );
 
     request.files.add(multipartFile);
-
+    print('OK');
     var response = await request.send();
     final respStr = await response.stream.bytesToString();
     _speak(respStr);
+    print('OK2');
   }
 
   @override
@@ -196,7 +199,7 @@ class _SceneDescriptorState extends State<SceneDescriptor> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Emotion Recognizer'),
+        title: const Text('Scene Descriptor'),
         backgroundColor: const Color(0xFF106cb5),
       ),
       body: FutureBuilder<void>(
