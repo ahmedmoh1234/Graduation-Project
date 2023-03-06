@@ -12,7 +12,7 @@ from Clothes_Descriptor.Clothes_Description import describe_clothes
 import os
 
 # Run ipconfig in command prompt to get IP Address
-IP_ADDRESS = '192.168.1.4'
+IP_ADDRESS = '192.168.1.18'
 
 app = Flask(__name__)
 
@@ -82,6 +82,17 @@ def emotion_recognizer():
     img, result = emoDetection(img)
     print(f"Emotion: {result[0]}")
     return result[0]
+
+
+
+@app.route('/currency-recognizer', methods=['POST'])
+def currency_recognizer():    
+    file = request.files['image']
+    img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
+    print(img.shape)
+    PILImage = Image.open(file.stream)
+    PILImage.show()
+    return 'Success'
     
 
 
