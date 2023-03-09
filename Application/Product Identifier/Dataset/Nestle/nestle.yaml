@@ -1,0 +1,9 @@
+path: ../datasets/nestle
+train: images/  
+val: images/
+test:
+
+
+#Classes
+names:
+0: nestle bottle
