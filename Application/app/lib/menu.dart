@@ -1,4 +1,5 @@
 import 'package:app/ChangeIPAddress.dart';
+import 'package:app/barcode_reader.dart';
 import 'package:app/clothes_descriptor.dart';
 import 'package:app/emotion_recognizer.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,16 @@ class Menu extends StatelessWidget {
       MaterialPageRoute(
         builder: (_) {
           return ChatBot();
+        },
+      ),
+    );
+  }
+
+  void _goToBarcodeReader(BuildContext ctx) {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return BarcodeReader();
         },
       ),
     );
@@ -250,6 +261,22 @@ class Menu extends StatelessWidget {
             ),
             title: const Text(
               'Currency Detector',
+              style: TextStyle(
+                fontSize: 17,
+                fontFamily: 'RalewayMedium',
+              ),
+            ),
+          ),
+          ListTile(
+            onTap: () {
+              _goToBarcodeReader(context);
+            },
+            leading: const Icon(
+              Icons.barcode_reader,
+              size: 27,
+            ),
+            title: const Text(
+              'Barcode Reader',
               style: TextStyle(
                 fontSize: 17,
                 fontFamily: 'RalewayMedium',

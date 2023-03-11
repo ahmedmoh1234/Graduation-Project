@@ -208,7 +208,7 @@ class _HomeState extends State<Home> {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
         await _speak();
-        await _startListening();
+        // await _startListening();
       },
     );
   }
