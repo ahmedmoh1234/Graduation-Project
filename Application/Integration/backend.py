@@ -9,6 +9,7 @@ from Face_Recognition.test import FaceDetector
 from Emotion_Recognition.main import emoDetection
 from Scene_Descriptor.Scene_Descriptor import detect_obj
 from Clothes_Descriptor.Clothes_Description import describe_clothes
+from Currency_Detector.detect import currency_detector
 import os
 
 # Run ipconfig in command prompt to get IP Address
@@ -89,6 +90,7 @@ def emotion_recognizer():
 def currency_recognizer():    
     file = request.files['image']
     img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
+    currency_detector(img)
     print(img.shape)
     PILImage = Image.open(file.stream)
     PILImage.show()
