@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'dart:convert';
 import 'config.dart';
@@ -11,10 +12,10 @@ class ChatBot extends StatefulWidget {
 }
 
 class _ChatBotState extends State<ChatBot> {
-  String _text = "No text yet";
   SpeechToText _speechToText = SpeechToText();
   bool _speechEnabled = false;
   String _lastWords = '';
+  String _currentWords = '';
 
   @override
   void initState() {
@@ -23,26 +24,69 @@ class _ChatBotState extends State<ChatBot> {
   }
 
   void _initSpeech() async {
-    print("Initializing speech");
-    _speechEnabled = await _speechToText.initialize();
+    _speechEnabled = await _speechToText.initialize(
+      onError: errorListener,
+      onStatus: statusListener,
+    );
     setState(() {});
   }
 
   /// Each time to start a speech recognition session
-  void _startListening() async {
+  // void _startListening() async {
+  //   await _speechToText.listen(
+  //     onResult: _onSpeechResult,
+  //     // listenFor: const Duration(seconds: 100),
+  //     // pauseFor: const Duration(seconds: 100),
+  //     listenMode: ListenMode.dictation,
+  //   );
+  //   setState(() {});
+  // }
+
+  void errorListener(SpeechRecognitionError error) {
+    debugPrint(error.errorMsg.toString());
+  }
+
+  /// Each time to start a speech recognition session
+  Future _startListening() async {
+    debugPrint("=================================================");
+    await _stopListening();
+    await Future.delayed(const Duration(milliseconds: 50));
     await _speechToText.listen(
       onResult: _onSpeechResult,
+      listenMode: ListenMode.dictation,
     );
-    setState(() {});
+    setState(
+      () {
+        _speechEnabled = true;
+      },
+    );
+  }
+
+  void statusListener(String status) async {
+    debugPrint("status $status");
+    if (status == "done" && _speechEnabled) {
+      setState(
+        () {
+          _lastWords += " $_currentWords";
+          _currentWords = "";
+          _speechEnabled = false;
+        },
+      );
+      await _startListening();
+    }
   }
 
   /// Manually stop the active speech recognition session
   /// Note that there are also timeouts that each platform enforces
   /// and the SpeechToText plugin supports setting timeouts on the
   /// listen method.
-  void _stopListening() async {
+  Future _stopListening() async {
+    setState(
+      () {
+        _speechEnabled = false;
+      },
+    );
     await _speechToText.stop();
-    setState(() {});
   }
 
   /// This is the callback that the SpeechToText plugin calls when
@@ -50,7 +94,7 @@ class _ChatBotState extends State<ChatBot> {
   void _onSpeechResult(SpeechRecognitionResult result) {
     setState(() {
       _lastWords = result.recognizedWords;
-      _sendText(_lastWords);
+      // _sendText(_lastWords);
     });
   }
 
@@ -69,7 +113,7 @@ class _ChatBotState extends State<ChatBot> {
     );
 
     // print('Response status: ${response.statusCode}');
-    // print('Response body: ${response.body}');
+    debugPrint('Response body: ${response.body}');
   }
 
   @override
@@ -85,19 +129,19 @@ class _ChatBotState extends State<ChatBot> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-              padding: EdgeInsets.all(16),
-              child: Text(
+              padding: const EdgeInsets.all(16),
+              child: const Text(
                 'Recognized words:',
                 style: TextStyle(fontSize: 20.0),
               ),
             ),
             Expanded(
               child: Container(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Text(
                   // If listening is active show the recognized words
                   _speechToText.isListening
-                      ? '$_lastWords'
+                      ? _lastWords
                       // If listening isn't active but could be tell the user
                       // how to start it, otherwise indicate that speech
                       // recognition is not yet ready or not supported on

@@ -22,7 +22,7 @@ class ChangeIPAddress extends StatelessWidget {
                 labelText: 'IP Address',
               ),
               onChanged: (v) {
-                IP_ADDRESS = '192.168.1.$v:5000';
+                IP_ADDRESS = '$v:5000';
               },
             ),
           ],
@@ -30,7 +30,7 @@ class ChangeIPAddress extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          IP_ADDRESS = '192.168.1.18:5000';
+          // IP_ADDRESS = '192.168.1.18:5000';
         },
         // tooltip: 'Increment',
         child: const Icon(
