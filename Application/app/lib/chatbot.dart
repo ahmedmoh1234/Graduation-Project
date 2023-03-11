@@ -117,6 +117,12 @@ class _ChatBotState extends State<ChatBot> {
   }
 
   @override
+  void dispose() {
+    _speechToText.stop();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

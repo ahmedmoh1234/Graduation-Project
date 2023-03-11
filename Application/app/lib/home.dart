@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'config.dart';
 import 'menu.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'dart:io' show Platform;
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:speech_to_text/speech_to_text.dart';
+import 'package:speech_to_text/speech_recognition_error.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'dart:io' show Platform;
 
 class Home extends StatefulWidget {
   @override
@@ -13,6 +16,7 @@ class Home extends StatefulWidget {
 enum TtsState { playing, stopped, paused, continued }
 
 class _HomeState extends State<Home> {
+  //===========================TEXT TO SPEECH===================================
   late FlutterTts flutterTts;
   double volume = 4;
   double pitch = 1.0;
@@ -41,12 +45,6 @@ class _HomeState extends State<Home> {
 
   Future _setAwaitOptions() async {
     await flutterTts.awaitSpeakCompletion(true);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    flutterTts.stop();
   }
 
   initTts() {
@@ -128,13 +126,98 @@ class _HomeState extends State<Home> {
     }
   }
 
+  //===========================SPEECH TO TEXT===================================
+
+  SpeechToText _speechToText = SpeechToText();
+  bool _speechEnabled = false;
+  String _lastWords = '';
+  String _currentWords = '';
+
+  void _initSpeech() async {
+    _speechEnabled = await _speechToText.initialize(
+      onError: errorListener,
+      onStatus: statusListener,
+    );
+    setState(() {});
+  }
+
+  void errorListener(SpeechRecognitionError error) {
+    debugPrint(error.errorMsg.toString());
+  }
+
+  void statusListener(String status) async {
+    debugPrint("status $status");
+    if (status == "done" && _speechEnabled) {
+      setState(
+        () {
+          _lastWords += " $_currentWords";
+          _currentWords = "";
+          _speechEnabled = false;
+        },
+      );
+      await _startListening();
+    }
+  }
+
+  /// Each time to start a speech recognition session
+  Future _startListening() async {
+    debugPrint("================START LISTENING==========================");
+    await _stopListening();
+    await Future.delayed(const Duration(milliseconds: 50));
+    await _speechToText.listen(
+      onResult: _onSpeechResult,
+      listenMode: ListenMode.dictation,
+    );
+    setState(
+      () {
+        _speechEnabled = true;
+      },
+    );
+  }
+
+  /// Manually stop the active speech recognition session
+  /// Note that there are also timeouts that each platform enforces
+  /// and the SpeechToText plugin supports setting timeouts on the
+  /// listen method.
+  Future _stopListening() async {
+    setState(
+      () {
+        _speechEnabled = false;
+      },
+    );
+    await _speechToText.stop();
+  }
+
+  /// This is the callback that the SpeechToText plugin calls when
+  /// the platform returns recognized words.
+  void _onSpeechResult(SpeechRecognitionResult result) {
+    debugPrint('Last Words = $_lastWords');
+    setState(() {
+      _lastWords = result.recognizedWords;
+      // _sendText(_lastWords);
+    });
+  }
+
+  //===========================WIDGET FUNCTIONS===================================
+
   @override
   void initState() {
     super.initState();
     initTts();
+    _initSpeech();
     WidgetsBinding.instance.addPostFrameCallback(
-      (_) => _speak(),
+      (_) async {
+        await _speak();
+        await _startListening();
+      },
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    flutterTts.stop();
+    _speechToText.stop();
   }
 
   @override
