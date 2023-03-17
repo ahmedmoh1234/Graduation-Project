@@ -1,14 +1,13 @@
-import 'package:app/ChangeIPAddress.dart';
-import 'package:app/barcode_reader.dart';
-import 'package:app/clothes_descriptor.dart';
-import 'package:app/emotion_recognizer.dart';
+import 'package:pocket_lens/ChangeIPAddress.dart';
+import 'package:pocket_lens/barcode_reader.dart';
+import 'package:pocket_lens/clothes_descriptor.dart';
+import 'package:pocket_lens/emotion_recognizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'chatbot.dart';
 import 'TTSTest.dart';
 import 'scene_descriptor.dart';
 import 'face_detector.dart';
-import 'emotion_recognizer.dart';
 
 class Menu extends StatelessWidget {
   String token = "";

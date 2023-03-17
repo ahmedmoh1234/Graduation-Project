@@ -9,7 +9,7 @@ from Face_Recognition.test import FaceDetector
 from Emotion_Recognition.main import emoDetection
 from Scene_Descriptor.Scene_Descriptor import detect_obj
 from Clothes_Descriptor.Clothes_Description import describe_clothes
-from Currency_Detector.detect import currency_detector
+# from Currency_Detector.detect import currency_detector
 import os
 
 # Run ipconfig in command prompt to get IP Address
