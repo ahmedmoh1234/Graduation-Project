@@ -1,5 +1,5 @@
 1- First, run the virtual environment 
-YOLOv5\YOLO5\Scripts\activate.bat
+YOLOv5\virtualenv\Scripts\activate.bat
 
 2- go to "yolov5" folder
 cd ..
