@@ -1,0 +1,21 @@
+1- First, run the virtual environment 
+YOLOv5\YOLO5\Scripts\activate.bat
+
+2- go to "yolov5" folder
+cd ..
+cd ..
+cd yolov5
+
+3- run the script
+python detect.py --weights best.pt --source enterSource
+
+enterSource can be 
+-0		webcam
+-img.jpg	image
+-vid.mp4	video
+-images/	directory
+-list.txt	list of images
+
+* To train, follow this link
+https://github.com/ultralytics/yolov5/wiki/Train-Custom-Data
+
