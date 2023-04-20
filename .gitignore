@@ -1,4 +1,5 @@
 Datasets/
 *.pkl
 *.pt
+*.h5
 predictions/

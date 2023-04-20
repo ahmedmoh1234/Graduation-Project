@@ -59,12 +59,15 @@ def describe_clothes(image):
 
     image = cv2.resize(image, (IMAGE_HEIGHT, IMAGE_WIDTH))
     image = np.expand_dims(image, axis=0)
+    #  show the image
+    plt.imshow(image[0])
+    plt.show()
     predicted = model.predict(image)
     predicted = np.argmax(predicted)
     result = classes[predicted]
     str = "The cloth is a " + result + "."
-    print(str)
     return str
 
-image = cv2.imread("test.jpg")
-describe_clothes(image)
+image = cv2.imread("test2.jpeg")
+result = describe_clothes(image)
+print(result)
