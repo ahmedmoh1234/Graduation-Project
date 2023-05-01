@@ -10,6 +10,7 @@ from Emotion_Recognition.main import emoDetection
 from Scene_Descriptor.Scene_Descriptor import detect_obj
 from Clothes_Descriptor.Clothes_Description import describe_clothes
 from Currency_Detector.currency_detect import currency_detector
+from Document_scanner.main import document_scanner
 
 # from Currency_Detector.detect import currency_detector
 import os
@@ -99,6 +100,15 @@ def currency_recognizer():
     print()
     return result
     
+@app.route('/document-reader', methods=['POST'])
+def document_reader():    
+    file = request.files['image']
+    img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
+    # PILImage = Image.open(file.stream)
+    # print(img.shape)
+    # PILImage.show()
+    result = document_scanner(img)
+    return result
 
 
 if __name__ == "__main__":
