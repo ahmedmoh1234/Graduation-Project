@@ -9,6 +9,8 @@ from Face_Recognition.test import FaceDetector
 from Emotion_Recognition.main import emoDetection
 from Scene_Descriptor.Scene_Descriptor import detect_obj
 from Clothes_Descriptor.Clothes_Description import describe_clothes
+from Currency_Detector.currency_detect import currency_detector
+
 # from Currency_Detector.detect import currency_detector
 import os
 
@@ -85,16 +87,17 @@ def emotion_recognizer():
     return result[0]
 
 
-
 @app.route('/currency-recognizer', methods=['POST'])
 def currency_recognizer():    
     file = request.files['image']
     img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
-    currency_detector(img)
-    print(img.shape)
-    PILImage = Image.open(file.stream)
-    PILImage.show()
-    return 'Success'
+    # PILImage = Image.open(file.stream)
+    # print(img.shape)
+    # PILImage.show()
+    # img = cv2.imread('20LE_1.jpg')
+    result = currency_detector(img)
+    print()
+    return result
     
 
 
