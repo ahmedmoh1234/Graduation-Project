@@ -13,7 +13,7 @@ from Clothes_Descriptor.Clothes_Description import describe_clothes
 import os
 
 # Run ipconfig in command prompt to get IP Address
-IP_ADDRESS = '192.168.1.18'
+IP_ADDRESS = '192.168.1.3'
 
 app = Flask(__name__)
 

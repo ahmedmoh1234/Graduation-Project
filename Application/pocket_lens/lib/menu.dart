@@ -1,4 +1,5 @@
 import 'package:pocket_lens/ChangeIPAddress.dart';
+import 'package:pocket_lens/alan_chatbot.dart';
 import 'package:pocket_lens/barcode_reader.dart';
 import 'package:pocket_lens/clothes_descriptor.dart';
 import 'package:pocket_lens/emotion_recognizer.dart';
@@ -21,6 +22,17 @@ class Menu extends StatelessWidget {
     required this.email,
     required this.gender,
   });
+
+  void _goToAlanChatbot(BuildContext ctx) {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return AlanChatBot();
+        },
+      ),
+    );
+  }
+
   void _goToChatbot(BuildContext ctx) {
     Navigator.of(ctx).push(
       MaterialPageRoute(
@@ -230,6 +242,22 @@ class Menu extends StatelessWidget {
             ),
             title: const Text(
               'Clothes Descriptor',
+              style: TextStyle(
+                fontSize: 17,
+                fontFamily: 'RalewayMedium',
+              ),
+            ),
+          ),
+          ListTile(
+            onTap: () {
+              _goToAlanChatbot(context);
+            },
+            leading: const Icon(
+              Icons.message_rounded,
+              size: 27,
+            ),
+            title: const Text(
+              'Alan Chatbot',
               style: TextStyle(
                 fontSize: 17,
                 fontFamily: 'RalewayMedium',
