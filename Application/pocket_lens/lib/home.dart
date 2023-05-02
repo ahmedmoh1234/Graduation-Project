@@ -7,6 +7,14 @@ import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'dart:io' show Platform;
+import 'package:alan_voice/alan_voice.dart';
+
+import 'package:pocket_lens/ChangeIPAddress.dart';
+import 'package:pocket_lens/barcode_reader.dart';
+import 'package:pocket_lens/clothes_descriptor.dart';
+import 'package:pocket_lens/emotion_recognizer.dart';
+import 'scene_descriptor.dart';
+import 'face_detector.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -14,6 +22,68 @@ class Home extends StatefulWidget {
 }
 
 enum TtsState { playing, stopped, paused, continued }
+
+//===========================GO TO FUNCTIONS===================================
+
+void _goToBarcodeReader(BuildContext ctx) {
+  Navigator.of(ctx).push(
+    MaterialPageRoute(
+      builder: (_) {
+        return BarcodeReader();
+      },
+    ),
+  );
+}
+
+void _goToSceneDescriptor(BuildContext ctx) {
+  Navigator.of(ctx).push(
+    MaterialPageRoute(
+      builder: (_) {
+        return const SceneDescriptor();
+      },
+    ),
+  );
+}
+
+void _goToFaceDetector(BuildContext ctx) {
+  Navigator.of(ctx).push(
+    MaterialPageRoute(
+      builder: (_) {
+        return const FaceDetector();
+      },
+    ),
+  );
+}
+
+void _goToChangeIPAddress(BuildContext ctx) {
+  Navigator.of(ctx).push(
+    MaterialPageRoute(
+      builder: (_) {
+        return ChangeIPAddress();
+      },
+    ),
+  );
+}
+
+void _goToEmotionRecognizer(BuildContext ctx) {
+  Navigator.of(ctx).push(
+    MaterialPageRoute(
+      builder: (_) {
+        return const EmotionRecognizer();
+      },
+    ),
+  );
+}
+
+void _goToClothesDescriptor(BuildContext ctx) {
+  Navigator.of(ctx).push(
+    MaterialPageRoute(
+      builder: (_) {
+        return const ClothesDescriptor();
+      },
+    ),
+  );
+}
 
 class _HomeState extends State<Home> {
   //===========================TEXT TO SPEECH===================================
@@ -198,26 +268,55 @@ class _HomeState extends State<Home> {
     });
   }
 
+  //===========================ALAN FUNCTIONS===================================
+
+  void initAlan() {
+    /// Init Alan Button with project key from Alan AI Studio
+    AlanVoice.addButton(
+        "95aec1209fe5ec07ce09fa461da220842e956eca572e1d8b807a3e2338fdd0dc/stage",
+        buttonAlign: AlanVoice.BUTTON_ALIGN_RIGHT);
+
+    /// Handle commands from Alan AI Studio
+    AlanVoice.onCommand.add(
+      (command) {
+        debugPrint("got new command ${command.toString()}");
+        var commandName = command.data["command"];
+        if (commandName == 'Scene Descriptor') {
+          // debugPrint('--------------------------------------------');
+          // debugPrint('SCENE DESCRIPTOR');
+          // debugPrint('--------------------------------------------');
+          _goToSceneDescriptor(context);
+        } else if (commandName == 'Face Recognizer') {
+          _goToFaceDetector(context);
+        } else if (commandName == 'Emotion Recognizer') {
+          _goToEmotionRecognizer(context);
+        }
+      },
+    );
+  }
+
   //===========================WIDGET FUNCTIONS===================================
 
   @override
   void initState() {
     super.initState();
-    initTts();
-    _initSpeech();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) async {
-        await _speak();
-        // await _startListening();
-      },
-    );
+    // initTts();
+    // _initSpeech();
+    // WidgetsBinding.instance.addPostFrameCallback(
+    //   (_) async {
+    //     await _speak();
+    //     // await _startListening();
+    //   },
+    // );
+
+    initAlan();
   }
 
   @override
   void dispose() {
     super.dispose();
-    flutterTts.stop();
-    _speechToText.stop();
+    // flutterTts.stop();
+    // _speechToText.stop();
   }
 
   @override
