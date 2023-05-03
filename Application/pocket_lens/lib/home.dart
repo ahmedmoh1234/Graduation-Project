@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pocket_lens/currency_recognizer.dart';
+import 'package:pocket_lens/document_reader.dart';
 import 'config.dart';
 import 'menu.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -81,6 +83,36 @@ void _goToClothesDescriptor(BuildContext ctx) {
     MaterialPageRoute(
       builder: (_) {
         return const ClothesDescriptor();
+      },
+    ),
+  );
+}
+
+void _goToDocumentReader(BuildContext ctx) {
+  Navigator.of(ctx).push(
+    MaterialPageRoute(
+      builder: (_) {
+        return const DocumentReader();
+      },
+    ),
+  );
+}
+
+void _goToCurrencyRecognizer(BuildContext ctx) {
+  Navigator.of(ctx).push(
+    MaterialPageRoute(
+      builder: (_) {
+        return const CurrencyRecognizer();
+      },
+    ),
+  );
+}
+
+_goToHome(BuildContext ctx) {
+  Navigator.of(ctx).push(
+    MaterialPageRoute(
+      builder: (_) {
+        return Home();
       },
     ),
   );
@@ -292,6 +324,12 @@ class _HomeState extends State<Home> {
           _goToBarcodeReader(context);
         } else if (commandName == 'Clothes') {
           _goToClothesDescriptor(context);
+        } else if (commandName == 'Currency Recognizer') {
+          _goToCurrencyRecognizer(context);
+        } else if (commandName == 'Document Reader') {
+          _goToDocumentReader(context);
+        } else if (commandName == 'Home') {
+          _goToHome(context);
         } else if (commandName == 'Menu') {
           Scaffold.of(context).openDrawer();
         } else if (commandName == 'Back') {
