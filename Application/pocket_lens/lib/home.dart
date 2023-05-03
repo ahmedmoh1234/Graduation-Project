@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'config.dart';
 import 'menu.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -282,14 +283,25 @@ class _HomeState extends State<Home> {
         debugPrint("got new command ${command.toString()}");
         var commandName = command.data["command"];
         if (commandName == 'Scene Descriptor') {
-          // debugPrint('--------------------------------------------');
-          // debugPrint('SCENE DESCRIPTOR');
-          // debugPrint('--------------------------------------------');
           _goToSceneDescriptor(context);
         } else if (commandName == 'Face Recognizer') {
           _goToFaceDetector(context);
         } else if (commandName == 'Emotion Recognizer') {
           _goToEmotionRecognizer(context);
+        } else if (commandName == 'Barcode') {
+          _goToBarcodeReader(context);
+        } else if (commandName == 'Clothes') {
+          _goToClothesDescriptor(context);
+        } else if (commandName == 'Menu') {
+          Scaffold.of(context).openDrawer();
+        } else if (commandName == 'Back') {
+          if (Navigator.canPop(context)) {
+            Navigator.pop(context);
+          }
+        } else if (commandName == 'Exit') {
+          //AlanVoice.deactivate();
+          //Exit application
+          SystemChannels.platform.invokeMethod('SystemNavigator.pop');
         }
       },
     );
@@ -301,13 +313,13 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     // initTts();
-    // _initSpeech();
-    // WidgetsBinding.instance.addPostFrameCallback(
-    //   (_) async {
-    //     await _speak();
-    //     // await _startListening();
-    //   },
-    // );
+    _initSpeech();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async {
+        await _speak();
+        // await _startListening();
+      },
+    );
 
     initAlan();
   }

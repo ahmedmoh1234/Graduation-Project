@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'config.dart';
 import 'package:camera/camera.dart';
 import 'main.dart';
@@ -9,18 +10,16 @@ import 'package:path/path.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:io' show Platform;
 
-import 'package:flutter_tts/flutter_tts.dart';
-
 enum TtsState { playing, stopped, paused, continued }
 
-class ClothesDescriptor extends StatefulWidget {
-  const ClothesDescriptor({super.key});
+class CurrencyRecognizer extends StatefulWidget {
+  const CurrencyRecognizer({super.key});
 
   @override
-  State<ClothesDescriptor> createState() => _ClothesDescriptorState();
+  State<CurrencyRecognizer> createState() => _CurrencyRecognizerState();
 }
 
-class _ClothesDescriptorState extends State<ClothesDescriptor> {
+class _CurrencyRecognizerState extends State<CurrencyRecognizer> {
   late CameraController _controller;
   late FlutterTts flutterTts;
   double volume = 3;
@@ -143,7 +142,7 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
     stream.cast();
 
     var length = await image.length();
-    var url = Uri.parse('http://$IP_ADDRESS/clothes-descriptor');
+    var url = Uri.parse('http://$IP_ADDRESS/currency-recognize');
     var request = http.MultipartRequest('POST', url);
     var multipartFile = await http.MultipartFile(
       'image',
@@ -153,7 +152,6 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
     );
 
     request.files.add(multipartFile);
-
     var response = await request.send();
     final respStr = await response.stream.bytesToString();
     _speak(respStr);
@@ -196,7 +194,7 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Clothes Descriptor'),
+        title: const Text('Currency Recognizer'),
         backgroundColor: const Color(0xFF106cb5),
       ),
       body: FutureBuilder<void>(

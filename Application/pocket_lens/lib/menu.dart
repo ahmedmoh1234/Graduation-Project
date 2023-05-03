@@ -253,22 +253,6 @@ class Menu extends StatelessWidget {
               _goToAlanChatbot(context);
             },
             leading: const Icon(
-              Icons.message_rounded,
-              size: 27,
-            ),
-            title: const Text(
-              'Alan Chatbot',
-              style: TextStyle(
-                fontSize: 17,
-                fontFamily: 'RalewayMedium',
-              ),
-            ),
-          ),
-          ListTile(
-            onTap: () {
-              _goToChatbot(context);
-            },
-            leading: const Icon(
               Icons.textsms_rounded,
               size: 27,
             ),
@@ -280,6 +264,22 @@ class Menu extends StatelessWidget {
               ),
             ),
           ),
+          // ListTile(
+          //   onTap: () {
+          //     _goToChatbot(context);
+          //   },
+          //   leading: const Icon(
+          //     Icons.textsms_rounded,
+          //     size: 27,
+          //   ),
+          //   title: const Text(
+          //     'Chatbot',
+          //     style: TextStyle(
+          //       fontSize: 17,
+          //       fontFamily: 'RalewayMedium',
+          //     ),
+          //   ),
+          // ),
           ListTile(
             onTap: () {},
             leading: const Icon(

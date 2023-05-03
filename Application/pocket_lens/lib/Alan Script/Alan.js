@@ -24,9 +24,15 @@ intent('(Face Recognizer|Who is this?)', p=> {
     p.play({command: 'Face Recognizer'});
 })
 
-//(Emotion|Emotion Detector|What is (he|she|they) feeling ?)
 
-intent('(Emotion|Emotion Detector|What is he feeling?)', p=> {
+
+
+
+intent('Emotion',
+       'Emotion Detector',
+       'What is (he|she) feeling?',
+       'What are they feeling?', 
+       p=> {
     p.play('Going to emotion recognizer.');
     p.play({command: 'Emotion Recognizer'});
 })

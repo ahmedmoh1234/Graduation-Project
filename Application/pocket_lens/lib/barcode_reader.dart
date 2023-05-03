@@ -26,6 +26,7 @@ class BarcodeReader extends StatelessWidget {
         },
         child: const Icon(Icons.camera_alt),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
