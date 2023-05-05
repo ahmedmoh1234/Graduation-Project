@@ -19,9 +19,9 @@ class Menu extends StatelessWidget {
   final String gender;
 
   Menu({
-    required this.name,
-    required this.email,
-    required this.gender,
+    this.name,
+    this.email,
+    this.gender,
   });
 
   void _goToCurrencyRecognizer(BuildContext ctx) {

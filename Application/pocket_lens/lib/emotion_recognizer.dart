@@ -14,20 +14,20 @@ import 'package:flutter_tts/flutter_tts.dart';
 enum TtsState { playing, stopped, paused, continued }
 
 class EmotionRecognizer extends StatefulWidget {
-  const EmotionRecognizer({super.key});
+  const EmotionRecognizer({key});
 
   @override
   State<EmotionRecognizer> createState() => _EmotionRecognizerState();
 }
 
 class _EmotionRecognizerState extends State<EmotionRecognizer> {
-  late CameraController _controller;
-  late FlutterTts flutterTts;
+  CameraController _controller;
+  FlutterTts flutterTts;
   double volume = 2.5;
   double pitch = 1.0;
   double rate = 0.5;
-  late Future<void> _initializeControllerFuture;
-  late CameraDescription camera;
+  Future<void> _initializeControllerFuture;
+  CameraDescription camera;
   TtsState ttsState = TtsState.stopped;
 
   get isPlaying => ttsState == TtsState.playing;
@@ -257,8 +257,7 @@ class _EmotionRecognizerState extends State<EmotionRecognizer> {
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
 
-  const DisplayPictureScreen({super.key, required this.imagePath});
-
+  const DisplayPictureScreen({key, this.imagePath});
   @override
   Widget build(BuildContext context) {
     return Scaffold(

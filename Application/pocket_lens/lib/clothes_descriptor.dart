@@ -14,20 +14,20 @@ import 'package:flutter_tts/flutter_tts.dart';
 enum TtsState { playing, stopped, paused, continued }
 
 class ClothesDescriptor extends StatefulWidget {
-  const ClothesDescriptor({super.key});
+  const ClothesDescriptor({key});
 
   @override
   State<ClothesDescriptor> createState() => _ClothesDescriptorState();
 }
 
 class _ClothesDescriptorState extends State<ClothesDescriptor> {
-  late CameraController _controller;
-  late FlutterTts flutterTts;
+  CameraController _controller;
+  FlutterTts flutterTts;
   double volume = 3;
   double pitch = 1.0;
   double rate = 0.5;
-  late Future<void> _initializeControllerFuture;
-  late CameraDescription camera;
+  Future<void> _initializeControllerFuture;
+  CameraDescription camera;
   TtsState ttsState = TtsState.stopped;
 
   get isPlaying => ttsState == TtsState.playing;
@@ -256,7 +256,7 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
 
-  const DisplayPictureScreen({super.key, required this.imagePath});
+  const DisplayPictureScreen({key, this.imagePath});
 
   @override
   Widget build(BuildContext context) {

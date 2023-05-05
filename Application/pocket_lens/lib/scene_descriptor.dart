@@ -14,20 +14,20 @@ import 'package:flutter_tts/flutter_tts.dart';
 enum TtsState { playing, stopped, paused, continued }
 
 class SceneDescriptor extends StatefulWidget {
-  const SceneDescriptor({super.key});
+  const SceneDescriptor({key});
 
   @override
   State<SceneDescriptor> createState() => _SceneDescriptorState();
 }
 
 class _SceneDescriptorState extends State<SceneDescriptor> {
-  late CameraController _controller;
-  late FlutterTts flutterTts;
+  CameraController _controller;
+  FlutterTts flutterTts;
   double volume = 3;
   double pitch = 1.0;
   double rate = 0.5;
-  late Future<void> _initializeControllerFuture;
-  late CameraDescription camera;
+  Future<void> _initializeControllerFuture;
+  CameraDescription camera;
   TtsState ttsState = TtsState.stopped;
 
   get isPlaying => ttsState == TtsState.playing;
@@ -259,8 +259,7 @@ class _SceneDescriptorState extends State<SceneDescriptor> {
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
 
-  const DisplayPictureScreen({super.key, required this.imagePath});
-
+  const DisplayPictureScreen({key, this.imagePath});
   @override
   Widget build(BuildContext context) {
     return Scaffold(

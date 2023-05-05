@@ -13,20 +13,20 @@ import 'dart:io' show Platform;
 enum TtsState { playing, stopped, paused, continued }
 
 class DocumentReader extends StatefulWidget {
-  const DocumentReader({super.key});
+  const DocumentReader({key});
 
   @override
   State<DocumentReader> createState() => _DocumentReaderState();
 }
 
 class _DocumentReaderState extends State<DocumentReader> {
-  late CameraController _controller;
-  late FlutterTts flutterTts;
+  CameraController _controller;
+  FlutterTts flutterTts;
   double volume = 3;
   double pitch = 1.0;
   double rate = 0.5;
-  late Future<void> _initializeControllerFuture;
-  late CameraDescription camera;
+  Future<void> _initializeControllerFuture;
+  CameraDescription camera;
   TtsState ttsState = TtsState.stopped;
 
   get isPlaying => ttsState == TtsState.playing;
@@ -254,7 +254,7 @@ class _DocumentReaderState extends State<DocumentReader> {
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
 
-  const DisplayPictureScreen({super.key, required this.imagePath});
+  const DisplayPictureScreen({key, this.imagePath});
 
   @override
   Widget build(BuildContext context) {

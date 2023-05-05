@@ -118,6 +118,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_appavailability:
+    dependency: "direct main"
+    description:
+      name: flutter_appavailability
+      sha256: "352b9e84b695ee13b0cfb5a9c8eee61c67e2518930ee633bb54ace923d490cee"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.21"
   flutter_barcode_scanner:
     dependency: "direct main"
     description:
@@ -366,5 +374,5 @@ packages:
     source: hosted
     version: "2.1.4"
 sdks:
-  dart: ">=2.19.2 <3.0.0"
+  dart: ">=2.18.0 <3.0.0"
   flutter: ">=3.3.0"
