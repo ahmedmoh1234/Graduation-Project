@@ -14,27 +14,96 @@ intent('What is your name ?', p => {
 
 
 
-intent('(Scene Descriptor|Scene|Describe|Describe the Scene)', p=> {
+intent('(Open|Go to|) Scene Descriptor',
+       'Scene',
+       'Describe',
+       'Describe the Scene',
+       'What(\'s| is) in front of me ?',
+       'What am I seeing ?',
+       'What are you seeing ?',
+       p=> {
     p.play('Going to scene descriptor.');
     p.play({command: 'Scene Descriptor'});
 })
 
-intent('(Face Recognizer|Who is this?)', p=> {
+intent('(Open|Go to|) Face Recognizer',
+       'Who is this?',
+       'Who (\'s| is) in front of me ?',
+       p=> {
     p.play('Going to Face Recognizer.');
     p.play({command: 'Face Recognizer'});
 })
 
+intent('Back', 
+      'Go back',
+      p => {
+       p.play({command: 'Back'});
+})
 
+intent('(Read|Scan) (this|) (document|text|)',
+       '(Open|Go to|) Document (scanner|reader|)',
+      p=>{
+    p.play('Going to document reader.');
+    p.play({command: 'Document Reader'});
+})
 
+intent('(Open|Go to|) Currency (Recognizer|Descriptor|)',
+      'How much ?',
+      'How much is this ?',
+      'Currency',
+      'Denomination',
+        p=>{
+    p.play('Going to currency recognizer.');
+    p.play({command: 'Currency Recognizer'})
+})
 
+intent('(Open|Go to|) Menu',
+       p=>{
+    p.play('Opening Menu');
+    p.play({command: 'Menu'});
+})
 
-intent('Emotion',
-       'Emotion Detector',
+intent('(Open|Go to|) Clothes (Descriptor|)',
+       'Clothes',
+      'What cloth is this ?',
+      'Is this a (t-shirt|dress|shirt|trousers)',
+      'What to wear ?',
+      p=>{
+    p.play('Going to clothes descriptor.');
+    p.play({command: 'Clothes'});
+})
+       
+intent('(Open|Go to|) Emotion (Recognizer|Detector|)',
+       'Emotion',
+       'Feeling',
        'What is (he|she) feeling?',
        'What are they feeling?', 
        p=> {
     p.play('Going to emotion recognizer.');
     p.play({command: 'Emotion Recognizer'});
+})
+
+intent('(Open|Go to|) Barcode (Scanner|Reader|)',
+      '(Scan this|) Barcode',
+      '(What is this|) Product',
+      'What product is this ?',
+      p => {
+    p.play('Going to barcode reader.');
+    p.play({command: 'Barcode'});
+})
+
+
+intent('(Go|) Home',
+      p=>{
+       p.play({command: 'Home'});
+})
+
+intent('Exit',
+       'Goodbye',
+       'Quit',
+      p => {
+    p.play('Goodbye');
+    p.play({command: 'Exit'});
 })
 
 corpus(`
