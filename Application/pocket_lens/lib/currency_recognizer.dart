@@ -13,20 +13,20 @@ import 'dart:io' show Platform;
 enum TtsState { playing, stopped, paused, continued }
 
 class CurrencyRecognizer extends StatefulWidget {
-  const CurrencyRecognizer({key});
+  const CurrencyRecognizer({super.key});
 
   @override
   State<CurrencyRecognizer> createState() => _CurrencyRecognizerState();
 }
 
 class _CurrencyRecognizerState extends State<CurrencyRecognizer> {
-  CameraController _controller;
-  FlutterTts flutterTts;
+  late CameraController _controller;
+  late FlutterTts flutterTts;
   double volume = 3;
   double pitch = 1.0;
   double rate = 0.5;
-  Future<void> _initializeControllerFuture;
-  CameraDescription camera;
+  late Future<void> _initializeControllerFuture;
+  late CameraDescription camera;
   TtsState ttsState = TtsState.stopped;
 
   get isPlaying => ttsState == TtsState.playing;
@@ -254,7 +254,7 @@ class _CurrencyRecognizerState extends State<CurrencyRecognizer> {
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
 
-  const DisplayPictureScreen({key, this.imagePath});
+  const DisplayPictureScreen({super.key, required this.imagePath});
 
   @override
   Widget build(BuildContext context) {

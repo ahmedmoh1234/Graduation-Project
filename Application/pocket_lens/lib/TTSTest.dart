@@ -13,16 +13,16 @@ class TTSTest extends StatefulWidget {
 enum TtsState { playing, stopped, paused, continued }
 
 class _TTSTestState extends State<TTSTest> {
-  FlutterTts flutterTts;
-  String language;
-  String engine;
+  late FlutterTts flutterTts;
+  String? language;
+  String? engine;
   double volume = 0.5;
   double pitch = 1.0;
   double rate = 0.5;
   bool isCurrentLanguageInstalled = false;
 
-  String _newVoiceText;
-  int _inputLength;
+  String? _newVoiceText;
+  int? _inputLength;
 
   TtsState ttsState = TtsState.stopped;
 
@@ -127,8 +127,8 @@ class _TTSTestState extends State<TTSTest> {
     await flutterTts.setPitch(pitch);
 
     if (_newVoiceText != null) {
-      if (_newVoiceText.isNotEmpty) {
-        await flutterTts.speak(_newVoiceText);
+      if (_newVoiceText!.isNotEmpty) {
+        await flutterTts.speak(_newVoiceText!);
       }
     }
   }
@@ -156,14 +156,14 @@ class _TTSTestState extends State<TTSTest> {
   List<DropdownMenuItem<String>> getEnginesDropDownMenuItems(dynamic engines) {
     var items = <DropdownMenuItem<String>>[];
     for (dynamic type in engines) {
-      items.add(
-          DropdownMenuItem(value: type as String, child: Text(type as String)));
+      items.add(DropdownMenuItem(
+          value: type as String?, child: Text(type as String)));
     }
     return items;
   }
 
-  void changedEnginesDropDownItem(String selectedEngine) async {
-    await flutterTts.setEngine(selectedEngine);
+  void changedEnginesDropDownItem(String? selectedEngine) async {
+    await flutterTts.setEngine(selectedEngine!);
     language = null;
     setState(() {
       engine = selectedEngine;
@@ -174,20 +174,20 @@ class _TTSTestState extends State<TTSTest> {
       dynamic languages) {
     var items = <DropdownMenuItem<String>>[];
     for (dynamic type in languages) {
-      items.add(
-          DropdownMenuItem(value: type as String, child: Text(type as String)));
+      items.add(DropdownMenuItem(
+          value: type as String?, child: Text(type as String)));
     }
     return items;
   }
 
-  void changedLanguageDropDownItem(String selectedType) {
+  void changedLanguageDropDownItem(String? selectedType) {
     setState(() {
       language = selectedType;
       print('LANGUAGE: $language');
-      flutterTts.setLanguage(language);
+      flutterTts.setLanguage(language!);
       if (isAndroid) {
         flutterTts
-            .isLanguageInstalled(language)
+            .isLanguageInstalled(language!)
             .then((value) => isCurrentLanguageInstalled = (value as bool));
       }
     });

@@ -18,7 +18,6 @@ import 'package:pocket_lens/clothes_descriptor.dart';
 import 'package:pocket_lens/emotion_recognizer.dart';
 import 'scene_descriptor.dart';
 import 'face_detector.dart';
-import 'package:flutter_appavailability/flutter_appavailability.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -121,7 +120,7 @@ _goToHome(BuildContext ctx) {
 
 class _HomeState extends State<Home> {
   //===========================TEXT TO SPEECH===================================
-  FlutterTts flutterTts;
+  late FlutterTts flutterTts;
   double volume = 4;
   double pitch = 1.0;
   double rate = 0.5;
@@ -338,7 +337,7 @@ class _HomeState extends State<Home> {
           _goToHome(context);
         } else if (commandName == 'Menu') {
           // Scaffold.of(context).openDrawer();
-          _scaffoldKey.currentState.openDrawer();
+          _scaffoldKey.currentState!.openDrawer();
         } else if (commandName == 'Back') {
           debugPrint(
               '---------------------------------------------------------');
@@ -362,11 +361,11 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    initTts();
+    // initTts();
     // _initSpeech();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
-        await _speak();
+        // await _speak();
         // await _startListening();
       },
     );
@@ -378,7 +377,6 @@ class _HomeState extends State<Home> {
   void dispose() {
     super.dispose();
     flutterTts.stop();
-    AlanVoice.deactivate();
     // _speechToText.stop();
   }
 
