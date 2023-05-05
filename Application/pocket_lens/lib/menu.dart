@@ -2,6 +2,7 @@ import 'package:pocket_lens/ChangeIPAddress.dart';
 import 'package:pocket_lens/alan_chatbot.dart';
 import 'package:pocket_lens/barcode_reader.dart';
 import 'package:pocket_lens/clothes_descriptor.dart';
+import 'package:pocket_lens/currency_recognizer.dart';
 import 'package:pocket_lens/emotion_recognizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,6 +23,16 @@ class Menu extends StatelessWidget {
     required this.email,
     required this.gender,
   });
+
+  void _goToCurrencyRecognizer(BuildContext ctx) {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return const CurrencyRecognizer();
+        },
+      ),
+    );
+  }
 
   void _goToAlanChatbot(BuildContext ctx) {
     Navigator.of(ctx).push(
@@ -281,13 +292,15 @@ class Menu extends StatelessWidget {
           //   ),
           // ),
           ListTile(
-            onTap: () {},
+            onTap: () {
+              _goToCurrencyRecognizer(context);
+            },
             leading: const Icon(
               Icons.paid,
               size: 27,
             ),
             title: const Text(
-              'Currency Detector',
+              'Currency Recognizer',
               style: TextStyle(
                 fontSize: 17,
                 fontFamily: 'RalewayMedium',

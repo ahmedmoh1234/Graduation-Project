@@ -315,6 +315,11 @@ class _HomeState extends State<Home> {
         debugPrint("got new command ${command.toString()}");
         var commandName = command.data["command"];
         if (commandName == 'Scene Descriptor') {
+          // debugPrint(
+          //     '---------------------------------------------------------');
+          // debugPrint('Scene Descriptor');
+          // debugPrint(
+          //     '---------------------------------------------------------');
           _goToSceneDescriptor(context);
         } else if (commandName == 'Face Recognizer') {
           _goToFaceDetector(context);
@@ -331,13 +336,19 @@ class _HomeState extends State<Home> {
         } else if (commandName == 'Home') {
           _goToHome(context);
         } else if (commandName == 'Menu') {
-          Scaffold.of(context).openDrawer();
+          // Scaffold.of(context).openDrawer();
+          _scaffoldKey.currentState!.openDrawer();
         } else if (commandName == 'Back') {
+          debugPrint(
+              '---------------------------------------------------------');
+          debugPrint("I am inside ${context.widget.runtimeType}");
+          debugPrint(
+              '---------------------------------------------------------');
           if (Navigator.canPop(context)) {
             Navigator.pop(context);
           }
         } else if (commandName == 'Exit') {
-          //AlanVoice.deactivate();
+          AlanVoice.deactivate();
           //Exit application
           SystemChannels.platform.invokeMethod('SystemNavigator.pop');
         }
@@ -351,10 +362,10 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     // initTts();
-    _initSpeech();
+    // _initSpeech();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
-        await _speak();
+        // await _speak();
         // await _startListening();
       },
     );
@@ -365,13 +376,16 @@ class _HomeState extends State<Home> {
   @override
   void dispose() {
     super.dispose();
-    // flutterTts.stop();
+    flutterTts.stop();
     // _speechToText.stop();
   }
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         centerTitle: true,
         title: const Text('This is the Home Page'),
