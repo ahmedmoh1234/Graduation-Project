@@ -5,7 +5,7 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 
-from utils.data_land_marker import LandMarker
+from utils_emo.data_land_marker import LandMarker
 
 NO_FACE_LABEL = 'no face'
 

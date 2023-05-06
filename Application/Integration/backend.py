@@ -11,12 +11,14 @@ from Scene_Descriptor.Scene_Descriptor import detect_obj
 from Clothes_Descriptor.Clothes_Description import describe_clothes
 from Currency_Detector.currency_detect import currency_detector
 from Document_scanner.main import document_scanner
+from Product_Identifier.product_detect import ProductDetection, BrandRecognition
+
 
 # from Currency_Detector.detect import currency_detector
 import os
 
 # Run ipconfig in command prompt to get IP Address
-IP_ADDRESS = '192.168.1.3'
+IP_ADDRESS = '192.168.1.7'
 
 app = Flask(__name__)
 
@@ -109,6 +111,26 @@ def document_reader():
     # PILImage.show()
     result = document_scanner(img)
     return result
+
+pd = ProductDetection('product_detect.pt')
+br = BrandRecognition('logo_detect.pt')
+
+@app.route('/product-identifier', methods=['POST'])
+def product_identifier():    
+    global pd
+    global br
+    file = request.files['image']
+    img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
+    # PILImage = Image.open(file.stream)
+    # print(img.shape)
+    # PILImage.show()
+    foundObjects = pd.predict(img)
+    finalStr = ""
+    for i in range(len(foundObjects)):
+        finalStr += foundObjects[i][1] + ", " + br.predict(foundObjects[i][0]) + "\n"
+    if finalStr == "":
+        finalStr = "No products found"
+    return finalStr
 
 
 if __name__ == "__main__":

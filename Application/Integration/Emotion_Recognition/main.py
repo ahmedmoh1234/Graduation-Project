@@ -6,7 +6,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
 
-from utils.image_classifier import ImageClassifier, NO_FACE_LABEL
+from utils_emo.image_classifier import ImageClassifier, NO_FACE_LABEL
 
 
 relativePath = ''
