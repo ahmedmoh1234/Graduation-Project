@@ -1,0 +1,8 @@
+train: datasetDetection/  
+val: datasetDetection/
+
+names:
+  0: nestle
+  1: aquafina
+  2: pepsi
+  3: coca_cola
