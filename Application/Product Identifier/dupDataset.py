@@ -6,8 +6,8 @@ def repeatDataset():
     import random
     import time 
 
-    dataImgPath = '/content/datasets/waterBottles/images'
-    dataLabelsPath = '/content/datasets/waterBottles/labels'
+    dataImgPath = '/content/datasets/train_dataset/images'
+    dataLabelsPath = '/content/datasets/train_dataset/labels'
 
     NO_OF_IMGS_REQ = 5200
     imgNo = len(os.listdir(dataImgPath))
@@ -16,6 +16,16 @@ def repeatDataset():
 
     imgArr = sorted(os.listdir(dataImgPath))
     labelArr = sorted(os.listdir(dataLabelsPath))
+
+    noPerImg = NO_OF_IMGS_REQ // imgNo
+    
+    noPerImgArr = [noPerImg] * imgNo
+
+    #add remainder to last element
+    noPerImgArr[-1] += NO_OF_IMGS_REQ % imgNo
+
+    print(f"Number of images = {noPerImgArr}")
+
 
     print(f"imgArr = {imgArr}")
 
@@ -28,6 +38,13 @@ def repeatDataset():
         
         #select random no from imgNo
         randNo = random.randint(0, imgNo-1)
+
+        #check if noPerImgArr[randNo] is 0
+        if noPerImgArr[randNo] == 0:
+            continue
+
+        #decrement noPerImgArr[randNo]
+        noPerImgArr[randNo] -= 1
         
         #select random image
         imgName = Image.open(dataImgPath + '/' + imgArr[randNo])
@@ -51,13 +68,13 @@ def repeatDataset():
 
         #progress bar updates every 1 second
         curTime = time.time()
-        if curTime - lastTime > 1:
+        if curTime - lastTime > 2:
 
             #clear line
             print('\r', end='')
 
             #print progress
-            print('Progress: ' + str(currentImgNo) + '/' + str(NO_OF_IMGS_REQ))
+            print('Progress: ' + str(currentImgNo) + '/' + str(NO_OF_IMGS_REQ), end='')
 
 
     print('Finished repeating dataset')
