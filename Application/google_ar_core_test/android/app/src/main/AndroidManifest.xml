@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" 
+xmlns:tools="http://schemas.android.com/tools"
     package="com.example.google_ar_core_test">
     <uses-sdk android:minSdkVersion="24" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -33,6 +34,6 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        <meta-data android:name="com.google.ar.core" android:value="optional" />
+        <meta-data android:name="com.google.ar.core" android:value="required" tools:replace="android:value"/>
     </application>
 </manifest>
