@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pocket_lens/currency_recognizer.dart';
 import 'package:pocket_lens/document_reader.dart';
+import 'package:pocket_lens/product-identifier.dart';
 import 'config.dart';
 import 'menu.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -103,6 +104,16 @@ void _goToCurrencyRecognizer(BuildContext ctx) {
     MaterialPageRoute(
       builder: (_) {
         return const CurrencyRecognizer();
+      },
+    ),
+  );
+}
+
+_goToProductIdentifier(BuildContext context) {
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (_) {
+        return const ProductIdentifier();
       },
     ),
   );
@@ -333,6 +344,8 @@ class _HomeState extends State<Home> {
           _goToCurrencyRecognizer(context);
         } else if (commandName == 'Document Reader') {
           _goToDocumentReader(context);
+        } else if (commandName == 'Product Identifier') {
+          _goToProductIdentifier(context);
         } else if (commandName == 'Home') {
           _goToHome(context);
         } else if (commandName == 'Menu') {
@@ -357,15 +370,16 @@ class _HomeState extends State<Home> {
   }
 
   //===========================WIDGET FUNCTIONS===================================
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    // initTts();
+    initTts();
     // _initSpeech();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
-        // await _speak();
+        await _speak();
         // await _startListening();
       },
     );
@@ -379,8 +393,6 @@ class _HomeState extends State<Home> {
     flutterTts.stop();
     // _speechToText.stop();
   }
-
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
