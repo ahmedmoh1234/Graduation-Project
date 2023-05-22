@@ -4,6 +4,7 @@ xmlns:tools="http://schemas.android.com/tools"
     <uses-sdk android:minSdkVersion="24" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera.ar" />
+    <!-- <uses-feature android:glEsVersion="0x00030000" android:required="true" /> -->
    <application
         android:label="google_ar_core_test"
         android:name="${applicationName}"
