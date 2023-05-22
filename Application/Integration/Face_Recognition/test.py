@@ -94,6 +94,8 @@ class FaceDetector:
         # getting embedding matrix of the given img
         # img = Image.open(img_path)
         face, prob = self.mtcnn(img, return_prob=True) # returns cropped face and probability
+        if face == None:
+            return "No Face Detected"
         emb = self.pretrainedModel(face.unsqueeze(0)).detach() # detech is to make required gradient false
         
         # print(f"Loading {data_path}")

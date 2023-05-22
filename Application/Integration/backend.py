@@ -66,10 +66,10 @@ def face_detector():
     except:
         print('No image')
         return 'No image'
-    img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
-    print(img.shape)
+    # img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
+    # print(img.shape)
     PILImage = Image.open(file.stream)
-    PILImage.show()
+    # PILImage.show()
     fd = FaceDetector()
     result = fd.faceMatch(PILImage, 1)
     print(f"Faced matched with {result}")
@@ -82,11 +82,11 @@ def face_detector():
 def emotion_recognizer():    
     file = request.files['image']
     img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
-    print(img.shape)
-    PILImage = Image.open(file.stream)
-    PILImage.show()
+    # print(img.shape)
+    # PILImage = Image.open(file.stream)
+    # PILImage.show()
     img, result = emoDetection(img)
-    print(f"Emotion: {result[0]}")
+    # print(f"Emotion: {result[0]}")
     return result[0]
 
 
