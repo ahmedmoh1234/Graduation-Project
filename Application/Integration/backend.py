@@ -18,7 +18,10 @@ from Product_Identifier.product_detect import ProductDetection, BrandRecognition
 import os
 
 # Run ipconfig in command prompt to get IP Address
-IP_ADDRESS = '192.168.1.7'
+IP_ADDRESS = '192.168.1.24'
+
+pd = ProductDetection('product_detect.pt')
+br = BrandRecognition('logo_detect.pt')
 
 app = Flask(__name__)
 
@@ -112,8 +115,7 @@ def document_reader():
     result = document_scanner(img)
     return result
 
-pd = ProductDetection('product_detect.pt')
-br = BrandRecognition('logo_detect.pt')
+
 
 @app.route('/product-identifier', methods=['POST'])
 def product_identifier():    
@@ -124,10 +126,23 @@ def product_identifier():
     # PILImage = Image.open(file.stream)
     # print(img.shape)
     # PILImage.show()
+    product = {"soda can":["pepsi","coca cola"],
+               "water bottle" : ["nestle", "aquafina"],
+               "No logo detected" : ["no logo detected"]}
     foundObjects = pd.predict(img)
     finalStr = ""
     for i in range(len(foundObjects)):
-        finalStr += foundObjects[i][1] + ", " + br.predict(foundObjects[i][0]) + "\n"
+        finalStr += foundObjects[i][1]
+        if finalStr == "":
+            finalStr = "No products found"
+            return finalStr
+        finalStr += " , "
+        temp = br.predict(img)
+        if temp in product[foundObjects[i][1]]:
+            finalStr += temp
+        else:
+            finalStr += "no logo detected"
+
     if finalStr == "":
         finalStr = "No products found"
     return finalStr
