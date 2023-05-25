@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import skimage
 from PIL import Image
 from Face_Recognition.test import FaceDetector
-from Emotion_Recognition.main import emoDetection
+from Emotion_Recognition.main import  loadEmoDetector
 from Scene_Descriptor.Scene_Descriptor import detect_obj
 from Clothes_Descriptor.Clothes_Description import describe_clothes
 from Currency_Detector.currency_detect import currency_detector
@@ -22,6 +22,7 @@ IP_ADDRESS = '192.168.1.24'
 
 pd = ProductDetection('product_detect.pt')
 br = BrandRecognition('logo_detect.pt')
+emoDetector = loadEmoDetector()
 
 app = Flask(__name__)
 
@@ -88,7 +89,7 @@ def emotion_recognizer():
     # print(img.shape)
     # PILImage = Image.open(file.stream)
     # PILImage.show()
-    img, result = emoDetection(img)
+    img, result = emoDetector.executeWithImage(img)
     # print(f"Emotion: {result[0]}")
     return result[0]
 

@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 import os
 import sys
+import time
 
 sys.path.insert(0, os.path.dirname(__file__))
 
@@ -116,14 +117,12 @@ class RealTimeEmotionDetector:
 
     def executeWithImage(self, img):
         predicted_labels = self.classifier.classify(img=self.transform_img(img=img))
-        rectangles = self.classifier.extract_face_rectangle(img=img)
-        landmark_points_list = self.classifier.extract_landmark_points(img=img)
-        for lbl, rectangle, lm_points in zip(predicted_labels, rectangles, landmark_points_list):
-            draw_face_rectangle(BoundingBox(*rectangle), img)
-            draw_landmark_points(points=lm_points, img=img)
-            write_label(rectangle[0], rectangle[1], label=lbl, img=img)
-            print('[INFO] Predicted Labels:', predicted_labels)
-
+        # rectangles = self.classifier.extract_face_rectangle(img=img)
+        # landmark_points_list = self.classifier.extract_landmark_points(img=img)
+        # for lbl, rectangle, lm_points in zip(predicted_labels, rectangles, landmark_points_list):
+        #     draw_face_rectangle(BoundingBox(*rectangle), img)
+        #     draw_landmark_points(points=lm_points, img=img)
+        #     write_label(rectangle[0], rectangle[1], label=lbl, img=img)
         
         return (img , predicted_labels)
 
@@ -149,31 +148,13 @@ def run_real_time_emotion_detector(
     print('[INFO] Opening camera, press "q" to exit..')
     RealTimeEmotionDetector(classifier_model=classifier).execute()
 
-def runEmotionDetectionImg(classifier_algorithm: str,
-        predictor_path: str,
-        dataset_csv: str,
-        img,
-        dataset_images_dir: str = None):
-    from utils_emo.data_land_marker import LandMarker
-    from utils_emo.image_classifier import ImageClassifier
-    from os.path import isfile
-
-    land_marker = LandMarker(landmark_predictor_path=predictor_path)
-
-    if not isfile(dataset_csv):  # If data-set not built before.
-        print('[INFO]', f'Dataset file: "{dataset_csv}" could not found.')
-        from data_preparer import run_data_preparer
-        run_data_preparer(land_marker, dataset_images_dir, dataset_csv)
-    else:
-        print('[INFO]', f'Dataset file: "{dataset_csv}" found.')
-
-    classifier = ImageClassifier(csv_path=dataset_csv, algorithm=classifier_algorithm, land_marker=land_marker)
+def runEmotionDetectionImg(classifier,img):
     return RealTimeEmotionDetector(classifier_model=classifier).executeWithImage(img)
 
 
 def emoDetection(img):
     return runEmotionDetectionImg(
-        classifier_algorithm= 'RandomForest',  # Alternatively 'SVM'.
+        classifier_algorithm= 'SVM',  # Alternatively 'SVM'.'RandomForest'
         predictor_path= createAbsolutePaths('/utils_emo/shape_predictor_68_face_landmarks.dat'),
         # predictor_path=relativePath + 'utils\sharks.dat',
         dataset_csv= createAbsolutePaths('/data/csv/dataset.csv'),
@@ -189,16 +170,48 @@ def createAbsolutePaths(relativePath):
     absPath = absPath + relativePath
     return absPath
 
+def loadClassifier(dataset_csv: str, classifier_algorithm: str, predictor_path: str, dataset_images_dir: str = None):
+    from utils_emo.data_land_marker import LandMarker
+    from utils_emo.image_classifier import ImageClassifier
+    from os.path import isfile
+
+    land_marker = LandMarker(landmark_predictor_path=predictor_path)
+
+    if not isfile(dataset_csv):  # If data-set not built before.
+        print('[INFO]', f'Dataset file: "{dataset_csv}" could not found.')
+        from data_preparer import run_data_preparer
+        run_data_preparer(land_marker, dataset_images_dir, dataset_csv)
+    else:
+        print('[INFO]', f'Dataset file: "{dataset_csv}" found.')
+
+    return ImageClassifier(csv_path=dataset_csv, algorithm=classifier_algorithm, land_marker=land_marker)
+
+def loadEmoDetector():
+    classifier = loadClassifier(classifier_algorithm= 'SVM',  # Alternatively 'SVM'.'RandomForest'
+        predictor_path= createAbsolutePaths('/utils_emo/shape_predictor_68_face_landmarks.dat'),
+        dataset_csv= createAbsolutePaths('/data/csv/dataset.csv'),
+        dataset_images_dir= createAbsolutePaths('/data/raw'))
+    
+    return RealTimeEmotionDetector(classifier_model=classifier)
+
 if __name__ == "__main__":
     """The value of the parameters can change depending on the case."""
-    # run_real_time_emotion_detector(
-    #     classifier_algorithm='RandomForest',  # Alternatively 'SVM'.
-    #     predictor_path='utils/shape_predictor_68_face_landmarks.dat',
-    #     dataset_csv='data/csv/dataset.csv',
-    #     dataset_images_dir='data/raw'
-    # )
+    
 
-    # img = cv2.imread('./moazTest.jpg')
-    # emoDetection(img)
+    img = cv2.imread('./moazTest.jpg')
+    
+    detector = loadEmoDetector()
+
+    time1 = time.time()
+    img, labels = detector.executeWithImage(img)
+    time2 = time.time()
+    print(labels)
+    print(f"Time taken: {time2-time1}")
+
+    time1 = time.time()
+    img, labels = detector.executeWithImage(img)
+    time2 = time.time()
+    print(labels)
+    print(f"Time taken: {time2-time1}")
 
     print('Successfully terminated.')
