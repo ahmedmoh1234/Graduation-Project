@@ -15,20 +15,24 @@ from Currency_Detector.currency_detect import currency_detector
 from Document_scanner.main import document_scanner
 from Product_Identifier.product_detect import ProductDetection, BrandRecognition
 # from Currency_Detector.detect import currency_detector
+from Apparel_recom.apparel import ApparelRecommender
 
 
 
 # Run ipconfig in command prompt to get IP Address
-IP_ADDRESS = '192.168.1.7'
+IP_ADDRESS = '192.168.1.24'
+
+
+
+app = Flask(__name__)
 
 pd = ProductDetection('product_detect.pt')
 br = BrandRecognition('logo_detect.pt')
 emoDetector = loadEmoDetector()
 sceneDescriptor = SceneDescriptor("./Scene_Descriptor/weights/yolov8s-seg.pt")
 
-print('Ready to serve...')
+ar = ApparelRecommender()
 
-app = Flask(__name__)
 
 
 @app.route('/test', methods=['POST'])
@@ -151,6 +155,47 @@ def product_identifier():
     if finalStr == "":
         finalStr = "No products found"
     return finalStr
+
+@app.route('/apparel', methods=['POST'])
+def apparel():    
+    
+    texture = request.json['texture']
+    color = request.json['color']
+    clothesType = request.json['clothesType']
+    
+
+    prodId = ar.getProductID(texture, color, clothesType)
+
+
+    if prodId[0] == -1:
+        #This means that this is a new product
+        #Add it to the database
+        ar.add_apparel_data(prodId[1], texture, color, clothesType)
+        result = ar.get_top_recommendations(prodId[1], 1)
+        if isinstance(result, str):
+            result = result
+        else:
+            #only return the texture, color and clothes type
+            result = str(result['texture'].iloc[0]) + ", " + str(result['color'].iloc[0]) + ", " + str(result['clothes_type'].iloc[0])
+
+    elif prodId[0] == -2:
+        #This means that the database is empty
+        #Add it to the database
+        ar.add_apparel_data(prodId[1], texture, color, clothesType)
+        result = "Database is empty"
+
+    else:
+        #This means that the product is already in the database
+        result = ar.get_top_recommendations(prodId[0], 1)
+        if isinstance(result, str):
+            result = result
+        else:
+            result = str(result['texture'].iloc[0]) + ", " + str(result['color'].iloc[0]) + ", " + str(result['clothes_type'].iloc[0])
+    
+    
+
+
+    return result
 
 
 if __name__ == "__main__":
