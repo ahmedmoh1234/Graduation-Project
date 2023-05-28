@@ -4,25 +4,29 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 import skimage
+import os
+import time
 from PIL import Image
 from Face_Recognition.test import FaceDetector
 from Emotion_Recognition.main import  loadEmoDetector
-from Scene_Descriptor.Scene_Descriptor import detect_obj
+from Scene_Descriptor.Scene_Descriptor import SceneDescriptor
 from Clothes_Descriptor.Clothes_Description import describe_clothes
 from Currency_Detector.currency_detect import currency_detector
 from Document_scanner.main import document_scanner
 from Product_Identifier.product_detect import ProductDetection, BrandRecognition
-
-
 # from Currency_Detector.detect import currency_detector
-import os
+
+
 
 # Run ipconfig in command prompt to get IP Address
-IP_ADDRESS = '192.168.1.24'
+IP_ADDRESS = '192.168.1.7'
 
 pd = ProductDetection('product_detect.pt')
 br = BrandRecognition('logo_detect.pt')
 emoDetector = loadEmoDetector()
+sceneDescriptor = SceneDescriptor("./Scene_Descriptor/weights/yolov8s-seg.pt")
+
+print('Ready to serve...')
 
 app = Flask(__name__)
 
@@ -41,14 +45,14 @@ def command():
 
 
 @app.route('/scene-descriptor', methods=['POST'])
-def scene_descriptor():    
+def scene_descriptor():
     file = request.files['image']
     img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
-    print(img.shape)
-    response = detect_obj(img)
+    response = sceneDescriptor.estimate_depth(img)
+    # print(img.shape)
     PILImage = Image.open(file.stream)
     PILImage.show()
-    print(f"Scene Descriptor: {response}")
+    # print(f"Scene Descriptor: {response}")
     return response
 
 
