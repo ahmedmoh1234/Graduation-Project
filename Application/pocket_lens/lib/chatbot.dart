@@ -7,12 +7,14 @@ import 'dart:convert';
 import 'config.dart';
 
 class ChatBot extends StatefulWidget {
+  const ChatBot({super.key});
+
   @override
   State<ChatBot> createState() => _ChatBotState();
 }
 
 class _ChatBotState extends State<ChatBot> {
-  SpeechToText _speechToText = SpeechToText();
+  final SpeechToText _speechToText = SpeechToText();
   bool _speechEnabled = false;
   String _lastWords = '';
   String _currentWords = '';

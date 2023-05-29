@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'config.dart';
 
 class ChangeIPAddress extends StatelessWidget {
+  const ChangeIPAddress({super.key});
+
   @override
   Widget build(BuildContext context) {
     //Take input from user and change IP_ADDRESS

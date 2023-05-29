@@ -18,7 +18,7 @@ class Menu extends StatelessWidget {
   final String email;
   final String gender;
 
-  Menu({
+  Menu({super.key, 
     required this.name,
     required this.email,
     required this.gender,
@@ -38,7 +38,7 @@ class Menu extends StatelessWidget {
     Navigator.of(ctx).push(
       MaterialPageRoute(
         builder: (_) {
-          return AlanChatBot();
+          return const AlanChatBot();
         },
       ),
     );
@@ -48,7 +48,7 @@ class Menu extends StatelessWidget {
     Navigator.of(ctx).push(
       MaterialPageRoute(
         builder: (_) {
-          return ChatBot();
+          return const ChatBot();
         },
       ),
     );
@@ -58,7 +58,7 @@ class Menu extends StatelessWidget {
     Navigator.of(ctx).push(
       MaterialPageRoute(
         builder: (_) {
-          return BarcodeReader();
+          return const BarcodeReader();
         },
       ),
     );
@@ -68,7 +68,7 @@ class Menu extends StatelessWidget {
     Navigator.of(ctx).push(
       MaterialPageRoute(
         builder: (_) {
-          return TTSTest();
+          return const TTSTest();
         },
       ),
     );
@@ -98,7 +98,7 @@ class Menu extends StatelessWidget {
     Navigator.of(ctx).push(
       MaterialPageRoute(
         builder: (_) {
-          return ChangeIPAddress();
+          return const ChangeIPAddress();
         },
       ),
     );

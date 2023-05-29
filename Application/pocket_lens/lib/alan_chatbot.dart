@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:alan_voice/alan_voice.dart';
 
 class AlanChatBot extends StatefulWidget {
+  const AlanChatBot({super.key});
+
   @override
   State<AlanChatBot> createState() => _AlanChatBotState();
 }
@@ -38,7 +40,7 @@ class _AlanChatBotState extends State<AlanChatBot> {
         title: const Text('Chatbot'),
         backgroundColor: const Color(0xFF106cb5),
       ),
-      body: Center(),
+      body: const Center(),
     );
   }
 }
