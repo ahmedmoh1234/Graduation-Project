@@ -233,9 +233,23 @@ class _RecommenderState extends State<Recommender> {
             ),
           ],
           alignment: Alignment.center,
+          // icon: const Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //   children: [
+          //     Icon(
+          //       Icons.thumb_up,
+          //       color: Colors.green,
+          //     ),
+          //     Icon(
+          //       Icons.thumb_down,
+          //       color: Colors.red,
+          //     ),
+          //   ],
+          // ),
           icon: const Icon(
-            Icons.recommend,
+            Icons.recommend_rounded,
             color: Colors.green,
+            size: 30,
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
