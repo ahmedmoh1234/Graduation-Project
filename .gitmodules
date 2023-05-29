@@ -1,0 +1,3 @@
+[submodule "Application/Product Identifier/YOLOv5/yolov5"]
+	path = Application/Product Identifier/YOLOv5/yolov5
+	url = https://github.com/ultralytics/yolov5

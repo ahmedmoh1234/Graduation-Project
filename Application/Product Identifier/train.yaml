@@ -1,0 +1,9 @@
+path: ../datasets  # dataset root dir
+train: train_dataset/images/  # train images (relative to 'path') 128 images
+val: val_dataset/images/  # val images (relative to 'path') 128 images
+test:  # test images (optional)
+
+# Classes (80 COCO classes)
+names:
+  0: water bottle
+  1: soda can
