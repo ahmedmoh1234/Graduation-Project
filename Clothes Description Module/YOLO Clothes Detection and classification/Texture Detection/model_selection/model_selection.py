@@ -52,8 +52,8 @@ class ModelSelection:
         # add output layer
         model.add(Dense(output_dim, activation="softmax"))
 
-        y_onehot_train = to_categorical(self.y_train, num_classes=15)
-        y_onehot_val = to_categorical(self.y_val, num_classes=15)
+        y_onehot_train = to_categorical(self.y_train, num_classes=5)
+        y_onehot_val = to_categorical(self.y_val, num_classes=5)
         print(f'y_onehot: {y_onehot_train.shape}')
         
         # compile the model

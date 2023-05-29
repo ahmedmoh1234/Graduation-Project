@@ -1,11 +1,11 @@
 ========================================
-Timestamp: 2023-05-29 22:54:12.746289
+Timestamp: 2023-05-29 23:30:21.843563
 Model: ANN Val
-Accuracy: 28.93%
+Accuracy: 94.21%
 
-Micro Average Precision: 0.2892561983471074
-Micro Average Recall: 0.2892561983471074
-Micro Average F1: 0.29
+Micro Average Precision: 0.9421487603305785
+Micro Average Recall: 0.9421487603305785
+Micro Average F1: 0.94
 
 Macro Average Precision: nan
 Macro Average Recall: nan

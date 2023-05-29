@@ -31,22 +31,6 @@ class FeatureSelector:
         pca_features = np.array(pca_features)
         return pca_features
         
-    def extract_daisy_features(self, images):
-        descs_features = []
-        
-        for image in images:
-            descs = daisy(  image, 
-                            step=180,
-                            radius=58,
-                            rings=2, 
-                            histograms=8,
-                            orientations=16,
-                            visualize=False)
-            descs = descs.flatten()
-            descs_features.append(descs)
-        descs_features = np.array(descs_features)
-        return descs_features
-        
     def test_pca(self,img, pca):
         image_vector = img.flatten()
         pca_features = pca.transform(np.array([image_vector]))

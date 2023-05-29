@@ -1,11 +1,12 @@
 import sys
 sys.path.append('../')
+from dataloader.dataloader import DataLoader
 
 from imports import *
 
 class FeatureExtractor:
     def __init__(self):
-        pass
+        self.data_loader = DataLoader(Path("../data/"))
 
     def extract_glcm_features(self,images):
         glcm_features = []
@@ -28,7 +29,24 @@ class FeatureExtractor:
 
         # Convert the list to a numpy array
         glcm_features = np.array(glcm_features)
-
         return glcm_features
+        
+        
+    def extract_daisy_features(self, images):
+        descs_features = []
+        
+        for image in images:
+            image = self.data_loader.crop_center(image)
+            descs = daisy(  image, 
+                            step=180,
+                            radius=58,
+                            rings=2, 
+                            histograms=8,
+                            orientations=16,
+                            visualize=False)
+            descs = descs.flatten()
+            descs_features.append(descs)
+        descs_features = np.array(descs_features)
+        return descs_features
         
 
