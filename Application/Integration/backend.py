@@ -20,7 +20,8 @@ from Apparel_recom.apparel import ApparelRecommender
 
 
 # Run ipconfig in command prompt to get IP Address
-IP_ADDRESS = '192.168.1.7'
+# IP_ADDRESS = '192.168.1.7'
+IP_ADDRESS = 'localhost'
 
 
 

@@ -135,8 +135,9 @@ class _HomeState extends State<Home> {
   double volume = 4;
   double pitch = 1.0;
   double rate = 0.5;
-  final String _voiceText = '''Hi, this is the Home Page
-  Please speak the module name to navigate to it''';
+  final String _greetingString =
+      'Hi, this is the Home Page. Please speak the module name to navigate to it.';
+  bool _greetingIsPlayed = false;
   TtsState ttsState = TtsState.stopped;
 
   get isPlaying => ttsState == TtsState.playing;
@@ -154,7 +155,7 @@ class _HomeState extends State<Home> {
     await flutterTts.setSpeechRate(rate);
     await flutterTts.setPitch(pitch);
 
-    await flutterTts.speak(_voiceText);
+    await flutterTts.speak(_greetingString);
   }
 
   Future _setAwaitOptions() async {
@@ -314,7 +315,7 @@ class _HomeState extends State<Home> {
 
   //===========================ALAN FUNCTIONS===================================
 
-  void initAlan() {
+  void _initAlan() {
     /// Init Alan Button with project key from Alan AI Studio
     AlanVoice.addButton(
         "95aec1209fe5ec07ce09fa461da220842e956eca572e1d8b807a3e2338fdd0dc/stage",
@@ -326,11 +327,6 @@ class _HomeState extends State<Home> {
         debugPrint("got new command ${command.toString()}");
         var commandName = command.data["command"];
         if (commandName == 'Scene Descriptor') {
-          // debugPrint(
-          //     '---------------------------------------------------------');
-          // debugPrint('Scene Descriptor');
-          // debugPrint(
-          //     '---------------------------------------------------------');
           _goToSceneDescriptor(context);
         } else if (commandName == 'Face Recognizer') {
           _goToFaceDetector(context);
@@ -367,6 +363,20 @@ class _HomeState extends State<Home> {
         }
       },
     );
+    AlanVoice.onButtonState.add((state) {
+      if (state.name == "ONLINE" && !_greetingIsPlayed) {
+        _greetingIsPlayed = true;
+        AlanVoice.activate();
+        AlanVoice.playText(
+          _greetingString,
+        );
+      }
+    });
+  }
+
+  /// Deactivate Alan Button programmatically
+  void _deactivateAlan() {
+    AlanVoice.deactivate();
   }
 
   //===========================WIDGET FUNCTIONS===================================
@@ -377,20 +387,21 @@ class _HomeState extends State<Home> {
     super.initState();
     initTts();
     // _initSpeech();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) async {
-        await _speak();
-        // await _startListening();
-      },
-    );
+    // WidgetsBinding.instance.addPostFrameCallback(
+    //   (_) async {
+    //     await _speak();
+    //     // await _startListening();
+    //   },
+    // );
 
-    initAlan();
+    _initAlan();
   }
 
   @override
   void dispose() {
     super.dispose();
     flutterTts.stop();
+    _deactivateAlan();
     // _speechToText.stop();
   }
 
