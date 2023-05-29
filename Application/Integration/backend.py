@@ -7,6 +7,9 @@ import skimage
 import os
 import time
 from PIL import Image
+import getmac
+import logging
+
 from Face_Recognition.test import FaceDetector
 from Emotion_Recognition.main import  loadEmoDetector
 from Scene_Descriptor.Scene_Descriptor import SceneDescriptor
@@ -19,11 +22,12 @@ from Apparel_recom.apparel import ApparelRecommender
 
 
 
+
 # Run ipconfig in command prompt to get IP Address
 # IP_ADDRESS = '192.168.1.7'
 IP_ADDRESS = 'localhost'
 
-
+logging.basicConfig(filename='logs.log', level=logging.DEBUG)
 
 app = Flask(__name__)
 
@@ -159,7 +163,30 @@ def product_identifier():
 
 @app.route('/apparel', methods=['POST'])
 def apparel():    
+
+    #Get mac address
+    # request.environ contains a dictionary of environment variables for the request.
+    # The MAC address can be obtained from the HTTP_X_REAL_IP environment variable
+    # convert the MAC address from binary to hexadecimal format using , and decode it to a string
     
+    # mac_address = binascii.hexlify(request.environ['HTTP_X_REAL_IP']).decode('utf-8')
+    # print(f"MAC Address {mac_address}")
+
+    ip_addr = request.environ.get('REMOTE_ADDR')
+    mac_addr = getmac.get_mac_address(ip=ip_addr)
+    if ip_addr == '127.0.0.1': #localhost
+        logging.info("User is localhost")
+        mac_addr = getmac.get_mac_address() #get mac address of the server
+    
+    #Load the model using the mac address
+    createModel = False
+    if ar.load(mac_addr):
+        logging.info("Model loaded")
+    else:
+        logging.info("Model not loaded")
+        createModel = True
+        
+
     texture = request.json['texture']
     color = request.json['color']
     clothesType = request.json['clothesType']
@@ -171,6 +198,7 @@ def apparel():
     if prodId[0] == -1:
         #This means that this is a new product
         #Add it to the database
+        logging.info("New product. Adding to database")
         ar.add_apparel_data(prodId[1], texture, color, clothesType)
         result = ar.get_top_recommendations(prodId[1], 1)
         if isinstance(result, str):
@@ -182,19 +210,22 @@ def apparel():
     elif prodId[0] == -2:
         #This means that the database is empty
         #Add it to the database
+        logging.info("Database is empty. Adding to database")
         ar.add_apparel_data(prodId[1], texture, color, clothesType)
         result = "Database is empty"
 
     else:
         #This means that the product is already in the database
+        logging.info("Product already in database")
         result = ar.get_top_recommendations(prodId[0], 1)
         if isinstance(result, str):
             result = result
         else:
             result = str(result['texture'].iloc[0]) + ", " + str(result['color'].iloc[0]) + ", " + str(result['clothes_type'].iloc[0])
     
-    
-
+    if createModel:
+        logging.info("Saving model")
+        ar.save(mac_addr)
 
     return result
 

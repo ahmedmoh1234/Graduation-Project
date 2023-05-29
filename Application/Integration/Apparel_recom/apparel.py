@@ -2,6 +2,12 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import pickle
+import os
+import pathlib
+
+PATH = pathlib.Path(__file__).parent
+
+
 
 class ApparelRecommender:
     apparel_data = None,
@@ -99,13 +105,25 @@ class ApparelRecommender:
         return (self.apparel_data_PD.iloc[product_index]['product_id'], 0)
     
     def save(self, filename):
-        pickle.dump(self.apparel_data, open(filename, 'wb'))
+        #Remove all colons from filename
+        filename = filename.replace(':', '')
+        filename = filename + '.pkl'
+        pickle.dump(self.apparel_data, open(PATH.resolve() / filename, 'wb'))
 
-    def load(self, filename):
-        self.apparel_data = pickle.load(open(filename, 'rb'))
-        self.apparel_data_PD = pd.DataFrame(self.apparel_data)
-        self.features_matrix = self.tfidf.fit_transform(self.apparel_data_PD['texture'] + ' ' + self.apparel_data_PD['color'] + ' ' + self.apparel_data_PD['clothes_type'])
-        self.cosine_similarities = cosine_similarity(self.features_matrix)
+    def load(self, filename) -> bool:
+        filename = filename.replace(':', '')
+        filename = filename + '.pkl'
+        try:
+
+            self.apparel_data = pickle.load(open(PATH.resolve() / filename, 'rb'))
+            self.apparel_data_PD = pd.DataFrame(self.apparel_data)
+            self.features_matrix = self.tfidf.fit_transform(self.apparel_data_PD['texture'] + ' ' + self.apparel_data_PD['color'] + ' ' + self.apparel_data_PD['clothes_type'])
+            self.cosine_similarities = cosine_similarity(self.features_matrix)
+            return True
+        except Exception as e:
+            print(e)
+            return False
+        
 
     
 
