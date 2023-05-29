@@ -365,6 +365,9 @@ class _HomeState extends State<Home> {
         }
       },
     );
+  }
+
+  void _greetingByAlan() {
     AlanVoice.onButtonState.add((state) {
       if (state.name == "ONLINE" && !_greetingIsPlayed) {
         _greetingIsPlayed = true;
@@ -388,15 +391,17 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     initTts();
-    // _initSpeech();
-    // WidgetsBinding.instance.addPostFrameCallback(
-    //   (_) async {
-    //     await _speak();
-    //     // await _startListening();
-    //   },
-    // );
+    _initSpeech();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async {
+        await _speak();
+        // await _startListening();
+      },
+    );
 
     _initAlan();
+    // _greetingByAlan();
+    // _deactivateAlan();
   }
 
   @override

@@ -24,17 +24,19 @@ from Apparel_recom.apparel import ApparelRecommender
 
 
 # Run ipconfig in command prompt to get IP Address
-# IP_ADDRESS = '192.168.1.7'
-IP_ADDRESS = 'localhost'
+IP_ADDRESS = '192.168.1.7'
+# IP_ADDRESS = 'localhost'
 
 logging.basicConfig(filename='logs.log', level=logging.DEBUG)
 
 app = Flask(__name__)
 
-# pd = ProductDetection('product_detect.pt')
-# br = BrandRecognition('logo_detect.pt')
-# emoDetector = loadEmoDetector()
-# sceneDescriptor = SceneDescriptor("./Scene_Descriptor/weights/yolov8s-seg.pt")
+pd = ProductDetection('product_detect.pt')
+br = BrandRecognition('logo_detect.pt')
+emoDetector = loadEmoDetector()
+sceneDescriptor = SceneDescriptor("./Scene_Descriptor/weights/yolov8s-seg.pt")
+
+
 
 ar = ApparelRecommender()
 
