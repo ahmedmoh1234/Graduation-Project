@@ -3,3 +3,6 @@ Datasets/
 *.pt
 predictions/
 *.h5
+data/
+.vscode
+__pycache__
