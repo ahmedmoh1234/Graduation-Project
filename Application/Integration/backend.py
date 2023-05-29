@@ -31,10 +31,10 @@ logging.basicConfig(filename='logs.log', level=logging.DEBUG)
 
 app = Flask(__name__)
 
-pd = ProductDetection('product_detect.pt')
-br = BrandRecognition('logo_detect.pt')
-emoDetector = loadEmoDetector()
-sceneDescriptor = SceneDescriptor("./Scene_Descriptor/weights/yolov8s-seg.pt")
+# pd = ProductDetection('product_detect.pt')
+# br = BrandRecognition('logo_detect.pt')
+# emoDetector = loadEmoDetector()
+# sceneDescriptor = SceneDescriptor("./Scene_Descriptor/weights/yolov8s-seg.pt")
 
 ar = ApparelRecommender()
 
@@ -129,8 +129,6 @@ def document_reader():
     result = document_scanner(img)
     return result
 
-
-
 @app.route('/product-identifier', methods=['POST'])
 def product_identifier():    
     global pd
@@ -165,12 +163,6 @@ def product_identifier():
 def apparel():    
 
     #Get mac address
-    # request.environ contains a dictionary of environment variables for the request.
-    # The MAC address can be obtained from the HTTP_X_REAL_IP environment variable
-    # convert the MAC address from binary to hexadecimal format using , and decode it to a string
-    
-    # mac_address = binascii.hexlify(request.environ['HTTP_X_REAL_IP']).decode('utf-8')
-    # print(f"MAC Address {mac_address}")
 
     ip_addr = request.environ.get('REMOTE_ADDR')
     mac_addr = getmac.get_mac_address(ip=ip_addr)
@@ -180,7 +172,7 @@ def apparel():
     
     #Load the model using the mac address
     createModel = False
-    if ar.load(mac_addr):
+    if ar.loadUserPreference(mac_addr):
         logging.info("Model loaded")
     else:
         logging.info("Model not loaded")
@@ -199,33 +191,37 @@ def apparel():
         #This means that this is a new product
         #Add it to the database
         logging.info("New product. Adding to database")
-        ar.add_apparel_data(prodId[1], texture, color, clothesType)
-        result = ar.get_top_recommendations(prodId[1], 1)
+        ar.addApparelData(prodId[1], texture, color, clothesType)
+        result = ar.getTopRecommendations(prodId[1], 1)
         if isinstance(result, str):
             result = result
         else:
             #only return the texture, color and clothes type
-            result = str(result['texture'].iloc[0]) + ", " + str(result['color'].iloc[0]) + ", " + str(result['clothes_type'].iloc[0])
+            resultStr = "We recommend the "
+            resultStr += str(result['color'].iloc[0]) + ", " + str(result['texture'].iloc[0]) +   " " + str(result['clothes_type'].iloc[0])
+            result = resultStr
 
     elif prodId[0] == -2:
         #This means that the database is empty
         #Add it to the database
         logging.info("Database is empty. Adding to database")
-        ar.add_apparel_data(prodId[1], texture, color, clothesType)
-        result = "Database is empty"
+        ar.addApparelData(prodId[1], texture, color, clothesType)
+        result = "There isn't enough data to make a recommendation"
 
     else:
         #This means that the product is already in the database
         logging.info("Product already in database")
-        result = ar.get_top_recommendations(prodId[0], 1)
+        result = ar.getTopRecommendations(prodId[0], 1)
         if isinstance(result, str):
             result = result
         else:
-            result = str(result['texture'].iloc[0]) + ", " + str(result['color'].iloc[0]) + ", " + str(result['clothes_type'].iloc[0])
+            resultStr = "We recommend the "
+            resultStr += str(result['color'].iloc[0]) + ", " + str(result['texture'].iloc[0]) +   " " + str(result['clothes_type'].iloc[0])
+            result = resultStr
     
     if createModel:
         logging.info("Saving model")
-        ar.save(mac_addr)
+        ar.saveUserPreference(mac_addr)
 
     return result
 
