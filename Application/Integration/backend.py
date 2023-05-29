@@ -20,7 +20,7 @@ from Apparel_recom.apparel import ApparelRecommender
 
 
 # Run ipconfig in command prompt to get IP Address
-IP_ADDRESS = '192.168.1.24'
+IP_ADDRESS = '192.168.1.7'
 
 
 
@@ -54,8 +54,8 @@ def scene_descriptor():
     img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
     response = sceneDescriptor.estimate_depth(img)
     # print(img.shape)
-    PILImage = Image.open(file.stream)
-    PILImage.show()
+    # PILImage = Image.open(file.stream)
+    # PILImage.show()
     # print(f"Scene Descriptor: {response}")
     return response
 

@@ -44,7 +44,6 @@ class _SceneDescriptorState extends State<SceneDescriptor> {
     await flutterTts.setVolume(volume);
     await flutterTts.setSpeechRate(rate);
     await flutterTts.setPitch(pitch);
-
     await flutterTts.speak(voiceText);
   }
 
@@ -139,7 +138,7 @@ class _SceneDescriptorState extends State<SceneDescriptor> {
   }
 
   Future<void> sendImagetoServer(XFile image) async {
-    print('IP ADDRESS = $IP_ADDRESS');
+    debugPrint('IP ADDRESS = $IP_ADDRESS');
 
     var stream = http.ByteStream(image.openRead());
     stream.cast();
@@ -155,11 +154,9 @@ class _SceneDescriptorState extends State<SceneDescriptor> {
     );
 
     request.files.add(multipartFile);
-    print('OK');
     var response = await request.send();
     final respStr = await response.stream.bytesToString();
-    _speak(respStr);
-    print('OK2');
+    await _speak(respStr);
   }
 
   @override
@@ -193,6 +190,42 @@ class _SceneDescriptorState extends State<SceneDescriptor> {
     initTts();
   }
 
+  Future<void> captureImage(BuildContext context) async {
+    try {
+      // Ensure that the camera is initialized.
+      await _initializeControllerFuture;
+
+      // Attempt to take a picture and get the file `image`
+      // where it was saved.
+      final image = await _controller.takePicture();
+      //image.saveTo('data/assets/images/scene.jpg');
+
+      //print('IMAGE PATH: ${image.path}');
+
+      if (!mounted) return;
+
+      //Send image to server
+
+      // If the picture was taken, display it on a new screen.
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => DisplayPictureScreen(
+            // Pass the automatically generated path to
+            // the DisplayPictureScreen widget.
+            imagePath: image.path,
+          ),
+        ),
+      );
+      await sendImagetoServer(image);
+      debugPrint(
+          '==============================Finsihed Speaking==============================');
+      Navigator.of(context).pop();
+    } catch (e) {
+      // If an error occurs, log the error to the console.
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -214,40 +247,11 @@ class _SceneDescriptorState extends State<SceneDescriptor> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        // Provide an onPressed callback.
+      floatingActionButton: FloatingActionButton.large(
         onPressed: () async {
-          // Take the Picture in a try / catch block. If anything goes wrong,
-          // catch the error.
-          try {
-            // Ensure that the camera is initialized.
-            await _initializeControllerFuture;
-
-            // Attempt to take a picture and get the file `image`
-            // where it was saved.
-            final image = await _controller.takePicture();
-            //image.saveTo('data/assets/images/scene.jpg');
-
-            //print('IMAGE PATH: ${image.path}');
-
-            //Send image to server
-            sendImagetoServer(image);
-
-            if (!mounted) return;
-
-            // If the picture was taken, display it on a new screen.
-            await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => DisplayPictureScreen(
-                  // Pass the automatically generated path to
-                  // the DisplayPictureScreen widget.
-                  imagePath: image.path,
-                ),
-              ),
-            );
-          } catch (e) {
-            // If an error occurs, log the error to the console.
-            print(e);
+          while (true) {
+            await captureImage(context);
+            await Future.delayed(const Duration(seconds: 2));
           }
         },
         child: const Icon(Icons.camera_alt),
