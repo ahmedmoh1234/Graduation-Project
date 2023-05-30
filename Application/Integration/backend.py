@@ -69,7 +69,7 @@ def clothes_descriptor():
     file = request.files['image']
     img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
     print(img.shape)
-    response_string, detected_clothes = clothes_descriptor.describe_cloth(img)
+    response_string, detected_clothes = clothesDescriptor.describe_cloth(img)
     # PILImage = Image.open(file.stream)
     # PILImage.show()
     print(response_string)

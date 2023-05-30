@@ -11,7 +11,10 @@ from matplotlib import pyplot as plt
 import pathlib
 PATH = pathlib.Path(__file__)
 
-sys.path.insert(0, PATH.resolve())
+PARENT = PATH.parent
+
+
+sys.path.append(str(PATH.parent))
 
 from feature_selection.feature_selection import FeatureSelector
 from feature_extraction.feature_extraction import FeatureExtractor
@@ -21,39 +24,37 @@ from webcolors import rgb_to_name
 import warnings
 warnings.filterwarnings('ignore')
 
+#remove the last appended path
+# sys.path.pop()
+
 
 class ClothesDescriptor():
     
     def __init__(self):
         self.p = inflect.engine()
-        self.texture_model = load_model("texture_ann.h5")
-        self.texture_pca = pickle.load(open("texture_pca.pkl", "rb"))
-        self.texture_extracted_features_train_mean = np.load("texture_extracted_features_train_mean.npy")
-        self.texture_extracted_features_train_std = np.load("texture_extracted_features_train_std.npy")
+        self.texture_model = load_model(PARENT.resolve() / "texture_ann.h5")
+        self.texture_pca = pickle.load(open(PARENT.resolve() / "texture_pca.pkl", "rb"))
+        self.texture_extracted_features_train_mean = np.load(PARENT.resolve() / "texture_extracted_features_train_mean.npy")
+        self.texture_extracted_features_train_std = np.load(PARENT.resolve() / "texture_extracted_features_train_std.npy")
         
         self.feature_extractor = FeatureExtractor()
         self.feature_selector = FeatureSelector()
       
-        with open(self.createAbsolutePaths("/clothes_classes.pkl"), "rb") as f:
+        with open(PARENT.resolve() / "clothes_classes.pkl", "rb") as f:
             self.clothes_classes = pickle.load(f)
             
-        with open(self.createAbsolutePaths("/texture_classes.pkl"), "rb") as f:
+        with open(PARENT.resolve() / "texture_classes.pkl", "rb") as f:
             self.texture_classes = pickle.load(f)
             
-        self.ys = YOLOSegmentation(self.createAbsolutePaths("/clothes_detection.pt"))
+        self.ys = YOLOSegmentation(PARENT.resolve() / "clothes_detection.pt")
         
-            
-    def createAbsolutePaths(self, relativePath):
-        absPath = os.path.dirname(__file__)
-        absPath = absPath.replace('\\', '/')
-        absPath = absPath + relativePath
-        return absPath
+
 
     def describe_cloth(self, image):
         bboxes, class_ids = self.ys.detect(image)
         
         if (bboxes is None or len(bboxes) == 0):
-            return "Cannot detect any cloth in the image."
+            return "Canno detect any cloth in the image." , None
         detected_clothes = []
         
         for i in range(len(bboxes)):
@@ -119,7 +120,7 @@ class ClothesDescriptor():
         
         result = ""
         if len(detected_clothes) ==1:
-            result = "There is " + self.p.a(detected_clothes[0][2]) + detected_clothes[0][1] + detected_clothes[0][0] + " in the image."
+            result = "There is " + detected_clothes[0][2]+ " " + detected_clothes[0][1]+ " " + detected_clothes[0][0] + " in the image."
         
         else:
             result = "There are "
@@ -223,6 +224,3 @@ class YOLOSegmentation:
         
         return bboxes, class_ids
     
-clothes_detector = ClothesDescriptor()
-test_image = cv2.imread("./test3.jpg")
-clothes_detector.describe_cloth(test_image)
