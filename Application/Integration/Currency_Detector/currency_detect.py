@@ -6,6 +6,9 @@ import subprocess
 from gtts import gTTS
 import os
 import sys
+import pathlib
+PATH = pathlib.Path(__file__).parent
+
 
 sys.path.insert(0, os.path.dirname(__file__))
 # print(50*'-')

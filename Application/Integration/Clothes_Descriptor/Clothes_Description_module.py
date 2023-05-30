@@ -3,9 +3,16 @@ from tensorflow.keras.models import load_model
 import numpy as np
 import inflect
 import os
+import sys
 import pickle
 import cv2
 from matplotlib import pyplot as plt
+
+import pathlib
+PATH = pathlib.Path(__file__)
+
+sys.path.insert(0, PATH.resolve())
+
 from feature_selection.feature_selection import FeatureSelector
 from feature_extraction.feature_extraction import FeatureExtractor
 from sklearn.cluster import KMeans

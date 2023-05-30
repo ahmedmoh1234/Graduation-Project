@@ -14,18 +14,17 @@ from Face_Recognition.test import FaceDetector
 from Emotion_Recognition.main import  loadEmoDetector
 from Scene_Descriptor.Scene_Descriptor import SceneDescriptor
 from Clothes_Descriptor.Clothes_Description_module import ClothesDescriptor
-from Currency_Detector.currency_detect import currency_detector
+from Currency_Detector.currency_detector import currency_detect
 from Document_scanner.main import document_scanner
 from Product_Identifier.product_detect import ProductDetection, BrandRecognition
-# from Currency_Detector.detect import currency_detector
 from Apparel_recom.apparel import ApparelRecommender
 
 
 
 
 # Run ipconfig in command prompt to get IP Address
-# IP_ADDRESS = '192.168.1.7'
-IP_ADDRESS = 'localhost'
+IP_ADDRESS = '192.168.1.7'
+# IP_ADDRESS = 'localhost'
 
 logging.basicConfig(filename='logs.log', level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
@@ -111,12 +110,12 @@ def emotion_recognizer():
 def currency_recognizer():    
     file = request.files['image']
     img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
-    # PILImage = Image.open(file.stream)
-    # print(img.shape)
-    # PILImage.show()
+    PILImage = Image.open(file.stream)
+    print("currency")
+    PILImage.show()
     # img = cv2.imread('20LE_1.jpg')
-    result = currency_detector(img)
-    print()
+    result = currency_detect(img)
+    print('Result:', result)
     return result
     
 @app.route('/document-reader', methods=['POST'])

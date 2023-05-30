@@ -125,3 +125,23 @@ DEBUG:urllib3.connectionpool:https://api.ultralytics.com:443 "POST /v1/usage/ano
 DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): api.ultralytics.com:443
 INFO:werkzeug:192.168.1.6 - - [30/May/2023 01:53:12] "POST /scene-descriptor HTTP/1.1" 200 -
 DEBUG:urllib3.connectionpool:https://api.ultralytics.com:443 "POST /v1/usage/anonymous HTTP/1.1" 410 48
+2023-05-30 22:14:49,475 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://localhost:5000
+2023-05-30 22:14:49,475 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2023-05-30 22:14:49,483 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2023-05-30 22:15:04,845 - werkzeug - WARNING -  * Debugger is active!
+2023-05-30 22:15:04,856 - werkzeug - INFO -  * Debugger PIN: 987-214-441
+2023-05-30 22:16:12,494 - werkzeug - INFO -  * Detected change in 'D:\\University_courses\\Graduation Project\\desktop\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-05-30 22:16:12,495 - werkzeug - INFO -  * Detected change in 'D:\\University_courses\\Graduation Project\\desktop\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-05-30 22:16:12,495 - werkzeug - INFO -  * Detected change in 'D:\\University_courses\\Graduation Project\\desktop\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-05-30 22:16:13,560 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2023-05-30 22:16:42,485 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://192.168.1.7:5000
+2023-05-30 22:16:42,574 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2023-05-30 22:16:42,586 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2023-05-30 22:16:57,512 - werkzeug - WARNING -  * Debugger is active!
+2023-05-30 22:16:57,523 - werkzeug - INFO -  * Debugger PIN: 987-214-441
+2023-05-30 22:17:03,774 - werkzeug - INFO - 192.168.1.8 - - [30/May/2023 22:17:03] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-30 22:17:12,371 - werkzeug - INFO - 192.168.1.8 - - [30/May/2023 22:17:12] "POST /scene-descriptor HTTP/1.1" 200 -
+2023-05-30 22:17:17,839 - werkzeug - INFO - 192.168.1.8 - - [30/May/2023 22:17:17] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-30 22:17:33,346 - werkzeug - INFO - 192.168.1.8 - - [30/May/2023 22:17:33] "POST /currency-recognizer HTTP/1.1" 200 -
