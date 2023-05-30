@@ -57,5 +57,3 @@ import hmmlearn.hmm as hmm
 import datetime
 import colorama
 import random
-
-

@@ -1,15 +1,13 @@
 from ultralytics import YOLO
+from tensorflow.keras.models import load_model
 import numpy as np
 import inflect
 import os
 import pickle
 import cv2
 from matplotlib import pyplot as plt
-from imports import *
 from feature_selection.feature_selection import FeatureSelector
 from feature_extraction.feature_extraction import FeatureExtractor
-from preprocessing.clustering_segmentation import ClusteringSegmentation
-from preprocessing.region_segmentation import RegionBasedSegmentation
 from sklearn.cluster import KMeans
 from webcolors import rgb_to_name
 
@@ -29,8 +27,6 @@ class ClothesDescriptor():
         
         self.feature_extractor = FeatureExtractor()
         self.feature_selector = FeatureSelector()
-        self.clustering_segmentation = ClusteringSegmentation(method='kmeans', n_clusters=2, compactness=30.0, sigma=1.0)
-        self.region_based_segmentation = RegionBasedSegmentation(method="region_growing", threshold=0.5)
       
         with open(self.createAbsolutePaths("/clothes_classes.pkl"), "rb") as f:
             self.clothes_classes = pickle.load(f)
@@ -91,10 +87,9 @@ class ClothesDescriptor():
             else:
                 color_val = np.random.randint(0,255,3)
              
-            for i in range(cloth_region.shape[0]):
-                for j in range(cloth_region.shape[1]):
-                    if mask[square_min_y+ i, square_min_x + j] == 0:
-                        cloth_region[i,j] = color_val # white color
+            # Replace pixels with 0 mask value
+            zero_pixels = np.where(mask[square_min_y:square_max_y, square_min_x:square_max_x] == 0)
+            cloth_region[zero_pixels] = color_val
                           
             color = self.detect_color(cloth_region)
 
@@ -223,5 +218,5 @@ class YOLOSegmentation:
         return bboxes, class_ids
     
 clothes_detector = ClothesDescriptor()
-test_image = cv2.imread("./test5.jpg")
+test_image = cv2.imread("./test3.jpg")
 clothes_detector.describe_cloth(test_image)
