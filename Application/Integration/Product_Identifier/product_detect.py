@@ -56,6 +56,8 @@ class ProductDetection():
         foundObjects = []
 
         for i in range(len(results.pandas().xyxy[0])):
+            if results.pandas().xyxy[0].iloc[i]['confidence'] < 0.5:
+                continue
             #crop the image
             box = results.pandas().xyxy[0].iloc[i]
             cropped_img = img[int(box.ymin):int(box.ymax), int(box.xmin):int(box.xmax)]

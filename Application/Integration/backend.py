@@ -24,10 +24,10 @@ from Apparel_recom.apparel import ApparelRecommender
 
 
 # Run ipconfig in command prompt to get IP Address
-IP_ADDRESS = '192.168.1.7'
-# IP_ADDRESS = 'localhost'
+# IP_ADDRESS = '192.168.1.7'
+IP_ADDRESS = 'localhost'
 
-logging.basicConfig(filename='logs.log', level=logging.DEBUG)
+logging.basicConfig(filename='logs.log', level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 app = Flask(__name__)
 
@@ -165,7 +165,6 @@ def product_identifier():
 def apparel():    
 
     #Get mac address
-
     ip_addr = request.environ.get('REMOTE_ADDR')
     mac_addr = getmac.get_mac_address(ip=ip_addr)
     if ip_addr == '127.0.0.1': #localhost
@@ -226,6 +225,83 @@ def apparel():
         ar.saveUserPreference(mac_addr)
 
     return result
+
+@app.route('/apparel-add', methods=['POST'])
+def apparelAdd(): 
+
+    #Get mac address
+    ip_addr = request.environ.get('REMOTE_ADDR')
+    mac_addr = getmac.get_mac_address(ip=ip_addr)
+    if ip_addr == '127.0.0.1': #localhost
+        logging.info("User is localhost")
+        mac_addr = getmac.get_mac_address() #get mac address of the server
+    
+    #Load the model using the mac address
+    
+    if ar.loadUserDataset(mac_addr):
+        logging.info("User dataset loaded")
+        logging.info(str(ar._apparel_data))
+    else:
+        logging.info("User dataset not loaded")
+
+    
+    #Get request data
+    texture = request.json['texture']
+    color = request.json['color']
+    clothesType = request.json['clothesType']
+
+    prodId = ar.getProductID(texture, color, clothesType)
+
+    if prodId[0] == -1 or prodId[0] == -2:
+        #This means that this is a new product (== -1) or the database is empty (== -2)
+        #Add it to the database
+        logging.info("New product. Adding to database")
+        ar.addApparelData(prodId[1], texture, color, clothesType)
+
+    else:
+        #This means that the product is already in the database
+        logging.info("Product already in database")
+        return "Product already in database"
+
+
+    
+    logging.info("Saving user dataset")
+    logging.info(str(ar._apparel_data))
+    ar.saveUserDataset(mac_addr)
+
+    return "Success"
+
+@app.route('/apparel-pref', methods=['POST'])
+def apparelSetPref(): 
+    
+    #Get mac address
+    ip_addr = request.environ.get('REMOTE_ADDR')
+    mac_addr = getmac.get_mac_address(ip=ip_addr)
+    if ip_addr == '127.0.0.1': #localhost
+        logging.info("User is localhost")
+        mac_addr = getmac.get_mac_address() #get mac address of the server
+
+    #Load user preferences
+    if ar.loadUserPreference(mac_addr):
+        logging.info("User preferences loaded")
+        logging.info(str(ar._user_preferences))
+    else:
+        logging.info("User preferences not loaded")
+
+
+    #Get request data
+    texture = request.json['texture']
+    color = request.json['color']
+    clothesType = request.json['clothesType']
+
+    ar.setUserPreferences(texture, color, clothesType)
+
+    #Save the model
+    logging.info("Saving user preference")
+    logging.info(str(ar._user_preferences))
+    ar.saveUserPreference(mac_addr)
+
+    return "Success"
 
 
 if __name__ == "__main__":
