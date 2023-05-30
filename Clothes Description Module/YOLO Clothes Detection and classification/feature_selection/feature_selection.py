@@ -18,7 +18,7 @@ class FeatureSelector:
         image_vectors = images
         
         if load:
-            pca = pickle.load(open("pca.pkl", "rb"))
+            pca = pickle.load(open("texture_pca.pkl", "rb"))
             pca_features = pca.transform(image_vectors)
         else:
             print("Creating new PCA model...")
@@ -26,7 +26,7 @@ class FeatureSelector:
             pca.fit(image_vectors)
 
             pca_features = pca.transform(image_vectors)
-            pickle.dump(pca, open("pca.pkl", "wb"))
+            pickle.dump(pca, open("texture_pca.pkl", "wb"))
 
         pca_features = np.array(pca_features)
         return pca_features
