@@ -101,7 +101,7 @@ class ClothesDescriptor():
             flag = True
             increased_size = 8
             texture = ""
-            count_trials = 10
+            count_trials = 20
             
             while flag:
                 try:            
@@ -124,11 +124,9 @@ class ClothesDescriptor():
             result = "There are "
             for i in range(len(detected_clothes)):
                 if i == len(detected_clothes) - 1:
-                    print (detected_clothes)
                     result += "and " + detected_clothes[i][2] +" " + detected_clothes[i][1] + " " + detected_clothes[i][0] + " in the image."
                 else:
                     result += detected_clothes[i][2] + " " + detected_clothes[i][1] + " " + detected_clothes[i][0] + "; "
-                    
         print(result)
         return result, detected_clothes
         
@@ -225,5 +223,5 @@ class YOLOSegmentation:
         return bboxes, class_ids
     
 clothes_detector = ClothesDescriptor()
-test_image = cv2.imread("./test1.jpg")
+test_image = cv2.imread("./test5.jpg")
 clothes_detector.describe_cloth(test_image)
