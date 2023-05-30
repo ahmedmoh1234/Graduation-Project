@@ -12,7 +12,7 @@ PATH = pathlib.Path(__file__).parent
 class ApparelRecommender:
     
     def __init__(self):
-        self._user_preferences = None
+        self._user_preferences = dict()
         self._apparel_data = None
         self._apparel_data_PD = None
         self._tfidf = TfidfVectorizer(stop_words='english')
@@ -44,8 +44,6 @@ class ApparelRecommender:
                 self._apparel_data[key].append(clothes_type)
 
 
-
-        
         self._apparel_data_PD = pd.DataFrame(self._apparel_data)
        
         #update the features matrix
@@ -58,8 +56,6 @@ class ApparelRecommender:
 
     def getTopRecommendations(self, product_id, n=5):
 
-        if self._apparel_data_PD is None:
-            return "Apparel Recommendation not initialized"
         
         # get the index of the product with the given id    
         product_index = self._apparel_data_PD.index[self._apparel_data_PD['product_id'] == product_id].tolist()[0]
@@ -85,8 +81,6 @@ class ApparelRecommender:
         if self._apparel_data_PD is None:
             return (-2, 0)
         
-
-
         # get the index of the product with the given id    
         foundList = self._apparel_data_PD.index[(self._apparel_data_PD['texture'] == texture) & (self._apparel_data_PD['color'] == color) & (self._apparel_data_PD['clothes_type'] == clothes_type)].tolist()
 
@@ -95,40 +89,61 @@ class ApparelRecommender:
         
         product_index = foundList[0]
 
-        #if not found, return -1 and new product ID
-        if product_index is None:
-            return (-1, len(self._apparel_data_PD['product_id']))
-        
         # return the top n most similar products
         return (self._apparel_data_PD.iloc[product_index]['product_id'], 0)
     
     def setUserPreferences(self, texture, color, clothes_type):
-        self._user_preferences = {
-            'texture': texture,
-            'color': color,
-            'clothes_type': clothes_type
-        }
+        if clothes_type not in self._user_preferences.keys():
+            self._user_preferences[clothes_type] = dict()
+            self._user_preferences[clothes_type]['texture'] = texture
+            self._user_preferences[clothes_type]['color'] = color
+        else:
+            self._user_preferences[clothes_type]['texture'] = texture
+            self._user_preferences[clothes_type]['color'] = color
 
-        self.addApparelData(len(self._apparel_data_PD['product_id']), texture, color, clothes_type)
+
+        if self._apparel_data_PD is None:
+            self.addApparelData(0, texture, color, clothes_type)
+        else:
+            self.addApparelData(len(self._apparel_data_PD['product_id']), texture, color, clothes_type)
 
     def saveUserPreference(self, filename):
         #Remove all colons from filename
         filename = filename.replace(':', '')
         filename = filename + '.pkl'
-        pickle.dump(self._user_preferences, open(PATH.resolve() / filename, 'wb'))
+        pickle.dump(self._user_preferences, open(PATH.resolve()/ "pref" / filename, 'wb'))
 
     def loadUserPreference(self, filename) -> bool:
         filename = filename.replace(':', '')
         filename = filename + '.pkl'
         try:
 
-            self._user_preferences = pickle.load(open(PATH.resolve() / filename, 'rb'))
+            self._user_preferences = pickle.load(open(PATH.resolve()/ "pref" / filename, 'rb'))
             return True
         except Exception as e:
             print(e)
             return False
         
+    def saveUserDataset(self,filename):
+        #Remove all colons from filename
+        filename = filename.replace(':', '')
+        filename = filename + '.pkl'
+        pickle.dump(self._apparel_data, open(PATH.resolve()/"dataset" / filename, 'wb'))
 
+    def loadUserDataset(self, filename) -> bool:
+        filename = filename.replace(':', '')
+        filename = filename + '.pkl'
+        try:
+
+            self._apparel_data = pickle.load(open(PATH.resolve()/"dataset" / filename, 'rb'))
+            self._apparel_data_PD = pd.DataFrame(self._apparel_data)
+            self._features_matrix = self._tfidf.fit_transform(self._apparel_data_PD['texture'] + ' ' + self._apparel_data_PD['color'] + ' ' + self._apparel_data_PD['clothes_type'])
+            self._cosine_similarities = cosine_similarity(self._features_matrix)
+            return True
+        except Exception as e:
+            print(e)
+            return False
+    
     
 
         
