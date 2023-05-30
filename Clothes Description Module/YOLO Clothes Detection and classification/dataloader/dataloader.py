@@ -6,8 +6,8 @@ sys.path.append("../")
 
 classes = ["Wool", "Denim", "Leather", "Cotton", "Silk"]
 
-WIDTH = 260
-HEIGHT = 260
+# WIDTH = 260
+# HEIGHT = 260
 
 
 class DataLoader:
@@ -80,11 +80,11 @@ class DataLoader:
 
         return x_train, y_train, x_test, y_test, x_val, y_val
 
-    def crop_center(self, image):
+    def crop_center(self, image,w,h):
         height, width = image.shape[:2]
-        start_row = max(0, int((height - HEIGHT) / 2))
-        start_col = max(0, int((width - WIDTH) / 2))
-        end_row = min(height, start_row + HEIGHT)
-        end_col = min(width, start_col + WIDTH)
+        start_row = max(0, int((height - h) / 2))
+        start_col = max(0, int((width - w) / 2))
+        end_row = min(height, start_row + h)
+        end_col = min(width, start_col + w)
         cropped_image = image[start_row:end_row, start_col:end_col]
         return cropped_image

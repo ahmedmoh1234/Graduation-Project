@@ -32,11 +32,11 @@ class FeatureExtractor:
         return glcm_features
         
         
-    def extract_daisy_features(self, images):
+    def extract_daisy_features(self, images, width=260, height=260):
         descs_features = []
         
         for image in images:
-            image = self.data_loader.crop_center(image)
+            image = self.data_loader.crop_center(image,width,height)
             descs = daisy(  image, 
                             step=180,
                             radius=58,
