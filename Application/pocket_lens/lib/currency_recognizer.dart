@@ -140,7 +140,7 @@ class _CurrencyRecognizerState extends State<CurrencyRecognizer> {
     stream.cast();
 
     var length = await image.length();
-    var url = Uri.parse('http://$IP_ADDRESS/currency-recognize');
+    var url = Uri.parse('http://$IP_ADDRESS/currency-recognizer');
     var request = http.MultipartRequest('POST', url);
     var multipartFile = http.MultipartFile(
       'image',
@@ -161,7 +161,7 @@ class _CurrencyRecognizerState extends State<CurrencyRecognizer> {
     camera = cameras[0];
     _controller = CameraController(
       camera,
-      ResolutionPreset.medium,
+      ResolutionPreset.high,
     );
 
     _initializeControllerFuture = _controller.initialize();

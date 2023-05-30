@@ -4,6 +4,7 @@ import 'package:pocket_lens/barcode_reader.dart';
 import 'package:pocket_lens/clothes_descriptor.dart';
 import 'package:pocket_lens/currency_recognizer.dart';
 import 'package:pocket_lens/emotion_recognizer.dart';
+import 'package:pocket_lens/product-identifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pocket_lens/recommender.dart';
@@ -51,6 +52,16 @@ class Menu extends StatelessWidget {
       MaterialPageRoute(
         builder: (_) {
           return const ChatBot();
+        },
+      ),
+    );
+  }
+
+  void _goToProductIdentifier(BuildContext ctx) {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return const ProductIdentifier();
         },
       ),
     );
@@ -351,7 +362,9 @@ class Menu extends StatelessWidget {
           ),
 
           ListTile(
-            onTap: () {},
+            onTap: () {
+              _goToProductIdentifier(context);
+            },
             leading: const Icon(
               Icons.shopping_cart,
               size: 27,
@@ -384,7 +397,7 @@ class Menu extends StatelessWidget {
             },
             leading: const Icon(
               Icons.recommend_outlined,
-              color: Colors.green,
+              // color: Colors.green,
               size: 27,
             ),
             title: const Text(
