@@ -4,10 +4,8 @@ import 'package:camera/camera.dart';
 import 'main.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:async/async.dart';
 import 'package:path/path.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'dart:io' show Platform;
 
 import 'package:flutter_tts/flutter_tts.dart';
 
@@ -146,7 +144,7 @@ class _EmotionRecognizerState extends State<EmotionRecognizer> {
     var url = Uri.parse('http://$IP_ADDRESS/emotion-recognizer');
     print('URL: $url');
     var request = http.MultipartRequest('POST', url);
-    var multipartFile = await http.MultipartFile(
+    var multipartFile = http.MultipartFile(
       'image',
       stream,
       length,

@@ -21,6 +21,8 @@ import 'scene_descriptor.dart';
 import 'face_detector.dart';
 
 class Home extends StatefulWidget {
+  const Home({super.key});
+
   @override
   State<Home> createState() => _HomeState();
 }
@@ -33,7 +35,7 @@ void _goToBarcodeReader(BuildContext ctx) {
   Navigator.of(ctx).push(
     MaterialPageRoute(
       builder: (_) {
-        return BarcodeReader();
+        return const BarcodeReader();
       },
     ),
   );
@@ -63,7 +65,7 @@ void _goToChangeIPAddress(BuildContext ctx) {
   Navigator.of(ctx).push(
     MaterialPageRoute(
       builder: (_) {
-        return ChangeIPAddress();
+        return const ChangeIPAddress();
       },
     ),
   );
@@ -123,7 +125,7 @@ _goToHome(BuildContext ctx) {
   Navigator.of(ctx).push(
     MaterialPageRoute(
       builder: (_) {
-        return Home();
+        return const Home();
       },
     ),
   );
@@ -243,7 +245,7 @@ class _HomeState extends State<Home> {
 
   //===========================SPEECH TO TEXT===================================
 
-  SpeechToText _speechToText = SpeechToText();
+  final SpeechToText _speechToText = SpeechToText();
   bool _speechEnabled = false;
   String _lastWords = '';
   String _currentWords = '';
@@ -363,6 +365,9 @@ class _HomeState extends State<Home> {
         }
       },
     );
+  }
+
+  void _greetingByAlan() {
     AlanVoice.onButtonState.add((state) {
       if (state.name == "ONLINE" && !_greetingIsPlayed) {
         _greetingIsPlayed = true;
@@ -380,21 +385,23 @@ class _HomeState extends State<Home> {
   }
 
   //===========================WIDGET FUNCTIONS===================================
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
     initTts();
-    // _initSpeech();
-    // WidgetsBinding.instance.addPostFrameCallback(
-    //   (_) async {
-    //     await _speak();
-    //     // await _startListening();
-    //   },
-    // );
+    _initSpeech();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async {
+        await _speak();
+        // await _startListening();
+      },
+    );
 
     _initAlan();
+    // _greetingByAlan();
+    // _deactivateAlan();
   }
 
   @override

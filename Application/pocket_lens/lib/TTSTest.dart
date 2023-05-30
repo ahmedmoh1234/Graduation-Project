@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
 class TTSTest extends StatefulWidget {
+  const TTSTest({super.key});
+
   @override
   State<TTSTest> createState() => _TTSTestState();
 }
@@ -204,7 +206,7 @@ class _TTSTestState extends State<TTSTest> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Flutter TTS'),
+          title: const Text('Flutter TTS'),
         ),
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -231,12 +233,14 @@ class _TTSTestState extends State<TTSTest> {
             if (snapshot.hasData) {
               return _enginesDropDownSection(snapshot.data);
             } else if (snapshot.hasError) {
-              return Text('Error loading engines...');
-            } else
-              return Text('Loading engines...');
+              return const Text('Error loading engines...');
+            } else {
+              return const Text('Loading engines...');
+            }
           });
-    } else
-      return Container(width: 0, height: 0);
+    } else {
+      return const SizedBox(width: 0, height: 0);
+    }
   }
 
   Widget _futureBuilder() => FutureBuilder<dynamic>(
@@ -245,14 +249,15 @@ class _TTSTestState extends State<TTSTest> {
         if (snapshot.hasData) {
           return _languageDropDownSection(snapshot.data);
         } else if (snapshot.hasError) {
-          return Text('Error loading languages...');
-        } else
-          return Text('Loading Languages...');
+          return const Text('Error loading languages...');
+        } else {
+          return const Text('Loading Languages...');
+        }
       });
 
   Widget _inputSection() => Container(
       alignment: Alignment.topCenter,
-      padding: EdgeInsets.only(top: 25.0, left: 25.0, right: 25.0),
+      padding: const EdgeInsets.only(top: 25.0, left: 25.0, right: 25.0),
       child: TextField(
         maxLines: 11,
         minLines: 6,
@@ -263,7 +268,7 @@ class _TTSTestState extends State<TTSTest> {
 
   Widget _btnSection() {
     return Container(
-      padding: EdgeInsets.only(top: 50.0),
+      padding: const EdgeInsets.only(top: 50.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -279,7 +284,7 @@ class _TTSTestState extends State<TTSTest> {
   }
 
   Widget _enginesDropDownSection(dynamic engines) => Container(
-        padding: EdgeInsets.only(top: 50.0),
+        padding: const EdgeInsets.only(top: 50.0),
         child: DropdownButton(
           value: engine,
           items: getEnginesDropDownMenuItems(engines),
@@ -288,7 +293,7 @@ class _TTSTestState extends State<TTSTest> {
       );
 
   Widget _languageDropDownSection(dynamic languages) => Container(
-      padding: EdgeInsets.only(top: 10.0),
+      padding: const EdgeInsets.only(top: 10.0),
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         DropdownButton(
           value: language,
@@ -327,7 +332,7 @@ class _TTSTestState extends State<TTSTest> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         ElevatedButton(
-          child: Text('Get max speech input length'),
+          child: const Text('Get max speech input length'),
           onPressed: () async {
             _inputLength = await flutterTts.getMaxSpeechInputLength;
             setState(() {});

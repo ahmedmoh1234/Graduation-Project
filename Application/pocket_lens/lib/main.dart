@@ -14,7 +14,7 @@ void main() async {
       ),
       // theme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
-      home: StartUp(),
+      home: const StartUp(),
     ),
   );
 }

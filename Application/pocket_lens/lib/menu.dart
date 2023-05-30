@@ -6,6 +6,7 @@ import 'package:pocket_lens/currency_recognizer.dart';
 import 'package:pocket_lens/emotion_recognizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pocket_lens/recommender.dart';
 import 'chatbot.dart';
 import 'TTSTest.dart';
 import 'scene_descriptor.dart';
@@ -19,6 +20,7 @@ class Menu extends StatelessWidget {
   final String gender;
 
   Menu({
+    super.key,
     required this.name,
     required this.email,
     required this.gender,
@@ -38,7 +40,7 @@ class Menu extends StatelessWidget {
     Navigator.of(ctx).push(
       MaterialPageRoute(
         builder: (_) {
-          return AlanChatBot();
+          return const AlanChatBot();
         },
       ),
     );
@@ -48,7 +50,7 @@ class Menu extends StatelessWidget {
     Navigator.of(ctx).push(
       MaterialPageRoute(
         builder: (_) {
-          return ChatBot();
+          return const ChatBot();
         },
       ),
     );
@@ -58,7 +60,7 @@ class Menu extends StatelessWidget {
     Navigator.of(ctx).push(
       MaterialPageRoute(
         builder: (_) {
-          return BarcodeReader();
+          return const BarcodeReader();
         },
       ),
     );
@@ -68,7 +70,7 @@ class Menu extends StatelessWidget {
     Navigator.of(ctx).push(
       MaterialPageRoute(
         builder: (_) {
-          return TTSTest();
+          return const TTSTest();
         },
       ),
     );
@@ -98,7 +100,7 @@ class Menu extends StatelessWidget {
     Navigator.of(ctx).push(
       MaterialPageRoute(
         builder: (_) {
-          return ChangeIPAddress();
+          return const ChangeIPAddress();
         },
       ),
     );
@@ -119,6 +121,16 @@ class Menu extends StatelessWidget {
       MaterialPageRoute(
         builder: (_) {
           return const ClothesDescriptor();
+        },
+      ),
+    );
+  }
+
+  void _goToRecommender(BuildContext ctx) {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return const Recommender();
         },
       ),
     );
@@ -360,6 +372,23 @@ class Menu extends StatelessWidget {
             ),
             title: const Text(
               'Call a contact',
+              style: TextStyle(
+                fontSize: 17,
+                fontFamily: 'RalewayMedium',
+              ),
+            ),
+          ),
+          ListTile(
+            onTap: () {
+              _goToRecommender(context);
+            },
+            leading: const Icon(
+              Icons.recommend_outlined,
+              color: Colors.green,
+              size: 27,
+            ),
+            title: const Text(
+              'Recommender',
               style: TextStyle(
                 fontSize: 17,
                 fontFamily: 'RalewayMedium',

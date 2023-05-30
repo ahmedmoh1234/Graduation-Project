@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'home.dart';
-import 'config.dart';
 
 class StartUp extends StatefulWidget {
+  const StartUp({super.key});
+
   @override
   State<StartUp> createState() => _StartUpState();
 }
@@ -11,7 +12,7 @@ class _StartUpState extends State<StartUp> {
   void _goToHome(BuildContext ctx) {
     Navigator.of(ctx).push(
       MaterialPageRoute(builder: (_) {
-        return Home();
+        return const Home();
       }),
     ).then((_) {
       _goToHomeDelayed(context);
@@ -36,11 +37,11 @@ class _StartUpState extends State<StartUp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF106cb5),
+    return const Scaffold(
+      backgroundColor: Color(0xFF106cb5),
       body: SingleChildScrollView(
         child: Column(
-          children: const [
+          children: [
             SizedBox(
               height: 150,
             ),
