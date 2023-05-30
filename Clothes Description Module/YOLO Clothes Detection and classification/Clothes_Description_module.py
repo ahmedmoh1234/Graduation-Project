@@ -1,17 +1,16 @@
 from ultralytics import YOLO
+from tensorflow.keras.models import load_model
 import numpy as np
 import inflect
 import os
 import pickle
 import cv2
 from matplotlib import pyplot as plt
-from imports import *
 from feature_selection.feature_selection import FeatureSelector
 from feature_extraction.feature_extraction import FeatureExtractor
-from preprocessing.clustering_segmentation import ClusteringSegmentation
-from preprocessing.region_segmentation import RegionBasedSegmentation
 from sklearn.cluster import KMeans
-import webcolors
+from webcolors import rgb_to_name
+
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -27,8 +26,6 @@ class ClothesDescriptor():
         
         self.feature_extractor = FeatureExtractor()
         self.feature_selector = FeatureSelector()
-        self.clustering_segmentation = ClusteringSegmentation(method='kmeans', n_clusters=2, compactness=30.0, sigma=1.0)
-        self.region_based_segmentation = RegionBasedSegmentation(method="region_growing", threshold=0.5)
       
         with open(self.createAbsolutePaths("/clothes_classes.pkl"), "rb") as f:
             self.clothes_classes = pickle.load(f)
@@ -50,7 +47,7 @@ class ClothesDescriptor():
         
         if (bboxes is None or len(bboxes) == 0):
             return "Cannot detect any cloth in the image."
-        detecte_clothes = {}
+        detected_clothes = []
         
         for i in range(len(bboxes)):
             class_id = class_ids[i]
@@ -58,58 +55,75 @@ class ClothesDescriptor():
             
             cloth_box_image = image[bboxes[i][1]:bboxes[i][3], bboxes[i][0]:bboxes[i][2],:] # 3D array (width, height, channels)
             
-            # Flatten the ROI to a 2D array
             roi = cloth_box_image # 3D array (width, height, channels)
             rows, cols, _ = roi.shape
             flattened_roi = roi.reshape(rows * cols, -1) # 2D array (rows*cols, channels)
-            print(f"flattened_roi shape: {flattened_roi.shape}")
-            # Apply k-means clustering
+            
             k = 2  # Number of clusters
             kmeans = KMeans(n_clusters=k, random_state=0)
             labels = kmeans.fit_predict(flattened_roi) # 1D array (rows*cols,)
-            print(f"labels shape: {labels.shape}")
 
-            # Calculate the cluster sizes
             _, cluster_sizes = np.unique(labels, return_counts=True)
 
-            # Determine the cloth segment as the cluster with the largest size
             cloth_segment = np.argmax(cluster_sizes) # 0 or 1
 
-            # Generate a mask based on the cloth segment
             mask = np.zeros((rows * cols,), dtype=np.uint8) # 1D array (rows*cols,)
             mask[labels == cloth_segment] = 255
             mask = mask.reshape(rows, cols) # 2D array (rows, cols)
+            
+            kernel = np.ones((10,10),np.uint8)
+            mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
 
-            # Apply the mask on the original ROI
             segmented_cloth = cv2.bitwise_and(roi, roi, mask=mask) # 3D array (width, height, channels)
             
-            # Find the largest square region in the segmented cloth
             square_min_x, square_min_y, square_max_x, square_max_y = self.find_largest_square(mask)
-            cloth_region = segmented_cloth[square_min_y:square_max_y, square_min_x:square_max_x]
+            cloth_region = segmented_cloth[square_min_y:square_max_y, square_min_x:square_max_x,:] # 3D array (width, height, channels)
             
-            print(f"cloth_region.shape: {cloth_region.shape}")
-            # plt.imshow(cloth_region)      
-            # plt.show()
+            color_val = cloth_region[cloth_region != 0]
             
-            color = self.detect_color(segmented_cloth,mask)
-            
-            # Find the non-zero pixels in the segmented_cloth image
-            nonzero_pixels = np.nonzero(segmented_cloth)
+            if color_val.size != 0:
+                 color_val = [color_val[0],color_val[0],color_val[0]]
+            else:
+                color_val = np.random.randint(0,255,3)
+             
+            # Replace pixels with 0 mask value
+            zero_pixels = np.where(mask[square_min_y:square_max_y, square_min_x:square_max_x] == 0)
+            cloth_region[zero_pixels] = color_val
+                          
+            color = self.detect_color(cloth_region)
 
-            # Get the minimum and maximum row and column indices of the non-zero pixels
-            min_row = np.min(nonzero_pixels[0])
-            max_row = np.max(nonzero_pixels[0])
-            min_col = np.min(nonzero_pixels[1])
-            max_col = np.max(nonzero_pixels[1])
-
-            # Extract the non-zero region as a sample
-            sample = segmented_cloth[min_row:max_row, min_col:max_col]
-
-            # Pass the sample to the detect_texture function
-            texture = self.detect_texture(sample)
+            flag = True
+            increased_size = 8
+            texture = ""
+            count_trials = 20
             
-            print(f"There is a {detected_object} in the image. It is made of {texture}. With color {color}.")
+            while flag:
+                try:            
+                    texture = self.detect_texture(cloth_region)
+                    flag = False
+                except:
+                    cloth_region = segmented_cloth[square_min_y - increased_size:square_max_y+increased_size, square_min_x - increased_size:square_max_x + increased_size,:] # 3D array (width, height, channels)   
+                    increased_size += 8
+                    count_trials -= 1
+                    if count_trials == 0:
+                        break
             
+            detected_clothes.append((detected_object,texture,color))
+        
+        result = ""
+        if len(detected_clothes) ==1:
+            result = "There is " + self.p.a(detected_clothes[0][2]) + detected_clothes[0][1] + detected_clothes[0][0] + " in the image."
+        
+        else:
+            result = "There are "
+            for i in range(len(detected_clothes)):
+                if i == len(detected_clothes) - 1:
+                    result += "and " + detected_clothes[i][2] +" " + detected_clothes[i][1] + " " + detected_clothes[i][0] + " in the image."
+                else:
+                    result += detected_clothes[i][2] + " " + detected_clothes[i][1] + " " + detected_clothes[i][0] + "; "
+        print(result)
+        return result, detected_clothes
+        
     def detect_texture(self,image):
         
         gray_image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
@@ -132,23 +146,20 @@ class ClothesDescriptor():
         return predicted_texture
     
 
-    def detect_color(self, image, mask):
-        #  mask is a 2D array and image is a 3D array
+    def detect_color(self, image):
 
-        # Get the RGB values of non-zero pixels
-        nonzero_image = image[mask != 0]
-
-        # Get the dominant RGB colors in the non-zero pixels
-        unique_colors, color_counts = np.unique(nonzero_image, axis=0, return_counts=True)
-
-        # Sort the colors based on their count in descending order
-        sorted_colors = sorted(zip(unique_colors, color_counts), key=lambda x: x[1], reverse=True)
-
+        unique_colors, counts = np.unique(image.reshape(-1, image.shape[-1]), axis=0, return_counts=True)
+        
+        sorted_indices = np.argsort(counts)[::-1]
+        unique_colors = unique_colors[sorted_indices]
+        counts = counts[sorted_indices]
         dominant_colors = []
-        for color, _ in sorted_colors:
+        
+        for i in range(len(unique_colors)):
             try:
-                closest_name = webcolors.rgb_to_name(color)
-                dominant_colors.append(closest_name)
+                color = unique_colors[i]
+                named_color = rgb_to_name(tuple(color), spec='css3')
+                dominant_colors.append(named_color)
                 if(len(dominant_colors) == 3):
                     break
             except ValueError:
@@ -159,36 +170,33 @@ class ClothesDescriptor():
         return dominant_colors_str
 
     def find_largest_square(self,mask):
-        # Find contours in the mask
         contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-        # Find the contour with the largest area
         largest_contour = max(contours, key=cv2.contourArea)
 
-        # Find the minimum area bounding rectangle
         rect = cv2.minAreaRect(largest_contour)
         box = cv2.boxPoints(rect)
         box = np.int0(box)
 
-        # Find the minimum and maximum coordinates of the bounding box
-        min_x = np.min(box[:, 0])
-        max_x = np.max(box[:, 0])
-        min_y = np.min(box[:, 1])
-        max_y = np.max(box[:, 1])
+        min_x = max(np.min(box[:, 0]),0)
+        max_x = None
+        
+        
+        if( np.max(box[:, 0]) < 0):
+            max_x = mask.shape[1]
+        else: 
+            max_x = np.max(box[:, 0])
+            
+        min_y = max(np.min(box[:, 1]),0)
+        
+        max_y = None
+                
+        if( np.max(box[:, 1]) < 0):
+            max_y = mask.shape[0]
+        else: 
+            max_y = np.max(box[:, 1])
 
-        # Calculate the side length of the square region
-        side_length = max(max_x - min_x, max_y - min_y)
-
-        # Adjust the coordinates to form a square region
-        center_x = (min_x + max_x) // 2
-        center_y = (min_y + max_y) // 2
-        half_length = side_length // 2
-        square_min_x = center_x - half_length
-        square_max_x = center_x + half_length
-        square_min_y = center_y - half_length
-        square_max_y = center_y + half_length
-
-        return square_min_x, square_min_y, square_max_x, square_max_y
+        return min_x, min_y, max_x, max_y
 
     
 class YOLOSegmentation:
@@ -209,5 +217,5 @@ class YOLOSegmentation:
         return bboxes, class_ids
     
 clothes_detector = ClothesDescriptor()
-test_image = cv2.imread("./test2.jpg")
+test_image = cv2.imread("./test3.jpg")
 clothes_detector.describe_cloth(test_image)

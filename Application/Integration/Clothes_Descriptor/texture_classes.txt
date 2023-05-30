@@ -1,0 +1,5 @@
+Wool
+Denim
+Leather
+Cotton
+Silk

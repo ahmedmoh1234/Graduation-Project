@@ -13,11 +13,10 @@ import logging
 from Face_Recognition.test import FaceDetector
 from Emotion_Recognition.main import  loadEmoDetector
 from Scene_Descriptor.Scene_Descriptor import SceneDescriptor
-from Clothes_Descriptor.Clothes_Description import describe_clothes
-from Currency_Detector.currency_detect import currency_detector
+from Clothes_Descriptor.Clothes_Description_module import ClothesDescriptor
+from Currency_Detector.currency_detector import currency_detect
 from Document_scanner.main import document_scanner
 from Product_Identifier.product_detect import ProductDetection, BrandRecognition
-# from Currency_Detector.detect import currency_detector
 from Apparel_recom.apparel import ApparelRecommender
 
 
@@ -31,13 +30,11 @@ logging.basicConfig(filename='logs.log', level=logging.INFO, format='%(asctime)s
 
 app = Flask(__name__)
 
-# pd = ProductDetection('product_detect.pt')
-# br = BrandRecognition('logo_detect.pt')
-# emoDetector = loadEmoDetector()
-# sceneDescriptor = SceneDescriptor("./Scene_Descriptor/weights/yolov8s-seg.pt")
-
-
-
+pd = ProductDetection('product_detect.pt')
+br = BrandRecognition('logo_detect.pt')
+emoDetector = loadEmoDetector()
+sceneDescriptor = SceneDescriptor("./Scene_Descriptor/weights/yolov8s-seg.pt")
+clothesDescriptor = ClothesDescriptor()
 ar = ApparelRecommender()
 
 
@@ -72,11 +69,11 @@ def clothes_descriptor():
     file = request.files['image']
     img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
     print(img.shape)
-    response = describe_clothes(img)
-    PILImage = Image.open(file.stream)
-    PILImage.show()
-    print(f"Clothes Descriptor: {response}")
-    return response
+    response_string, detected_clothes = clothes_descriptor.describe_cloth(img)
+    # PILImage = Image.open(file.stream)
+    # PILImage.show()
+    print(response_string)
+    return response_string
 
 @app.route('/face-detector', methods=['POST'])
 def face_detector():   
@@ -113,12 +110,12 @@ def emotion_recognizer():
 def currency_recognizer():    
     file = request.files['image']
     img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
-    # PILImage = Image.open(file.stream)
-    # print(img.shape)
-    # PILImage.show()
+    PILImage = Image.open(file.stream)
+    print("currency")
+    PILImage.show()
     # img = cv2.imread('20LE_1.jpg')
-    result = currency_detector(img)
-    print()
+    result = currency_detect(img)
+    print('Result:', result)
     return result
     
 @app.route('/document-reader', methods=['POST'])
