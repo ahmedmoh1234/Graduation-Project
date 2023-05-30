@@ -27,8 +27,8 @@ class ApparelRecommender:
         self._apparel_data_PD = None
 
         self._tfidf = TfidfVectorizer(stop_words='english')
-        self._features_matrix = dict()
-        self._cosine_similarities = dict()
+        self._features_matrix = None
+        self._cosine_similarities = None
 
     def addApparelData(self, product_id, texture, color, clothes_type) -> bool:
 
@@ -49,46 +49,47 @@ class ApparelRecommender:
             elif key == ApparelRecommender.CLOTHES_TYPE:
                 self._apparel_data[key].append(clothes_type)
 
-
+        #update the dataframe
         self._apparel_data_PD = pd.DataFrame(self._apparel_data)
-
-        #Update the features matrix and cosine similarities based on the key which is the clothes type
-        for key in self._user_preferences.keys():
-            #key here represents the clothes type
-            #get all the data for this clothes type
-            data = self._apparel_data_PD[self._apparel_data_PD[ApparelRecommender.CLOTHES_TYPE] == key]
-            #update the features matrix
-            self._features_matrix[key] = self._tfidf.fit_transform(data[ApparelRecommender.TEXTURE] 
-                                                                   + ' ' + data[ApparelRecommender.COLOR] 
-                                                                   + ' ' + data[ApparelRecommender.CLOTHES_TYPE])
-
+        
+        #update the features matrix
+        self._features_matrix = self._tfidf.fit_transform(self._apparel_data_PD[ApparelRecommender.TEXTURE] 
+                                                          + ' ' + self._apparel_data_PD[ApparelRecommender.COLOR] 
+                                                          + ' ' + self._apparel_data_PD[ApparelRecommender.CLOTHES_TYPE])
+            
+        #update the cosine similarities
+        self._cosine_similarities = cosine_similarity(self._features_matrix)
         return True
 
     def getTopRecommendations(self, product_id, n=5):
 
-        
-        # get the index of the product with the given id    
-        product_index = self._apparel_data_PD.index[self._apparel_data_PD[ApparelRecommender.PRODUCT_ID] == product_id].tolist()[0]
+        productType = self._apparel_data_PD.iloc[product_id][ApparelRecommender.CLOTHES_TYPE]
+        productTexture = self._apparel_data_PD.iloc[product_id][ApparelRecommender.TEXTURE]
+        productColor = self._apparel_data_PD.iloc[product_id][ApparelRecommender.COLOR]
 
-        #Get the product's clothes type
-        clothes_type = self._apparel_data_PD.iloc[product_index][ApparelRecommender.CLOTHES_TYPE]
+        # get the index of the product with the given id
+        product_index = self._apparel_data_PD.index[(self._apparel_data_PD[ApparelRecommender.TEXTURE] == productTexture) 
+                                                    & (self._apparel_data_PD[ApparelRecommender.COLOR] == productColor)
+                                                    & (self._apparel_data_PD[ApparelRecommender.CLOTHES_TYPE] == productType)].tolist()[0]
         
         # get the cosine similarity scores for the product
-        product_cosine_scores = self._cosine_similarities[clothes_type][product_index]
+        product_cosine_scores = self._cosine_similarities[product_index]
         
         # get the indices of the top n most similar products
-        top_indices = product_cosine_scores.argsort()[::-1][:n+1]
+        top_indices = product_cosine_scores.argsort()[::-1]
         
-        # remove the index of the original product from the list
-        if product_index in top_indices :
-            top_indices = list(top_indices)
-            top_indices.remove(product_index)
         
+        print(top_indices)
+
         if len(top_indices) == 0:
             return "There isn't enough data to make a recommendation"
         
-        # return the top n most similar products
-        return self._apparel_data_PD.iloc[top_indices]
+        for ind in top_indices:
+            if productType == self._apparel_data_PD.iloc[ind][ApparelRecommender.CLOTHES_TYPE]:
+                return self._apparel_data_PD.iloc[ind]
+
+
+        return "There isn't enough data to make a recommendation"
     
     def getProductID(self, texture, color, clothes_type):
         if self._apparel_data_PD is None:
