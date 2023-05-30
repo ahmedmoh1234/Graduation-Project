@@ -13,7 +13,7 @@ import logging
 from Face_Recognition.test import FaceDetector
 from Emotion_Recognition.main import  loadEmoDetector
 from Scene_Descriptor.Scene_Descriptor import SceneDescriptor
-from Clothes_Descriptor.Clothes_Description import describe_clothes
+from Clothes_Descriptor.Clothes_Description_module import ClothesDescriptor
 from Currency_Detector.currency_detect import currency_detector
 from Document_scanner.main import document_scanner
 from Product_Identifier.product_detect import ProductDetection, BrandRecognition
@@ -35,9 +35,7 @@ pd = ProductDetection('product_detect.pt')
 br = BrandRecognition('logo_detect.pt')
 emoDetector = loadEmoDetector()
 sceneDescriptor = SceneDescriptor("./Scene_Descriptor/weights/yolov8s-seg.pt")
-
-
-
+clothesDescriptor = ClothesDescriptor()
 ar = ApparelRecommender()
 
 
@@ -72,11 +70,11 @@ def clothes_descriptor():
     file = request.files['image']
     img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
     print(img.shape)
-    response = describe_clothes(img)
-    PILImage = Image.open(file.stream)
-    PILImage.show()
-    print(f"Clothes Descriptor: {response}")
-    return response
+    response_string, detected_clothes = clothes_descriptor.describe_cloth(img)
+    # PILImage = Image.open(file.stream)
+    # PILImage.show()
+    print(response_string)
+    return response_string
 
 @app.route('/face-detector', methods=['POST'])
 def face_detector():   
