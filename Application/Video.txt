@@ -1,0 +1,7 @@
+1. Generic Chatbot (What's the weather ?)
+2. Scene Descriptor: 3 people, cup, car in street
+3. Face recognition + Emotion recognition: 1 person
+4. Clothes (Detect 2 items and recommend one of them)
+5. OCR
+6. Product
+7. Currency
