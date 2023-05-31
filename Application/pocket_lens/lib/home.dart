@@ -393,16 +393,16 @@ class _HomeState extends State<Home> {
     super.initState();
     initTts();
     _initSpeech();
-    // WidgetsBinding.instance.addPostFrameCallback(
-    //   (_) async {
-    //     await _speak();
-    //     // await _startListening();
-    //   },
-    // );
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async {
+        await _speak();
+        // await _startListening();
+      },
+    );
 
     _initAlan();
-    _greetingByAlan();
-    _deactivateAlan();
+    // _greetingByAlan();
+    // _deactivateAlan();
   }
 
   @override

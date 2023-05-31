@@ -136,7 +136,7 @@ class _CurrencyRecognizerState extends State<CurrencyRecognizer> {
     }
   }
 
-  Future<void> sendImagetoServer(XFile image, BuildContext context) async {
+  Future<void> sendImagetoServer(XFile image) async {
     debugPrint('IP ADDRESS = $IP_ADDRESS');
 
     var stream = http.ByteStream(image.openRead());
@@ -155,24 +155,25 @@ class _CurrencyRecognizerState extends State<CurrencyRecognizer> {
     request.files.add(multipartFile);
     var response = await request.send();
     final respStr = await response.stream.bytesToString();
-    // await _speak(respStr);
-    await play(respStr);
-    if (finished) {
-      finished = false;
-      Navigator.of(context).pop();
-    }
+    await _speak(respStr);
+
+    // await play(respStr);
+    // if (finished) {
+    //   finished = false;
+    // }
   }
 
-  Future<void> play(String text) async {
-    AlanVoice.activate();
-    AlanVoice.playText(text);
-    finished = true;
-  }
+  // Future<void> play(String text) async {
+  //   AlanVoice.activate();
+  //   AlanVoice.playText(text);
+  //   finished = true;
+  //   debugPrint('*************----------------FINISHED = $finished');
+  // }
 
-  var finished = false;
-  Future<void> stop() async {
-    AlanVoice.deactivate();
-  }
+  // var finished = false;
+  // Future<void> stop() async {
+  //   AlanVoice.deactivate();
+  // }
 
   @override
   void initState() {
@@ -231,9 +232,9 @@ class _CurrencyRecognizerState extends State<CurrencyRecognizer> {
       );
 
       //Send image to server
-      await sendImagetoServer(image, context);
+      await sendImagetoServer(image);
 
-      // Navigator.of(context).pop();
+      Navigator.of(context).pop();
     } catch (e) {
       // If an error occurs, log the error to the console.
       print(e);
