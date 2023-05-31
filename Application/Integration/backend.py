@@ -75,9 +75,9 @@ def clothes_descriptor():
     # PILImage = Image.open(file.stream)
     # PILImage.show()
     # response_string, detected_clothes = clothesDescriptor.describe_cloth(img)
-    response_string = 'This is a blue shirt'
+    response_string = 'This is a grey shirt'
     detected_clothes = dict()
-    detected_clothes['color'] = 'blue'
+    detected_clothes['color'] = 'grey'
     detected_clothes['type'] = 'shirt'
     detected_clothes['texture'] = 'plain'
     result = dict()
@@ -279,7 +279,7 @@ def apparelSetPref():
     else:
         logging.info("User preferences not loaded")
 
-
+    print(request.json)
     #Get request data
     texture = request.json['texture']
     color = request.json['color']

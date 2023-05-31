@@ -168,6 +168,48 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
     var type = detectedClothes['type'] as String;
   }
 
+  Future<void> _addPreference(Map<dynamic, dynamic> detectedClothes) async {
+    var url = Uri.parse('http://$IP_ADDRESS/apparel-pref');
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'color': detectedClothes['color'],
+        'texture': detectedClothes['texture'],
+        'clothesType': detectedClothes['type'],
+      }),
+    );
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    final extractedMyInfo = json.decode(response.body) as Map<String, dynamic>;
+    debugPrint(extractedMyInfo.toString());
+  }
+
+  Future<void> _addToDatabase(Map<dynamic, dynamic> detectedClothes) async {
+    var url = Uri.parse('http://$IP_ADDRESS/apparel-pref');
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'color': detectedClothes['color'],
+        'texture': detectedClothes['texture'],
+        'clothesType': detectedClothes['type'],
+      }),
+    );
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    final extractedMyInfo = json.decode(response.body) as Map<String, dynamic>;
+    debugPrint(extractedMyInfo.toString());
+  }
+
   Future<void> captureImage(BuildContext context) async {
     try {
       //Initialize camera
@@ -192,126 +234,129 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
 
       debugPrint('=====Detected Clothes = $detectedClothes =============');
 
-      // _speak('Do you like this ?');
+      _speak('Do you want to add this to your preferences ?');
 
-      // // Show Dialog Box
-      // var choice1 = await showDialog(
-      //   context: context,
-      //   builder: (BuildContext context) => AlertDialog(
-      //     title: const Text(
-      //       'Recommender',
-      //     ),
-      //     content: const Text(
-      //       'Do you like this ?',
-      //       textAlign: TextAlign.center,
-      //     ),
-      //     actions: <Widget>[
-      //       TextButton(
-      //         onPressed: () {
-      //           debugPrint('Yes');
-      //           Navigator.pop(context, 'Yes');
-      //         },
-      //         child: const Text(
-      //           'Yes',
-      //           style: TextStyle(
-      //             fontWeight: FontWeight.bold,
-      //             color: Colors.green,
-      //             fontSize: 18,
-      //           ),
-      //         ),
-      //       ),
-      //       TextButton(
-      //         onPressed: () {
-      //           debugPrint('No');
-      //           Navigator.pop(context, 'No');
-      //         },
-      //         child: const Text(
-      //           'No',
-      //           style: TextStyle(
-      //             fontWeight: FontWeight.bold,
-      //             color: Colors.red,
-      //             fontSize: 18,
-      //           ),
-      //         ),
-      //       ),
-      //     ],
-      //     alignment: Alignment.center,
-      //     icon: const Icon(
-      //       Icons.recommend_rounded,
-      //       color: Colors.green,
-      //       size: 30,
-      //     ),
-      //     shape: RoundedRectangleBorder(
-      //       borderRadius: BorderRadius.circular(10),
-      //     ),
-      //     actionsAlignment: MainAxisAlignment.spaceEvenly,
-      //   ),
-      // );
-      // debugPrint('=====Choice = $choice1 =============');
+      // Show Dialog Box
+      // ignore: use_build_context_synchronously
+      var choice1 = await showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text(
+            'Future Recommendations',
+          ),
+          content: const Text(
+            'Do you want to add this to your preferences ?',
+            textAlign: TextAlign.center,
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                debugPrint('Yes');
+                Navigator.pop(context, 'Yes');
+              },
+              child: const Text(
+                'Yes',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                debugPrint('No');
+                Navigator.pop(context, 'No');
+              },
+              child: const Text(
+                'No',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ],
+          alignment: Alignment.center,
+          icon: const Icon(
+            Icons.recommend_rounded,
+            color: Colors.green,
+            size: 30,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          actionsAlignment: MainAxisAlignment.spaceEvenly,
+        ),
+      );
+      debugPrint('=====Choice = $choice1 =============');
 
-      // if (choice1 == 'Yes') {
-      //   _speak('Do you want to add this to the Database ?');
+      if (choice1 == 'Yes') {
+        _speak('Do you want to add this to the Wardrobe ?');
+        _addPreference(detectedClothes);
+        // Show Dialog Box
+        // ignore: use_build_context_synchronously
+        var choice2 = await showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text(
+              'Future Recommendations',
+            ),
+            content: const Text(
+              'Do you want to add this to the Wardrobe ?',
+              textAlign: TextAlign.center,
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  debugPrint('Yes');
+                  Navigator.pop(context, 'Yes');
+                },
+                child: const Text(
+                  'Yes',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  debugPrint('No');
+                  Navigator.pop(context, 'No');
+                },
+                child: const Text(
+                  'No',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ],
+            alignment: Alignment.center,
+            icon: const Icon(
+              Icons.man,
+              color: Colors.blue,
+              size: 30,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            actionsAlignment: MainAxisAlignment.spaceEvenly,
+          ),
+        );
 
-      //   // Show Dialog Box
-      //   var choice2 = await showDialog(
-      //     context: context,
-      //     builder: (BuildContext context) => AlertDialog(
-      //       title: const Text(
-      //         'Recommender',
-      //       ),
-      //       content: const Text(
-      //         'Do you want to add this ?',
-      //         textAlign: TextAlign.center,
-      //       ),
-      //       actions: <Widget>[
-      //         TextButton(
-      //           onPressed: () {
-      //             debugPrint('Yes');
-      //             Navigator.pop(context, 'Yes');
-      //           },
-      //           child: const Text(
-      //             'Yes',
-      //             style: TextStyle(
-      //               fontWeight: FontWeight.bold,
-      //               color: Colors.green,
-      //               fontSize: 18,
-      //             ),
-      //           ),
-      //         ),
-      //         TextButton(
-      //           onPressed: () {
-      //             debugPrint('No');
-      //             Navigator.pop(context, 'No');
-      //           },
-      //           child: const Text(
-      //             'No',
-      //             style: TextStyle(
-      //               fontWeight: FontWeight.bold,
-      //               color: Colors.red,
-      //               fontSize: 18,
-      //             ),
-      //           ),
-      //         ),
-      //       ],
-      //       alignment: Alignment.center,
-      //       icon: const Icon(
-      //         Icons.recommend_rounded,
-      //         color: Colors.green,
-      //         size: 30,
-      //       ),
-      //       shape: RoundedRectangleBorder(
-      //         borderRadius: BorderRadius.circular(10),
-      //       ),
-      //       actionsAlignment: MainAxisAlignment.spaceEvenly,
-      //     ),
-      //   );
+        debugPrint('=====Choice = $choice2 =============');
 
-      //   debugPrint('=====Choice = $choice2 =============');
-
-      //   if (choice2 == 'Yes') {
-      //     _speak('Adding this to Database');
-      //   }
-      // }
+        if (choice2 == 'Yes') {
+          _speak('Adding this to Database');
+          _addToDatabase(detectedClothes);
+        }
+      }
 
       Navigator.pop(context);
     } catch (e) {

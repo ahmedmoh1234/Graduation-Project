@@ -182,3 +182,75 @@ DEBUG:urllib3.connectionpool:https://api.ultralytics.com:443 "POST /v1/usage/ano
 2023-05-31 15:41:11,589 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:41:11] "POST /clothes-descriptor HTTP/1.1" 200 -
 2023-05-31 15:42:18,135 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:42:18] "POST /clothes-descriptor HTTP/1.1" 200 -
 2023-05-31 15:44:27,569 - werkzeug - INFO -  * Detected change in 'D:\\Senior II\\Graduation Project\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-05-31 15:47:57,412 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-05-31 15:47:57,414 - werkzeug - INFO -  * Restarting with stat
+2023-05-31 15:48:24,865 - werkzeug - WARNING -  * Debugger is active!
+2023-05-31 15:48:24,872 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-05-31 15:48:42,587 - root - INFO - User preferences not loaded
+2023-05-31 15:48:42,597 - root - INFO - Saving user preference
+2023-05-31 15:48:42,597 - root - INFO - {'t-shirt': {'texture': 'cotton', 'color': 'blue'}}
+2023-05-31 15:48:42,645 - werkzeug - INFO - 192.168.1.7 - - [31/May/2023 15:48:42] "[35m[1mPOST /apparel-pref HTTP/1.1[0m" 500 -
+2023-05-31 15:49:31,053 - werkzeug - INFO -  * Detected change in 'D:\\Senior II\\Graduation Project\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-05-31 15:49:32,472 - werkzeug - INFO -  * Restarting with stat
+2023-05-31 15:50:02,894 - werkzeug - WARNING -  * Debugger is active!
+2023-05-31 15:50:02,902 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-05-31 15:52:19,343 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:52:19] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 15:52:23,988 - root - INFO - User preferences not loaded
+2023-05-31 15:52:24,008 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:52:24] "[35m[1mPOST /apparel-pref HTTP/1.1[0m" 500 -
+2023-05-31 15:52:26,808 - root - INFO - User preferences not loaded
+2023-05-31 15:52:26,819 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:52:26] "[35m[1mPOST /apparel-pref HTTP/1.1[0m" 500 -
+2023-05-31 15:53:49,079 - root - INFO - User preferences not loaded
+2023-05-31 15:53:49,091 - root - INFO - Saving user preference
+2023-05-31 15:53:49,092 - root - INFO - {'t-shirt': {'texture': 'cotton', 'color': 'blue'}}
+2023-05-31 15:53:49,092 - werkzeug - INFO - 192.168.1.7 - - [31/May/2023 15:53:49] "POST /apparel-pref HTTP/1.1" 200 -
+2023-05-31 15:54:03,212 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:54:03] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 15:54:07,619 - root - INFO - User preferences not loaded
+2023-05-31 15:54:07,632 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:54:07] "[35m[1mPOST /apparel-pref HTTP/1.1[0m" 500 -
+2023-05-31 15:55:30,993 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:55:30] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 15:55:35,129 - root - INFO - User preferences not loaded
+2023-05-31 15:55:35,138 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:55:35] "[35m[1mPOST /apparel-pref HTTP/1.1[0m" 500 -
+2023-05-31 15:55:36,200 - root - INFO - User preferences not loaded
+2023-05-31 15:55:36,210 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:55:36] "[35m[1mPOST /apparel-pref HTTP/1.1[0m" 500 -
+2023-05-31 15:56:57,181 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:56:57] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 15:57:01,796 - root - INFO - User preferences not loaded
+2023-05-31 15:57:01,824 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:57:01] "[35m[1mPOST /apparel-pref HTTP/1.1[0m" 500 -
+2023-05-31 15:57:31,798 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:57:31] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 15:57:36,451 - root - INFO - User preferences not loaded
+2023-05-31 15:57:36,462 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:57:36] "[35m[1mPOST /apparel-pref HTTP/1.1[0m" 500 -
+2023-05-31 16:09:18,711 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-05-31 16:09:18,713 - werkzeug - INFO -  * Restarting with stat
+2023-05-31 16:09:46,843 - werkzeug - WARNING -  * Debugger is active!
+2023-05-31 16:09:46,849 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-05-31 16:10:52,261 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 16:10:52] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 16:10:57,146 - root - INFO - User preferences not loaded
+2023-05-31 16:10:57,174 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 16:10:57] "[35m[1mPOST /apparel-pref HTTP/1.1[0m" 500 -
+2023-05-31 16:16:25,017 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-05-31 16:16:25,017 - werkzeug - INFO -  * Restarting with stat
+2023-05-31 16:16:49,043 - werkzeug - WARNING -  * Debugger is active!
+2023-05-31 16:16:49,048 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-05-31 16:16:49,436 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 16:16:49] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 16:16:52,145 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 16:16:52] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 16:17:06,510 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 16:17:06] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 16:17:09,511 - root - INFO - User preferences not loaded
+2023-05-31 16:17:09,526 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 16:17:09] "[35m[1mPOST /apparel-pref HTTP/1.1[0m" 500 -
+2023-05-31 16:17:41,651 - werkzeug - INFO -  * Detected change in 'D:\\Senior II\\Graduation Project\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-05-31 16:17:43,083 - werkzeug - INFO -  * Restarting with stat
+2023-05-31 16:18:15,146 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-05-31 16:18:15,146 - werkzeug - INFO -  * Restarting with stat
+2023-05-31 16:18:38,522 - werkzeug - WARNING -  * Debugger is active!
+2023-05-31 16:18:38,522 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-05-31 16:18:39,407 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 16:18:39] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 16:18:44,899 - root - INFO - User preferences not loaded
+2023-05-31 16:18:44,920 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 16:18:44] "[35m[1mPOST /apparel-pref HTTP/1.1[0m" 500 -
+2023-05-31 16:19:21,849 - root - INFO - User preferences loaded
+2023-05-31 16:19:21,849 - root - INFO - {'t-shirt': {'texture': 'cotton', 'color': 'blue'}}
+2023-05-31 16:19:23,948 - root - INFO - Saving user preference
+2023-05-31 16:19:23,949 - root - INFO - {'t-shirt': {'texture': 'cotton', 'color': 'blue'}}
+2023-05-31 16:19:23,951 - werkzeug - INFO - 192.168.1.7 - - [31/May/2023 16:19:23] "POST /apparel-pref HTTP/1.1" 200 -
+2023-05-31 16:20:25,316 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-05-31 16:20:25,316 - werkzeug - INFO -  * Restarting with stat
+2023-05-31 16:20:47,826 - werkzeug - WARNING -  * Debugger is active!
+2023-05-31 16:20:47,833 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-05-31 16:20:57,277 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 16:20:57] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 16:21:01,407 - root - INFO - User preferences not loaded
+2023-05-31 16:21:01,424 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 16:21:01] "[35m[1mPOST /apparel-pref HTTP/1.1[0m" 500 -
