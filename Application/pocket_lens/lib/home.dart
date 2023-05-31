@@ -138,7 +138,8 @@ class _HomeState extends State<Home> {
   double pitch = 1.0;
   double rate = 0.5;
   final String _greetingString =
-      'Hi, this is the Home Page. Please speak the module name to navigate to it.';
+      'Welcome! I\'m Pocket Lens, your trusted visual assistant. I am here to assist you to explore the world . Please speak the module name to navigate to it.';
+  // 'Hi, this is the Home Page. Please speak the module name to navigate to it.';
   bool _greetingIsPlayed = false;
   TtsState ttsState = TtsState.stopped;
 
@@ -392,16 +393,16 @@ class _HomeState extends State<Home> {
     super.initState();
     initTts();
     _initSpeech();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) async {
-        await _speak();
-        // await _startListening();
-      },
-    );
+    // WidgetsBinding.instance.addPostFrameCallback(
+    //   (_) async {
+    //     await _speak();
+    //     // await _startListening();
+    //   },
+    // );
 
     _initAlan();
-    // _greetingByAlan();
-    // _deactivateAlan();
+    _greetingByAlan();
+    _deactivateAlan();
   }
 
   @override
