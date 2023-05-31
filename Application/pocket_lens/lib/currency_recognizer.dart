@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
+import 'package:pocket_lens/alan_chatbot.dart';
 import 'config.dart';
 import 'package:camera/camera.dart';
 import 'main.dart';
@@ -7,6 +7,8 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:alan_voice/alan_voice.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 enum TtsState { playing, stopped, paused, continued }
 
@@ -41,7 +43,6 @@ class _CurrencyRecognizerState extends State<CurrencyRecognizer> {
     await flutterTts.setVolume(volume);
     await flutterTts.setSpeechRate(rate);
     await flutterTts.setPitch(pitch);
-
     await flutterTts.speak(voiceText);
   }
 
@@ -135,7 +136,9 @@ class _CurrencyRecognizerState extends State<CurrencyRecognizer> {
     }
   }
 
-  Future<void> sendImagetoServer(XFile image) async {
+  Future<void> sendImagetoServer(XFile image, BuildContext context) async {
+    debugPrint('IP ADDRESS = $IP_ADDRESS');
+
     var stream = http.ByteStream(image.openRead());
     stream.cast();
 
@@ -152,7 +155,23 @@ class _CurrencyRecognizerState extends State<CurrencyRecognizer> {
     request.files.add(multipartFile);
     var response = await request.send();
     final respStr = await response.stream.bytesToString();
-    _speak(respStr);
+    // await _speak(respStr);
+    await play(respStr);
+    if (finished) {
+      finished = false;
+      Navigator.of(context).pop();
+    }
+  }
+
+  Future<void> play(String text) async {
+    AlanVoice.activate();
+    AlanVoice.playText(text);
+    finished = true;
+  }
+
+  var finished = false;
+  Future<void> stop() async {
+    AlanVoice.deactivate();
   }
 
   @override
@@ -186,6 +205,41 @@ class _CurrencyRecognizerState extends State<CurrencyRecognizer> {
     initTts();
   }
 
+  Future<void> captureImage(BuildContext context) async {
+    try {
+      // Ensure that the camera is initialized.
+      await _initializeControllerFuture;
+
+      // Attempt to take a picture and get the file `image`
+      // where it was saved.
+      final image = await _controller.takePicture();
+      //image.saveTo('data/assets/images/scene.jpg');
+
+      //print('IMAGE PATH: ${image.path}');
+
+      if (!mounted) return;
+
+      // If the picture was taken, display it on a new screen.
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => DisplayPictureScreen(
+            // Pass the automatically generated path to
+            // the DisplayPictureScreen widget.
+            imagePath: image.path,
+          ),
+        ),
+      );
+
+      //Send image to server
+      await sendImagetoServer(image, context);
+
+      // Navigator.of(context).pop();
+    } catch (e) {
+      // If an error occurs, log the error to the console.
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -208,40 +262,8 @@ class _CurrencyRecognizerState extends State<CurrencyRecognizer> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        // Provide an onPressed callback.
         onPressed: () async {
-          // Take the Picture in a try / catch block. If anything goes wrong,
-          // catch the error.
-          try {
-            // Ensure that the camera is initialized.
-            await _initializeControllerFuture;
-
-            // Attempt to take a picture and get the file `image`
-            // where it was saved.
-            final image = await _controller.takePicture();
-            //image.saveTo('data/assets/images/scene.jpg');
-
-            //print('IMAGE PATH: ${image.path}');
-
-            //Send image to server
-            sendImagetoServer(image);
-
-            if (!mounted) return;
-
-            // If the picture was taken, display it on a new screen.
-            await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => DisplayPictureScreen(
-                  // Pass the automatically generated path to
-                  // the DisplayPictureScreen widget.
-                  imagePath: image.path,
-                ),
-              ),
-            );
-          } catch (e) {
-            // If an error occurs, log the error to the console.
-            print(e);
-          }
+          await captureImage(context);
         },
         child: const Icon(Icons.camera_alt),
       ),

@@ -346,3 +346,103 @@ DEBUG:urllib3.connectionpool:https://api.ultralytics.com:443 "POST /v1/usage/ano
 2023-05-31 17:50:37,751 - root - INFO - Saving user preference
 2023-05-31 17:50:37,751 - root - INFO - {'Cotton': {'texture': 'dimgray, gray', 'color': 'short'}}
 2023-05-31 17:50:37,754 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 17:50:37] "POST /apparel-pref HTTP/1.1" 200 -
+2023-05-31 19:18:43,066 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-05-31 19:18:43,075 - werkzeug - INFO -  * Restarting with stat
+2023-05-31 19:19:22,381 - werkzeug - WARNING -  * Debugger is active!
+2023-05-31 19:19:22,464 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-05-31 19:19:33,320 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:19:33] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:19:35,746 - werkzeug - INFO -  * Detected change in 'D:\\Senior II\\Graduation Project\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-05-31 19:19:37,485 - werkzeug - INFO -  * Restarting with stat
+2023-05-31 19:20:17,192 - werkzeug - WARNING -  * Debugger is active!
+2023-05-31 19:20:17,192 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-05-31 19:22:25,583 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:22:25] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:26:29,229 - werkzeug - INFO -  * Detected change in 'D:\\Senior II\\Graduation Project\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-05-31 19:26:31,109 - werkzeug - INFO -  * Restarting with stat
+2023-05-31 19:28:04,310 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-05-31 19:28:04,310 - werkzeug - INFO -  * Restarting with stat
+2023-05-31 19:28:33,906 - werkzeug - WARNING -  * Debugger is active!
+2023-05-31 19:28:33,913 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-05-31 19:28:35,648 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:28:35] "POST /scene-descriptor HTTP/1.1" 200 -
+2023-05-31 19:28:42,931 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:28:42] "POST /scene-descriptor HTTP/1.1" 200 -
+2023-05-31 19:33:15,620 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:33:15] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:34:12,287 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-05-31 19:34:12,289 - werkzeug - INFO -  * Restarting with stat
+2023-05-31 19:34:41,027 - werkzeug - WARNING -  * Debugger is active!
+2023-05-31 19:34:41,033 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-05-31 19:34:58,946 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:34:58] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:36:44,300 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:36:44] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:37:20,230 - werkzeug - INFO - 192.168.1.7 - - [31/May/2023 19:37:20] "[35m[1mPOST /scene-descriptor HTTP/1.1[0m" 500 -
+2023-05-31 19:38:39,855 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-05-31 19:38:39,857 - werkzeug - INFO -  * Restarting with stat
+2023-05-31 19:39:20,696 - werkzeug - WARNING -  * Debugger is active!
+2023-05-31 19:39:20,703 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-05-31 19:39:54,549 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:39:54] "POST /scene-descriptor HTTP/1.1" 200 -
+2023-05-31 19:40:07,112 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:40:07] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:40:26,201 - werkzeug - INFO -  * Detected change in 'D:\\Senior II\\Graduation Project\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-05-31 19:40:29,435 - werkzeug - INFO -  * Restarting with stat
+2023-05-31 19:41:05,687 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-05-31 19:41:05,689 - werkzeug - INFO -  * Restarting with stat
+2023-05-31 19:41:35,534 - werkzeug - WARNING -  * Debugger is active!
+2023-05-31 19:41:35,540 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-05-31 19:41:49,185 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:41:49] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:42:01,770 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:42:01] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 19:42:15,734 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:42:15] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:42:24,295 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:42:24] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:46:04,771 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:46:04] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:47:33,801 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:47:33] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:48:06,934 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:48:06] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:48:40,180 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:48:40] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:49:11,413 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:49:11] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:49:21,571 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:49:21] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:49:39,090 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:49:39] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:52:22,371 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:52:22] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:53:02,813 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:53:02] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:53:32,598 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:53:32] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:53:37,786 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:53:37] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:53:43,831 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:53:43] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:53:48,576 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:53:48] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:55:59,155 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:55:59] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:56:03,379 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:56:03] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:56:23,186 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:56:23] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:56:57,834 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:56:57] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:57:49,428 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:57:49] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 19:59:14,258 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 19:59:14] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:00:27,331 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:00:27] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:02:23,147 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:02:23] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:04:36,763 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-05-31 20:04:36,767 - werkzeug - INFO -  * Restarting with stat
+2023-05-31 20:05:11,607 - werkzeug - WARNING -  * Debugger is active!
+2023-05-31 20:05:11,635 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-05-31 20:05:58,430 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:05:58] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:06:27,409 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:06:27] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:06:39,896 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:06:39] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:06:58,306 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:06:58] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:08:09,640 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:08:09] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:08:28,092 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:08:28] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:08:51,210 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:08:51] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:09:09,146 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:09:09] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:10:42,772 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:10:42] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:11:53,309 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:11:53] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:12:43,373 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:12:43] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:17:22,046 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:17:22] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:18:20,989 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:18:20] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:18:34,158 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:18:34] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:20:05,949 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:20:05] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:20:14,733 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:20:14] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:20:27,200 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:20:27] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:20:41,230 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:20:41] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:24:08,053 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:24:08] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:25:31,173 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:25:31] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:25:38,128 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:25:38] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:34:17,975 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:34:17] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:35:08,127 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:35:08] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:35:24,277 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:35:24] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:38:53,425 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:38:53] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:39:10,895 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:39:10] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:40:49,079 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:40:49] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 20:41:02,436 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:41:02] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:41:16,998 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:41:16] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:41:26,318 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:41:26] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:41:59,236 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:41:59] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:42:57,141 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:42:57] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 20:43:38,127 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 20:43:38] "POST /currency-recognizer HTTP/1.1" 200 -
