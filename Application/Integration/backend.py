@@ -34,7 +34,7 @@ pd = ProductDetection('product_detect.pt')
 br = BrandRecognition('logo_detect.pt')
 emoDetector = loadEmoDetector()
 sceneDescriptor = SceneDescriptor("./Scene_Descriptor/weights/yolov8s-seg.pt")
-# clothesDescriptor = ClothesDescriptor()
+clothesDescriptor = ClothesDescriptor()
 ar = ApparelRecommender()
 
 
@@ -74,12 +74,18 @@ def clothes_descriptor():
     # print(img.shape)
     # PILImage = Image.open(file.stream)
     # PILImage.show()
-    # response_string, detected_clothes = clothesDescriptor.describe_cloth(img)
-    response_string = 'This is a grey shirt'
-    detected_clothes = dict()
-    detected_clothes['color'] = 'grey'
-    detected_clothes['type'] = 'shirt'
-    detected_clothes['texture'] = 'plain'
+    
+    
+    response_string, detected_clothes = clothesDescriptor.describe_cloth(img)
+    print(detected_clothes)
+    
+    
+    
+    # response_string = 'This is a grey shirt'
+    # # # detected_clothes = dict()
+    # detected_clothes['color'] = 'grey'
+    # detected_clothes['type'] = 'shirt'
+    # detected_clothes['texture'] = 'plain'
     result = dict()
     result['response_string'] = response_string 
     result['detected_clothes'] = detected_clothes
@@ -279,7 +285,8 @@ def apparelSetPref():
     else:
         logging.info("User preferences not loaded")
 
-    print(request.json)
+    print(f'------Request: {request.json}')
+
     #Get request data
     texture = request.json['texture']
     color = request.json['color']

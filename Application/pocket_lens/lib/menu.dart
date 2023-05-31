@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pocket_lens/recommender.dart';
 import 'package:pocket_lens/test.dart';
+import 'package:pocket_lens/text-reader.dart';
 import 'chatbot.dart';
 import 'TTSTest.dart';
 import 'scene_descriptor.dart';
@@ -33,6 +34,16 @@ class Menu extends StatelessWidget {
       MaterialPageRoute(
         builder: (_) {
           return const CurrencyRecognizer();
+        },
+      ),
+    );
+  }
+
+  void _goToTextReader(BuildContext ctx) {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return const TextReader();
         },
       ),
     );
@@ -360,7 +371,9 @@ class Menu extends StatelessWidget {
           ),
 
           ListTile(
-            onTap: () {},
+            onTap: () {
+              _goToTextReader(context);
+            },
             leading: const Icon(
               Icons.format_color_text_sharp,
               size: 27,

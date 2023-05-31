@@ -161,7 +161,7 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
 
     var responseString = extractedInfo['response_string'] as String;
     await _speak(responseString);
-
+    debugPrint('************************ ${extractedInfo['detected_clothes']}');
     detectedClothes = extractedInfo['detected_clothes'] as Map<String, dynamic>;
     var color = detectedClothes['color'] as String;
     var texture = detectedClothes['texture'] as String;
