@@ -76,20 +76,19 @@ def clothes_descriptor():
     # PILImage.show()
     
     
-    response_string, detected_clothes = clothesDescriptor.describe_cloth(img)
-    print(detected_clothes)
-    
-    
-    
-    # response_string = 'This is a grey shirt'
-    # # # detected_clothes = dict()
-    # detected_clothes['color'] = 'grey'
-    # detected_clothes['type'] = 'shirt'
-    # detected_clothes['texture'] = 'plain'
+    response_string, detected_clothes_list = clothesDescriptor.describe_cloth(img)
+    detected_clothes = dict()
+    if (not(detected_clothes_list is None)):
+        detected_clothes['color'] = detected_clothes_list[0][0]
+        detected_clothes['type'] = detected_clothes_list[0][1]
+        detected_clothes['texture'] = detected_clothes_list[0][2]
+    else:
+        detected_clothes['color'] = "None"
+        detected_clothes['type'] = "None"
+        detected_clothes['texture'] = "None"
     result = dict()
     result['response_string'] = response_string 
     result['detected_clothes'] = detected_clothes
-    # print(result)
     return result
 
 @app.route('/face-detector', methods=['POST'])
