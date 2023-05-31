@@ -145,3 +145,40 @@ DEBUG:urllib3.connectionpool:https://api.ultralytics.com:443 "POST /v1/usage/ano
 2023-05-30 22:17:12,371 - werkzeug - INFO - 192.168.1.8 - - [30/May/2023 22:17:12] "POST /scene-descriptor HTTP/1.1" 200 -
 2023-05-30 22:17:17,839 - werkzeug - INFO - 192.168.1.8 - - [30/May/2023 22:17:17] "POST /currency-recognizer HTTP/1.1" 200 -
 2023-05-30 22:17:33,346 - werkzeug - INFO - 192.168.1.8 - - [30/May/2023 22:17:33] "POST /currency-recognizer HTTP/1.1" 200 -
+2023-05-31 15:23:42,033 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-05-31 15:23:42,159 - werkzeug - INFO -  * Restarting with stat
+2023-05-31 15:24:30,714 - werkzeug - WARNING -  * Debugger is active!
+2023-05-31 15:24:30,763 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-05-31 15:24:56,872 - werkzeug - INFO - 192.168.1.7 - - [31/May/2023 15:24:56] "[35m[1mPOST /scene-descriptor HTTP/1.1[0m" 500 -
+2023-05-31 15:25:06,274 - werkzeug - INFO - 192.168.1.7 - - [31/May/2023 15:25:06] "[35m[1mPOST /scene-descriptor HTTP/1.1[0m" 500 -
+2023-05-31 15:25:28,096 - werkzeug - INFO - 192.168.1.7 - - [31/May/2023 15:25:28] "[35m[1mPOST /scene-descriptor HTTP/1.1[0m" 500 -
+2023-05-31 15:26:10,168 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-05-31 15:26:10,168 - werkzeug - INFO -  * Restarting with stat
+2023-05-31 15:26:40,294 - werkzeug - WARNING -  * Debugger is active!
+2023-05-31 15:26:40,302 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-05-31 15:26:40,986 - werkzeug - INFO - 192.168.1.7 - - [31/May/2023 15:26:40] "[35m[1mPOST /scene-descriptor HTTP/1.1[0m" 500 -
+2023-05-31 15:27:24,493 - werkzeug - INFO - 192.168.1.7 - - [31/May/2023 15:27:24] "POST /test HTTP/1.1" 200 -
+2023-05-31 15:27:39,646 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:27:39] "POST /test HTTP/1.1" 200 -
+2023-05-31 15:28:12,909 - werkzeug - INFO -  * Detected change in 'D:\\Senior II\\Graduation Project\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-05-31 15:28:14,524 - werkzeug - INFO -  * Restarting with stat
+2023-05-31 15:28:43,935 - werkzeug - WARNING -  * Debugger is active!
+2023-05-31 15:28:43,942 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-05-31 15:28:47,764 - werkzeug - INFO -  * Detected change in 'D:\\Senior II\\Graduation Project\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-05-31 15:28:49,230 - werkzeug - INFO -  * Restarting with stat
+2023-05-31 15:29:25,466 - werkzeug - WARNING -  * Debugger is active!
+2023-05-31 15:29:25,473 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-05-31 15:30:03,988 - werkzeug - INFO - 192.168.1.7 - - [31/May/2023 15:30:03] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 15:30:41,020 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:30:41] "POST /scene-descriptor HTTP/1.1" 200 -
+2023-05-31 15:30:50,211 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:30:50] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 15:31:31,056 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:31:31] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 15:31:54,834 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:31:54] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 15:33:55,216 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:33:55] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 15:34:40,414 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:34:40] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 15:35:56,078 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:35:56] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 15:36:19,899 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:36:19] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 15:36:48,026 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:36:48] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 15:37:53,615 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:37:53] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 15:40:17,925 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:40:17] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 15:41:11,589 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:41:11] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 15:42:18,135 - werkzeug - INFO - 192.168.1.6 - - [31/May/2023 15:42:18] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-05-31 15:44:27,569 - werkzeug - INFO -  * Detected change in 'D:\\Senior II\\Graduation Project\\Graduation-Project\\Application\\Integration\\backend.py', reloading

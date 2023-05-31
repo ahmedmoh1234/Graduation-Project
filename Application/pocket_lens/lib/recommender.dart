@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'config.dart';
 import 'package:camera/camera.dart';
@@ -145,53 +147,33 @@ class _RecommenderState extends State<Recommender> {
     );
 
     _initializeControllerFuture = _controller.initialize();
-    // _controller.initialize().then((_) {
-    //   if (!mounted) {
-    //     return;
-    //   }
-    //   setState(() {});
-    // }).catchError((Object e) {
-    //   if (e is CameraException) {
-    //     switch (e.code) {
-    //       case 'CameraAccessDenied':
-    //         // Handle access errors here.
-    //         break;
-    //       default:
-    //         // Handle other errors here.
-    //         break;
-    //     }
-    //   }
-    // });
 
     initTts();
   }
 
   Future<void> captureImage(BuildContext context) async {
     try {
-      // Ensure that the camera is initialized.
+      //Initialize camera
       await _initializeControllerFuture;
 
-      // Attempt to take a picture and get the file `image`
-      // where it was saved.
+      // Take a picture
       final image = await _controller.takePicture();
-
-      //print('IMAGE PATH: ${image.path}');
 
       if (!mounted) return;
 
-      //Send image to server
-
-      // If the picture was taken, display it on a new screen.
+      //Display image on a new screen
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => DisplayPictureScreen(
-            // Pass the automatically generated path to
-            // the DisplayPictureScreen widget.
             imagePath: image.path,
           ),
         ),
       );
-      showDialog(
+
+      _speak('Do you like this ?');
+
+      // Show Dialog Box
+      var choice1 = await showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
           title: const Text(
@@ -204,10 +186,9 @@ class _RecommenderState extends State<Recommender> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.pop(context, 'Cancel');
-                Navigator.pop(context);
+                debugPrint('Yes');
+                Navigator.pop(context, 'Yes');
               },
-              //Make the text bold
               child: const Text(
                 'Yes',
                 style: TextStyle(
@@ -219,8 +200,8 @@ class _RecommenderState extends State<Recommender> {
             ),
             TextButton(
               onPressed: () {
+                debugPrint('No');
                 Navigator.pop(context, 'No');
-                Navigator.pop(context);
               },
               child: const Text(
                 'No',
@@ -233,19 +214,6 @@ class _RecommenderState extends State<Recommender> {
             ),
           ],
           alignment: Alignment.center,
-          // icon: const Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //   children: [
-          //     Icon(
-          //       Icons.thumb_up,
-          //       color: Colors.green,
-          //     ),
-          //     Icon(
-          //       Icons.thumb_down,
-          //       color: Colors.red,
-          //     ),
-          //   ],
-          // ),
           icon: const Icon(
             Icons.recommend_rounded,
             color: Colors.green,
@@ -257,10 +225,74 @@ class _RecommenderState extends State<Recommender> {
           actionsAlignment: MainAxisAlignment.spaceEvenly,
         ),
       );
+      debugPrint('=====Choice = $choice1 =============');
 
-      // Navigator.of(context).pop();
+      if (choice1 == 'Yes') {
+        _speak('Do you want to add this to the Database ?');
+
+        // Show Dialog Box
+        var choice2 = await showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text(
+              'Recommender',
+            ),
+            content: const Text(
+              'Do you want to add this ?',
+              textAlign: TextAlign.center,
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  debugPrint('Yes');
+                  Navigator.pop(context, 'Yes');
+                },
+                child: const Text(
+                  'Yes',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  debugPrint('No');
+                  Navigator.pop(context, 'No');
+                },
+                child: const Text(
+                  'No',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ],
+            alignment: Alignment.center,
+            icon: const Icon(
+              Icons.recommend_rounded,
+              color: Colors.green,
+              size: 30,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            actionsAlignment: MainAxisAlignment.spaceEvenly,
+          ),
+        );
+
+        debugPrint('=====Choice = $choice2 =============');
+
+        if (choice2 == 'Yes') {
+          _speak('Adding this to Database');
+        }
+      }
+
+      Navigator.pop(context);
     } catch (e) {
-      // If an error occurs, log the error to the console.
       print(e);
     }
   }
@@ -289,7 +321,6 @@ class _RecommenderState extends State<Recommender> {
       floatingActionButton: FloatingActionButton.large(
         onPressed: () async {
           await captureImage(context);
-          // _speak('Do you like this ?');
         },
         child: const Icon(Icons.camera_alt),
       ),

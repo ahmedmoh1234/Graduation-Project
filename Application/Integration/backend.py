@@ -23,7 +23,7 @@ from Apparel_recom.apparel import ApparelRecommender
 
 
 # Run ipconfig in command prompt to get IP Address
-IP_ADDRESS = '192.168.1.9'
+IP_ADDRESS = '192.168.1.7'
 # IP_ADDRESS = 'localhost'
 
 logging.basicConfig(filename='logs.log', level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -34,7 +34,7 @@ pd = ProductDetection('product_detect.pt')
 br = BrandRecognition('logo_detect.pt')
 emoDetector = loadEmoDetector()
 sceneDescriptor = SceneDescriptor("./Scene_Descriptor/weights/yolov8s-seg.pt")
-clothesDescriptor = ClothesDescriptor()
+# clothesDescriptor = ClothesDescriptor()
 ar = ApparelRecommender()
 
 
@@ -42,7 +42,10 @@ ar = ApparelRecommender()
 @app.route('/test', methods=['POST'])
 def test():
     print('Test')
-    return 'test'
+    result = dict()
+    result['test1'] = 'test1'
+    result['test2'] = 'test2'
+    return result
 
 @app.route('/command', methods=['POST'])
 def command():
@@ -68,12 +71,20 @@ def scene_descriptor():
 def clothes_descriptor():    
     file = request.files['image']
     img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
-    print(img.shape)
-    response_string, detected_clothes = clothesDescriptor.describe_cloth(img)
+    # print(img.shape)
     # PILImage = Image.open(file.stream)
     # PILImage.show()
-    print(response_string)
-    return response_string
+    # response_string, detected_clothes = clothesDescriptor.describe_cloth(img)
+    response_string = 'This is a blue shirt'
+    detected_clothes = dict()
+    detected_clothes['color'] = 'blue'
+    detected_clothes['type'] = 'shirt'
+    detected_clothes['texture'] = 'plain'
+    result = dict()
+    result['response_string'] = response_string 
+    result['detected_clothes'] = detected_clothes
+    # print(result)
+    return result
 
 @app.route('/face-detector', methods=['POST'])
 def face_detector():   
