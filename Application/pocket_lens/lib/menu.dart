@@ -4,9 +4,12 @@ import 'package:pocket_lens/barcode_reader.dart';
 import 'package:pocket_lens/clothes_descriptor.dart';
 import 'package:pocket_lens/currency_recognizer.dart';
 import 'package:pocket_lens/emotion_recognizer.dart';
+import 'package:pocket_lens/product-identifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pocket_lens/recommender.dart';
+import 'package:pocket_lens/test.dart';
+import 'package:pocket_lens/text-reader.dart';
 import 'chatbot.dart';
 import 'TTSTest.dart';
 import 'scene_descriptor.dart';
@@ -36,6 +39,16 @@ class Menu extends StatelessWidget {
     );
   }
 
+  void _goToTextReader(BuildContext ctx) {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return const TextReader();
+        },
+      ),
+    );
+  }
+
   void _goToAlanChatbot(BuildContext ctx) {
     Navigator.of(ctx).push(
       MaterialPageRoute(
@@ -51,6 +64,16 @@ class Menu extends StatelessWidget {
       MaterialPageRoute(
         builder: (_) {
           return const ChatBot();
+        },
+      ),
+    );
+  }
+
+  void _goToProductIdentifier(BuildContext ctx) {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return const ProductIdentifier();
         },
       ),
     );
@@ -91,6 +114,16 @@ class Menu extends StatelessWidget {
       MaterialPageRoute(
         builder: (_) {
           return const FaceDetector();
+        },
+      ),
+    );
+  }
+
+  void _goToTest(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return const Test();
         },
       ),
     );
@@ -273,20 +306,37 @@ class Menu extends StatelessWidget {
           ),
           ListTile(
             onTap: () {
-              _goToAlanChatbot(context);
+              _goToRecommender(context);
             },
             leading: const Icon(
-              Icons.textsms_rounded,
+              Icons.recommend_outlined,
+              // color: Colors.green,
               size: 27,
             ),
             title: const Text(
-              'Chatbot',
+              'Recommender',
               style: TextStyle(
                 fontSize: 17,
                 fontFamily: 'RalewayMedium',
               ),
             ),
           ),
+          // ListTile(
+          //   onTap: () {
+          //     _goToAlanChatbot(context);
+          //   },
+          //   leading: const Icon(
+          //     Icons.textsms_rounded,
+          //     size: 27,
+          //   ),
+          //   title: const Text(
+          //     'Chatbot',
+          //     style: TextStyle(
+          //       fontSize: 17,
+          //       fontFamily: 'RalewayMedium',
+          //     ),
+          //   ),
+          // ),
           // ListTile(
           //   onTap: () {
           //     _goToChatbot(context);
@@ -319,6 +369,40 @@ class Menu extends StatelessWidget {
               ),
             ),
           ),
+
+          ListTile(
+            onTap: () {
+              _goToTextReader(context);
+            },
+            leading: const Icon(
+              Icons.format_color_text_sharp,
+              size: 27,
+            ),
+            title: const Text(
+              'Text Reader',
+              style: TextStyle(
+                fontSize: 17,
+                fontFamily: 'RalewayMedium',
+              ),
+            ),
+          ),
+
+          ListTile(
+            onTap: () {
+              _goToProductIdentifier(context);
+            },
+            leading: const Icon(
+              Icons.shopping_cart,
+              size: 27,
+            ),
+            title: const Text(
+              'Product Identifier',
+              style: TextStyle(
+                fontSize: 17,
+                fontFamily: 'RalewayMedium',
+              ),
+            ),
+          ),
           ListTile(
             onTap: () {
               _goToBarcodeReader(context);
@@ -335,94 +419,49 @@ class Menu extends StatelessWidget {
               ),
             ),
           ),
-          ListTile(
-            onTap: () {},
-            leading: const Icon(
-              Icons.format_color_text_sharp,
-              size: 27,
-            ),
-            title: const Text(
-              'Text Reader',
-              style: TextStyle(
-                fontSize: 17,
-                fontFamily: 'RalewayMedium',
-              ),
-            ),
-          ),
+          // ListTile(
+          //   onTap: () {},
+          //   leading: const Icon(
+          //     Icons.account_box,
+          //     size: 27,
+          //   ),
+          //   title: const Text(
+          //     'Call a contact',
+          //     style: TextStyle(
+          //       fontSize: 17,
+          //       fontFamily: 'RalewayMedium',
+          //     ),
+          //   ),
+          // ),
 
-          ListTile(
-            onTap: () {},
-            leading: const Icon(
-              Icons.shopping_cart,
-              size: 27,
-            ),
-            title: const Text(
-              'Product Identifier',
-              style: TextStyle(
-                fontSize: 17,
-                fontFamily: 'RalewayMedium',
-              ),
-            ),
-          ),
-          ListTile(
-            onTap: () {},
-            leading: const Icon(
-              Icons.account_box,
-              size: 27,
-            ),
-            title: const Text(
-              'Call a contact',
-              style: TextStyle(
-                fontSize: 17,
-                fontFamily: 'RalewayMedium',
-              ),
-            ),
-          ),
-          ListTile(
-            onTap: () {
-              _goToRecommender(context);
-            },
-            leading: const Icon(
-              Icons.recommend_outlined,
-              color: Colors.green,
-              size: 27,
-            ),
-            title: const Text(
-              'Recommender',
-              style: TextStyle(
-                fontSize: 17,
-                fontFamily: 'RalewayMedium',
-              ),
-            ),
-          ),
-          ListTile(
-            onTap: () {},
-            leading: const Icon(
-              Icons.note_add,
-              size: 27,
-            ),
-            title: const Text(
-              'Note taker',
-              style: TextStyle(
-                fontSize: 17,
-                fontFamily: 'RalewayMedium',
-              ),
-            ),
-          ),
-          ListTile(
-            onTap: () {},
-            leading: const Icon(
-              Icons.calendar_month,
-              size: 27,
-            ),
-            title: const Text(
-              'Event Scheduler',
-              style: TextStyle(
-                fontSize: 17,
-                fontFamily: 'RalewayMedium',
-              ),
-            ),
-          ),
+          // ListTile(
+          //   onTap: () {},
+          //   leading: const Icon(
+          //     Icons.note_add,
+          //     size: 27,
+          //   ),
+          //   title: const Text(
+          //     'Note taker',
+          //     style: TextStyle(
+          //       fontSize: 17,
+          //       fontFamily: 'RalewayMedium',
+          //     ),
+          //   ),
+          // ),
+          // ListTile(
+          //   onTap: () {},
+          //   leading: const Icon(
+          //     Icons.calendar_month,
+          //     size: 27,
+          //   ),
+          //   title: const Text(
+          //     'Event Scheduler',
+          //     style: TextStyle(
+          //       fontSize: 17,
+          //       fontFamily: 'RalewayMedium',
+          //     ),
+          //   ),
+          // ),
           ListTile(
             leading: const Icon(
               Icons.help,

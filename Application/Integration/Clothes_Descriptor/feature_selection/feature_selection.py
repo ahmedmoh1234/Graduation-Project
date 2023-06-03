@@ -1,5 +1,8 @@
 import sys
-sys.path.append('../')
+import pathlib
+PATH = pathlib.Path(__file__)
+sys.path.append(str(PATH.parent))
+
 
 from imports import *
 

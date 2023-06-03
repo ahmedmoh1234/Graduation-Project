@@ -42,7 +42,10 @@ ar = ApparelRecommender()
 @app.route('/test', methods=['POST'])
 def test():
     print('Test')
-    return 'test'
+    result = dict()
+    result['test1'] = 'test1'
+    result['test2'] = 'test2'
+    return result
 
 @app.route('/command', methods=['POST'])
 def command():
@@ -68,12 +71,25 @@ def scene_descriptor():
 def clothes_descriptor():    
     file = request.files['image']
     img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
-    print(img.shape)
-    response_string, detected_clothes = clothes_descriptor.describe_cloth(img)
+    # print(img.shape)
     # PILImage = Image.open(file.stream)
     # PILImage.show()
-    print(response_string)
-    return response_string
+    
+    
+    response_string, detected_clothes_list = clothesDescriptor.describe_cloth(img)
+    detected_clothes = dict()
+    if (not(detected_clothes_list is None)):
+        detected_clothes['color'] = detected_clothes_list[0][0]
+        detected_clothes['type'] = detected_clothes_list[0][1]
+        detected_clothes['texture'] = detected_clothes_list[0][2]
+    else:
+        detected_clothes['color'] = "None"
+        detected_clothes['type'] = "None"
+        detected_clothes['texture'] = "None"
+    result = dict()
+    result['response_string'] = response_string 
+    result['detected_clothes'] = detected_clothes
+    return result
 
 @app.route('/face-detector', methods=['POST'])
 def face_detector():   
@@ -108,14 +124,16 @@ def emotion_recognizer():
 
 @app.route('/currency-recognizer', methods=['POST'])
 def currency_recognizer():    
-    file = request.files['image']
-    img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
-    PILImage = Image.open(file.stream)
-    print("currency")
-    PILImage.show()
+    # file = request.files['image']
+    # img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
+    # PILImage = Image.open(file.stream)
+    # PILImage.show()
     # img = cv2.imread('20LE_1.jpg')
-    result = currency_detect(img)
-    print('Result:', result)
+    # result = currency_detect(img)
+    # print('Result:', result)
+    print('Received')
+    time.sleep(1.5)
+    result = 'This is a 20 pounds note.'
     return result
     
 @app.route('/document-reader', methods=['POST'])
@@ -128,12 +146,14 @@ def document_reader():
     result = document_scanner(img)
     return result
 
+prod_counter = 0
 @app.route('/product-identifier', methods=['POST'])
 def product_identifier():    
     global pd
     global br
     file = request.files['image']
     img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
+    cv2.imwrite(f"product{prod_counter}.jpg", img)
     # PILImage = Image.open(file.stream)
     # print(img.shape)
     # PILImage.show()
@@ -158,7 +178,7 @@ def product_identifier():
         finalStr = "No products found"
     return finalStr
 
-@app.route('/apparel', methods=['POST'])
+@app.route('/apparel-rec', methods=['POST'])
 def apparel():    
 
     #Get mac address
@@ -169,57 +189,38 @@ def apparel():
         mac_addr = getmac.get_mac_address() #get mac address of the server
     
     #Load the model using the mac address
-    createModel = False
     if ar.loadUserPreference(mac_addr):
         logging.info("Model loaded")
     else:
         logging.info("Model not loaded")
-        createModel = True
-        
-
-    texture = request.json['texture']
-    color = request.json['color']
+        return "Preference not set. Please set your preferences first"
+    
+    #Get clothes type
     clothesType = request.json['clothesType']
+
+    prefProductType = clothesType
+    prefProductTexture = ar._user_preferences[clothesType][ApparelRecommender.TEXTURE]
+    prefProductColor = ar._user_preferences[clothesType][ApparelRecommender.COLOR]
+
+    preferenceID = ar.getProductID(prefProductTexture, prefProductColor, prefProductType)
+
+
+    if preferenceID[0] == -1 or preferenceID[0] == -2:
+        #This means that this is a new product (== -1) or the database is empty (== -2)
+        logging.error("Preference is not in database")
+        return "Preference not set. Please set your preferences first"
     
-
-    prodId = ar.getProductID(texture, color, clothesType)
-
-
-    if prodId[0] == -1:
-        #This means that this is a new product
-        #Add it to the database
-        logging.info("New product. Adding to database")
-        ar.addApparelData(prodId[1], texture, color, clothesType)
-        result = ar.getTopRecommendations(prodId[1], 1)
-        if isinstance(result, str):
-            result = result
-        else:
-            #only return the texture, color and clothes type
-            resultStr = "We recommend the "
-            resultStr += str(result['color'].iloc[0]) + ", " + str(result['texture'].iloc[0]) +   " " + str(result['clothes_type'].iloc[0])
-            result = resultStr
-
-    elif prodId[0] == -2:
-        #This means that the database is empty
-        #Add it to the database
-        logging.info("Database is empty. Adding to database")
-        ar.addApparelData(prodId[1], texture, color, clothesType)
-        result = "There isn't enough data to make a recommendation"
-
     else:
-        #This means that the product is already in the database
-        logging.info("Product already in database")
-        result = ar.getTopRecommendations(prodId[0], 1)
+        logging.info("Preference is in database")
+        result = ar.getTopRecommendations(preferenceID[0], 1)
+
         if isinstance(result, str):
             result = result
         else:
             resultStr = "We recommend the "
-            resultStr += str(result['color'].iloc[0]) + ", " + str(result['texture'].iloc[0]) +   " " + str(result['clothes_type'].iloc[0])
+            resultStr += str(result['color']) + ", " + str(result['texture']) +   " " + str(result['clothes_type'])
             result = resultStr
-    
-    if createModel:
-        logging.info("Saving model")
-        ar.saveUserPreference(mac_addr)
+
 
     return result
 
@@ -285,6 +286,7 @@ def apparelSetPref():
     else:
         logging.info("User preferences not loaded")
 
+    print(f'------Request: {request.json}')
 
     #Get request data
     texture = request.json['texture']

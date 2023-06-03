@@ -6,7 +6,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-
+import 'dart:convert';
 import 'package:flutter_tts/flutter_tts.dart';
 
 enum TtsState { playing, stopped, paused, continued }
@@ -37,6 +37,8 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
   bool get isAndroid => !kIsWeb && Platform.isAndroid;
   bool get isWindows => !kIsWeb && Platform.isWindows;
   bool get isWeb => kIsWeb;
+
+  late var detectedClothes = {};
 
   Future _speak(voiceText) async {
     await flutterTts.setVolume(volume);
@@ -152,9 +154,214 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
 
     request.files.add(multipartFile);
 
-    var response = await request.send();
-    final respStr = await response.stream.bytesToString();
-    _speak(respStr);
+    var streamedResponse = await request.send();
+
+    var response = await http.Response.fromStream(streamedResponse);
+    var extractedInfo = json.decode(response.body) as Map<String, dynamic>;
+
+    var responseString = extractedInfo['response_string'] as String;
+    await _speak(responseString);
+    debugPrint('************************ ${extractedInfo['detected_clothes']}');
+    detectedClothes = extractedInfo['detected_clothes'] as Map<String, dynamic>;
+    var color = detectedClothes['color'] as String;
+    var texture = detectedClothes['texture'] as String;
+    var type = detectedClothes['type'] as String;
+  }
+
+  Future<void> _addPreference(Map<dynamic, dynamic> detectedClothes) async {
+    var url = Uri.parse('http://$IP_ADDRESS/apparel-pref');
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'color': detectedClothes['color'],
+        'texture': detectedClothes['texture'],
+        'clothesType': detectedClothes['type'],
+      }),
+    );
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    final extractedMyInfo = json.decode(response.body) as Map<String, dynamic>;
+    debugPrint(extractedMyInfo.toString());
+  }
+
+  Future<void> _addToDatabase(Map<dynamic, dynamic> detectedClothes) async {
+    var url = Uri.parse('http://$IP_ADDRESS/apparel-pref');
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'color': detectedClothes['color'],
+        'texture': detectedClothes['texture'],
+        'clothesType': detectedClothes['type'],
+      }),
+    );
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    final extractedMyInfo = json.decode(response.body) as Map<String, dynamic>;
+    debugPrint(extractedMyInfo.toString());
+  }
+
+  Future<void> captureImage(BuildContext context) async {
+    try {
+      //Initialize camera
+      await _initializeControllerFuture;
+
+      // Take a picture
+      final image = await _controller.takePicture();
+
+      if (!mounted) return;
+
+      //Display image on a new screen
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => DisplayPictureScreen(
+            imagePath: image.path,
+          ),
+        ),
+      );
+
+      //Send image to server
+      await sendImagetoServer(image);
+
+      debugPrint('=====Detected Clothes = $detectedClothes =============');
+
+      _speak('Do you want to add this to your preferences ?');
+
+      // Show Dialog Box
+      // ignore: use_build_context_synchronously
+      var choice1 = await showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text(
+            'Future Recommendations',
+          ),
+          content: const Text(
+            'Do you want to add this to your preferences ?',
+            textAlign: TextAlign.center,
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                debugPrint('Yes');
+                Navigator.pop(context, 'Yes');
+              },
+              child: const Text(
+                'Yes',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                debugPrint('No');
+                Navigator.pop(context, 'No');
+              },
+              child: const Text(
+                'No',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ],
+          alignment: Alignment.center,
+          icon: const Icon(
+            Icons.recommend_rounded,
+            color: Colors.green,
+            size: 30,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          actionsAlignment: MainAxisAlignment.spaceEvenly,
+        ),
+      );
+      debugPrint('=====Choice = $choice1 =============');
+
+      if (choice1 == 'Yes') {
+        _speak('Do you want to add this to the Wardrobe ?');
+        _addPreference(detectedClothes);
+        // Show Dialog Box
+        // ignore: use_build_context_synchronously
+        var choice2 = await showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text(
+              'Future Recommendations',
+            ),
+            content: const Text(
+              'Do you want to add this to the Wardrobe ?',
+              textAlign: TextAlign.center,
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  debugPrint('Yes');
+                  Navigator.pop(context, 'Yes');
+                },
+                child: const Text(
+                  'Yes',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  debugPrint('No');
+                  Navigator.pop(context, 'No');
+                },
+                child: const Text(
+                  'No',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ],
+            alignment: Alignment.center,
+            icon: const Icon(
+              Icons.man,
+              color: Colors.blue,
+              size: 30,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            actionsAlignment: MainAxisAlignment.spaceEvenly,
+          ),
+        );
+
+        debugPrint('=====Choice = $choice2 =============');
+
+        if (choice2 == 'Yes') {
+          _speak('Adding this to Database');
+          _addToDatabase(detectedClothes);
+        }
+      }
+
+      Navigator.pop(context);
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -167,23 +374,6 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
     );
 
     _initializeControllerFuture = _controller.initialize();
-    // _controller.initialize().then((_) {
-    //   if (!mounted) {
-    //     return;
-    //   }
-    //   setState(() {});
-    // }).catchError((Object e) {
-    //   if (e is CameraException) {
-    //     switch (e.code) {
-    //       case 'CameraAccessDenied':
-    //         // Handle access errors here.
-    //         break;
-    //       default:
-    //         // Handle other errors here.
-    //         break;
-    //     }
-    //   }
-    // });
 
     initTts();
   }
@@ -209,41 +399,10 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.large(
         // Provide an onPressed callback.
         onPressed: () async {
-          // Take the Picture in a try / catch block. If anything goes wrong,
-          // catch the error.
-          try {
-            // Ensure that the camera is initialized.
-            await _initializeControllerFuture;
-
-            // Attempt to take a picture and get the file `image`
-            // where it was saved.
-            final image = await _controller.takePicture();
-            //image.saveTo('data/assets/images/scene.jpg');
-
-            //print('IMAGE PATH: ${image.path}');
-
-            //Send image to server
-            sendImagetoServer(image);
-
-            if (!mounted) return;
-
-            // If the picture was taken, display it on a new screen.
-            await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => DisplayPictureScreen(
-                  // Pass the automatically generated path to
-                  // the DisplayPictureScreen widget.
-                  imagePath: image.path,
-                ),
-              ),
-            );
-          } catch (e) {
-            // If an error occurs, log the error to the console.
-            print(e);
-          }
+          await captureImage(context);
         },
         child: const Icon(Icons.camera_alt),
       ),

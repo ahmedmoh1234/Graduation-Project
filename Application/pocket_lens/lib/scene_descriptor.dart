@@ -202,8 +202,6 @@ class _SceneDescriptorState extends State<SceneDescriptor> {
 
       if (!mounted) return;
 
-      //Send image to server
-
       // If the picture was taken, display it on a new screen.
       Navigator.of(context).push(
         MaterialPageRoute(
@@ -214,6 +212,8 @@ class _SceneDescriptorState extends State<SceneDescriptor> {
           ),
         ),
       );
+
+      //Send image to server
       await sendImagetoServer(image);
       debugPrint(
           '==============================Finsihed Speaking==============================');
