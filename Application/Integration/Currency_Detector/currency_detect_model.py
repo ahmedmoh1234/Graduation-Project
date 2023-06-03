@@ -24,7 +24,7 @@ def createAbsolutePaths(relativePath):
     return absPath
 
 
-def currency_detector(currencyImg):
+def currency_detector_ready(currencyImg):
 	max_val = 8
 	max_pt = -1
 	max_kp = 0
@@ -51,12 +51,16 @@ def currency_detector(currencyImg):
 
 	# training_set = ['files/20.jpg', 'files/50.jpg', 'files/100.jpg', 'files/500.jpg']
 	# training_set = ['files/20LE_1.jpg','files/20LE_2.jpg', 'files/50.jpg', 'files/100.jpg', 'files/500.jpg']
-	training_set = [createAbsolutePaths('/files/20LE_1.jpg'),createAbsolutePaths('/files/20LE_2.jpg')]
-
+	# training_set = [createAbsolutePaths('/files/20LE_1.jpg'),createAbsolutePaths('/files/20LE_2.jpg')]
+	training_set = ['1','5','10','20','50','100','200']
+	
 	for i in range(0, len(training_set)):
 		# train image
-		train_img = cv2.imread(training_set[i])
-		
+  
+		path = createAbsolutePaths('/datasets/'+training_set[i]+'/'+training_set[i]+'.'+str(19)+'.jpg')
+		path2 = createAbsolutePaths('/datasets/'+training_set[i]+'/'+training_set[i]+'.'+str(5)+'.jpg')
+		train_img = cv2.imread(path)
+		# train_img2 = cv2.imread(path2)
 		# print(50*'-')
 		# print('train_img ', train_img.shape)
 		# print(50*'-')
@@ -64,11 +68,13 @@ def currency_detector(currencyImg):
 		# plt.imshow(train_img)
 		# plt.show()
 		(kp2, des2) = orb.detectAndCompute(train_img, None)
+		# (kp3, des3) = orb.detectAndCompute(train_img2, None)
 
 		# brute force matcher
 		bf = cv2.BFMatcher()
 		print('des2 ', des2.shape)
 		all_matches = bf.knnMatch(des1, des2, k=2)
+		# all_matches2 = bf.knnMatch(des1, des3, k=2)
 
 		good = []
 		# give an arbitrary number -> 0.789
@@ -76,6 +82,10 @@ def currency_detector(currencyImg):
 		for (m, n) in all_matches:
 			if m.distance < 0.789 * n.distance:
 				good.append([m])
+    
+		# for (m, n) in all_matches2:
+		# 	if m.distance < 0.789 * n.distance:
+		# 		good.append([m])
 
 		if len(good) > max_val:
 			max_val = len(good)
@@ -89,7 +99,7 @@ def currency_detector(currencyImg):
 		print('good matches ', max_val)
 
 		train_img = cv2.imread(training_set[max_pt])
-		img3 = cv2.drawMatchesKnn(test_img, kp1, train_img, max_kp, good, 4)
+		# img3 = cv2.drawMatchesKnn(test_img, kp1, train_img, max_kp, good, 4)
 		
 		#Detect if training_set[max_pt] is None
 		
@@ -111,3 +121,5 @@ def currency_detector(currencyImg):
 	else:
 		print('No Matches')
 		return 'None'
+
+# currency_detector(cv2.imread(createAbsolutePaths('/datasets/200/200.2.jpg')))

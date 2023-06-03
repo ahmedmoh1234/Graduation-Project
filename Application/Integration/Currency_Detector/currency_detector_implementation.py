@@ -163,26 +163,30 @@ def KNN(test_points, training_features, labels, k):
 
 def currency_detect(testImg):
     datasetcsv = np.loadtxt(PATH.resolve()/"dataset.csv", delimiter=",")
-    print("datasetcsv",datasetcsv.shape)
+    print(datasetcsv.shape)
     #normalize the dataset
     #separate the labels
-    y_dataset = datasetcsv[:, 573:580]
-    y_expected = datasetcsv[:, 580]
+    # y_dataset = datasetcsv[:, 573:580]
+    y_expected = datasetcsv[:, 0]
     dataset = datasetcsv[:, 1:573]
+    print(dataset.shape)
+    # print(y_dataset.shape)
+    print(y_expected.shape)
 
     #normalize the dataset
     dataset = preprocessing.normalize(dataset, norm='l2')
+    print(dataset.shape)
 
 
     # #duplicate y_expected
-    for i in range(0, 7):
+    for i in range(0, 4):
         y_expected = np.concatenate((y_expected, y_expected), axis=0)
         dataset = np.concatenate((dataset, dataset), axis=0)
-        y_dataset = np.concatenate((y_dataset, y_dataset), axis=0)
+        # y_dataset = np.concatenate((y_dataset, y_dataset), axis=0)
     
     print(y_expected.shape)
     print(dataset.shape)
-    print(y_dataset.shape)
+    # print(y_dataset.shape)
     print(testImg.shape)
     test = prepare_image(testImg)       
     
@@ -190,7 +194,7 @@ def currency_detect(testImg):
     #use knn model
 
     # print("Training knn model...")
-    knn = KNeighborsClassifier(n_neighbors=21)
+    knn = KNeighborsClassifier(n_neighbors=15,metric='hamming')
 
 
     y_train = y_train.flatten()
@@ -208,10 +212,59 @@ def currency_detect(testImg):
     print("predictions_5",predictions_5)
 
     return str(int(prediction_knn[0]))
-# imgpath = PATH.resolve()/'datasets/200/200.1.jpg'
-# imgpath = PATH.resolve()/'50.jpeg'
+# imgpath20 = PATH.resolve()/'datasets/20/20.2.jpg'
+# imgpath = PATH.resolve()/'20LE_1.jpg'
 
 # testImg = cv2.imread(str(imgpath))
 # print(testImg.shape)
 # print(currency_detect(testImg))
+
+def boundedBox(image):
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # Example: Gaussian blur and Canny edge detection
+    blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+    edges = cv2.Canny(blurred, 50, 150)
+    contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    def is_egyptian_bill(contour):
+        # Calculate properties like aspect ratio and area
+        x, y, w, h = cv2.boundingRect(contour)
+        aspect_ratio = float(w) / h
+        area = cv2.contourArea(contour)
+
+        # Compare the calculated properties to the expected values for a bill
+        if min_aspect_ratio <= aspect_ratio <= max_aspect_ratio and min_area <= area <= max_area:
+            return True
+
+        return False
+
+    # Set the expected aspect ratio and area values for an Egyptian bill
+    min_aspect_ratio, max_aspect_ratio = 1.5, 2.5  # Adjust these values as needed
+    min_area, max_area = 1000, 100000  # Adjust these values as needed
+
+    # Filter contours based on the custom function
+    filtered_contours = [cnt for cnt in contours if is_egyptian_bill(cnt)]
+    
+    for cnt in filtered_contours:
+        x, y, w, h = cv2.boundingRect(cnt)
+        cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
+    cv2.imshow("Egyptian Bill Detection", image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+    for cnt in filtered_contours:
+        x, y, w, h = cv2.boundingRect(cnt)
+        egyptian_bill = image[y:y+h, x:x+w]
+    # Save or process the bill as needed
+
+    cv2.imshow("Egyptian Bill ", egyptian_bill)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+    
+    return egyptian_bill
+
+# boundedBox(testImg)
+
+# import cv2
+# import numpy as np
+
 
