@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:pocket_lens/recommender.dart';
 import 'package:pocket_lens/test.dart';
 import 'package:pocket_lens/text-reader.dart';
+import 'package:pocket_lens/how_it_works.dart';
 import 'chatbot.dart';
 import 'TTSTest.dart';
 import 'scene_descriptor.dart';
@@ -34,6 +35,16 @@ class Menu extends StatelessWidget {
       MaterialPageRoute(
         builder: (_) {
           return const CurrencyRecognizer();
+        },
+      ),
+    );
+  }
+
+  void _goToHowItWorks(BuildContext ctx) {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return const HowItWorks();
         },
       ),
     );
@@ -475,7 +486,7 @@ class Menu extends StatelessWidget {
               ),
             ),
             onTap: () {
-              // _goToHowItWorks(context);
+              _goToHowItWorks(context);
             },
           ),
           ListTile(
