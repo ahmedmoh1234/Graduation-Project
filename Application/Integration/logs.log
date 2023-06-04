@@ -1775,3 +1775,149 @@ DEBUG:urllib3.connectionpool:https://api.ultralytics.com:443 "POST /v1/usage/ano
 2023-06-03 19:57:08,049 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
 2023-06-03 19:57:39,608 - werkzeug - WARNING -  * Debugger is active!
 2023-06-03 19:57:39,614 - werkzeug - INFO -  * Debugger PIN: 987-214-441
+2023-06-04 14:36:44,019 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-06-04 14:36:44,104 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 14:37:29,512 - werkzeug - WARNING -  * Debugger is active!
+2023-06-04 14:37:29,754 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-06-04 14:40:24,615 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 14:40:24] "[35m[1mPOST /clothes-descriptor HTTP/1.1[0m" 500 -
+2023-06-04 14:41:22,924 - werkzeug - INFO -  * Detected change in 'D:\\Senior II\\Graduation Project\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-06-04 14:42:36,987 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-06-04 14:42:36,990 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 14:42:48,073 - werkzeug - WARNING -  * Debugger is active!
+2023-06-04 14:42:48,079 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-06-04 14:44:27,206 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 14:44:27] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-06-04 14:45:30,363 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-06-04 14:45:30,365 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 14:45:41,309 - werkzeug - WARNING -  * Debugger is active!
+2023-06-04 14:45:41,315 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-06-04 14:46:07,133 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 14:46:07] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-06-04 14:47:42,381 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 14:47:42] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-06-04 14:51:31,630 - werkzeug - INFO -  * Detected change in 'D:\\Senior II\\Graduation Project\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-06-04 14:51:33,087 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 14:51:44,806 - werkzeug - WARNING -  * Debugger is active!
+2023-06-04 14:51:44,812 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-06-04 14:51:48,441 - werkzeug - INFO -  * Detected change in 'D:\\Senior II\\Graduation Project\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-06-04 14:51:49,288 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 14:52:12,471 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-06-04 14:52:12,473 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 14:52:23,409 - werkzeug - WARNING -  * Debugger is active!
+2023-06-04 14:52:23,415 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-06-04 14:52:45,748 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 14:52:45] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-06-04 14:53:49,027 - werkzeug - INFO -  * Detected change in 'D:\\Senior II\\Graduation Project\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-06-04 14:53:50,293 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 14:54:02,825 - werkzeug - WARNING -  * Debugger is active!
+2023-06-04 14:54:02,832 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-06-04 14:54:20,476 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-06-04 14:54:20,478 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 14:54:31,493 - werkzeug - WARNING -  * Debugger is active!
+2023-06-04 14:54:31,499 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-06-04 14:54:50,455 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 14:54:50] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-06-04 14:55:41,165 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 14:55:41] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-06-04 14:56:03,099 - werkzeug - INFO -  * Detected change in 'D:\\Senior II\\Graduation Project\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-06-04 14:56:04,247 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 14:56:16,232 - werkzeug - WARNING -  * Debugger is active!
+2023-06-04 14:56:16,237 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-06-04 14:56:25,830 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 14:56:25] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-06-04 14:57:42,004 - werkzeug - INFO -  * Detected change in 'D:\\Senior II\\Graduation Project\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-06-04 14:57:43,295 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 14:57:58,563 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-06-04 14:57:58,566 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 14:58:12,388 - werkzeug - WARNING -  * Debugger is active!
+2023-06-04 14:58:12,398 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-06-04 14:58:16,360 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 14:58:16] "[35m[1mPOST /clothes-descriptor HTTP/1.1[0m" 500 -
+2023-06-04 14:58:49,094 - werkzeug - INFO -  * Detected change in 'D:\\Senior II\\Graduation Project\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-06-04 14:58:50,237 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 14:59:02,076 - werkzeug - WARNING -  * Debugger is active!
+2023-06-04 14:59:02,084 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-06-04 14:59:14,766 - werkzeug - INFO -  * Detected change in 'D:\\Senior II\\Graduation Project\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-06-04 14:59:15,639 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 14:59:27,752 - werkzeug - WARNING -  * Debugger is active!
+2023-06-04 14:59:27,761 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-06-04 14:59:42,785 - werkzeug - INFO -  * Detected change in 'D:\\Senior II\\Graduation Project\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-06-04 14:59:43,730 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 14:59:55,561 - werkzeug - WARNING -  * Debugger is active!
+2023-06-04 14:59:55,569 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-06-04 15:00:18,547 - werkzeug - INFO -  * Detected change in 'D:\\Senior II\\Graduation Project\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-06-04 15:00:19,391 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 15:00:30,794 - werkzeug - WARNING -  * Debugger is active!
+2023-06-04 15:00:30,806 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-06-04 15:00:32,258 - werkzeug - INFO -  * Detected change in 'D:\\Senior II\\Graduation Project\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-06-04 15:00:33,164 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 15:02:47,510 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-06-04 15:02:47,513 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 15:02:58,712 - werkzeug - WARNING -  * Debugger is active!
+2023-06-04 15:02:58,717 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-06-04 15:03:06,382 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 15:03:06] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-06-04 15:04:16,425 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 15:04:16] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-06-04 15:06:10,948 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-06-04 15:06:10,950 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 15:06:22,212 - werkzeug - WARNING -  * Debugger is active!
+2023-06-04 15:06:22,249 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-06-04 15:06:29,607 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 15:06:29] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-06-04 15:06:37,324 - root - INFO - User preferences loaded
+2023-06-04 15:06:37,324 - root - INFO - {'Cotton': {'texture': 'dimgray, gray', 'color': 'short'}}
+2023-06-04 15:06:37,329 - root - INFO - Saving user preference
+2023-06-04 15:06:37,329 - root - INFO - {'Cotton': {'texture': 'dimgray, gray', 'color': 'short'}, 'short': {'texture': 'Cotton', 'color': 'gray, dimgray'}}
+2023-06-04 15:06:37,330 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 15:06:37] "POST /apparel-pref HTTP/1.1" 200 -
+2023-06-04 15:08:13,205 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 15:08:13] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-06-04 15:08:28,811 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 15:08:28] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-06-04 15:08:37,148 - root - INFO - User preferences loaded
+2023-06-04 15:08:37,148 - root - INFO - {'Cotton': {'texture': 'dimgray, gray', 'color': 'short'}, 'short': {'texture': 'Cotton', 'color': 'gray, dimgray'}}
+2023-06-04 15:08:37,152 - root - INFO - Saving user preference
+2023-06-04 15:08:37,152 - root - INFO - {'Cotton': {'texture': 'dimgray, gray', 'color': 'short'}, 'short': {'texture': 'Silk', 'color': 'silver, gray, dimgray'}}
+2023-06-04 15:08:37,153 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 15:08:37] "POST /apparel-pref HTTP/1.1" 200 -
+2023-06-04 15:08:39,758 - root - INFO - User preferences loaded
+2023-06-04 15:08:39,759 - root - INFO - {'Cotton': {'texture': 'dimgray, gray', 'color': 'short'}, 'short': {'texture': 'Silk', 'color': 'silver, gray, dimgray'}}
+2023-06-04 15:08:39,765 - root - INFO - Saving user preference
+2023-06-04 15:08:39,765 - root - INFO - {'Cotton': {'texture': 'dimgray, gray', 'color': 'short'}, 'short': {'texture': 'Silk', 'color': 'silver, gray, dimgray'}}
+2023-06-04 15:08:39,767 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 15:08:39] "POST /apparel-pref HTTP/1.1" 200 -
+2023-06-04 15:31:06,482 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 15:31:06] "[35m[1mPOST /scene-descriptor HTTP/1.1[0m" 500 -
+2023-06-04 15:32:09,570 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-06-04 15:32:09,573 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 15:32:41,411 - werkzeug - WARNING -  * Debugger is active!
+2023-06-04 15:32:41,438 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-06-04 15:32:43,035 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 15:32:43] "POST /scene-descriptor HTTP/1.1" 200 -
+2023-06-04 15:32:51,578 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 15:32:51] "POST /scene-descriptor HTTP/1.1" 200 -
+2023-06-04 15:33:01,375 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 15:33:01] "POST /scene-descriptor HTTP/1.1" 200 -
+2023-06-04 15:33:12,380 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 15:33:12] "POST /scene-descriptor HTTP/1.1" 200 -
+2023-06-04 15:33:38,367 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 15:33:38] "[35m[1mPOST /document-reader HTTP/1.1[0m" 500 -
+2023-06-04 15:33:56,700 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 15:33:56] "[35m[1mPOST /document-reader HTTP/1.1[0m" 500 -
+2023-06-04 15:34:53,681 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-06-04 15:34:53,684 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 15:35:21,270 - werkzeug - WARNING -  * Debugger is active!
+2023-06-04 15:35:21,279 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-06-04 15:36:17,858 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-06-04 15:36:17,859 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 15:36:44,758 - werkzeug - WARNING -  * Debugger is active!
+2023-06-04 15:36:44,764 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-06-04 15:37:04,015 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 15:37:04] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-06-04 15:37:44,030 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 15:37:44] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-06-04 15:38:08,099 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 15:38:08] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-06-04 15:50:46,567 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 15:50:46] "POST /face-detector HTTP/1.1" 200 -
+2023-06-04 15:51:48,220 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 15:51:48] "POST /emotion-recognizer HTTP/1.1" 200 -
+2023-06-04 15:52:02,962 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 15:52:02] "POST /emotion-recognizer HTTP/1.1" 200 -
+2023-06-04 15:52:07,510 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 15:52:07] "POST /emotion-recognizer HTTP/1.1" 200 -
+2023-06-04 15:55:55,386 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 15:55:55] "POST /product-identifier HTTP/1.1" 200 -
+2023-06-04 15:57:17,413 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-06-04 15:57:17,416 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 15:57:54,227 - werkzeug - WARNING -  * Debugger is active!
+2023-06-04 15:57:54,285 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-06-04 15:57:59,229 - werkzeug - INFO -  * Detected change in 'D:\\Senior II\\Graduation Project\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-06-04 15:58:00,903 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 15:58:35,564 - werkzeug - WARNING -  * Debugger is active!
+2023-06-04 15:58:35,572 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-06-04 15:58:36,611 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 15:58:36] "POST /document-reader HTTP/1.1" 200 -
+2023-06-04 15:58:50,398 - werkzeug - INFO -  * Detected change in 'D:\\Senior II\\Graduation Project\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-06-04 15:58:52,020 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 15:59:26,953 - werkzeug - WARNING -  * Debugger is active!
+2023-06-04 15:59:26,960 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-06-04 15:59:45,743 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 15:59:45] "POST /document-reader HTTP/1.1" 200 -
+2023-06-04 16:01:16,685 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 16:01:16] "POST /product-identifier HTTP/1.1" 200 -
+2023-06-04 16:01:27,035 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 16:01:27] "POST /product-identifier HTTP/1.1" 200 -
+2023-06-04 16:01:32,450 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 16:01:32] "POST /product-identifier HTTP/1.1" 200 -
+2023-06-04 16:02:08,269 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 16:02:08] "POST /product-identifier HTTP/1.1" 200 -
+2023-06-04 16:03:52,742 - werkzeug - INFO -  * Detected change in 'D:\\Senior II\\Graduation Project\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-06-04 16:03:54,201 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 16:04:18,902 - werkzeug - WARNING -  * Debugger is active!
+2023-06-04 16:04:18,908 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-06-04 16:04:20,871 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 16:04:20] "POST /product-identifier HTTP/1.1" 200 -

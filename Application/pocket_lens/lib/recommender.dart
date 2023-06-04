@@ -8,7 +8,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-
+import 'dart:convert';
 import 'package:flutter_tts/flutter_tts.dart';
 
 enum TtsState { playing, stopped, paused, continued }
@@ -140,160 +140,20 @@ class _RecommenderState extends State<Recommender> {
   @override
   void initState() {
     super.initState();
-    camera = cameras[0];
-    _controller = CameraController(
-      camera,
-      ResolutionPreset.medium,
-    );
-
-    _initializeControllerFuture = _controller.initialize();
-
     initTts();
+    _speak(_apiText);
+    // _fetchApiText();
   }
 
-  Future<void> captureImage(BuildContext context) async {
-    try {
-      //Initialize camera
-      await _initializeControllerFuture;
-
-      // Take a picture
-      final image = await _controller.takePicture();
-
-      if (!mounted) return;
-
-      //Display image on a new screen
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => DisplayPictureScreen(
-            imagePath: image.path,
-          ),
-        ),
-      );
-
-      _speak('Do you like this ?');
-
-      // Show Dialog Box
-      var choice1 = await showDialog(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text(
-            'Recommender',
-          ),
-          content: const Text(
-            'Do you like this ?',
-            textAlign: TextAlign.center,
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                debugPrint('Yes');
-                Navigator.pop(context, 'Yes');
-              },
-              child: const Text(
-                'Yes',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.green,
-                  fontSize: 18,
-                ),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                debugPrint('No');
-                Navigator.pop(context, 'No');
-              },
-              child: const Text(
-                'No',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red,
-                  fontSize: 18,
-                ),
-              ),
-            ),
-          ],
-          alignment: Alignment.center,
-          icon: const Icon(
-            Icons.recommend_rounded,
-            color: Colors.green,
-            size: 30,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          actionsAlignment: MainAxisAlignment.spaceEvenly,
-        ),
-      );
-      debugPrint('=====Choice = $choice1 =============');
-
-      if (choice1 == 'Yes') {
-        _speak('Do you want to add this to the Database ?');
-
-        // Show Dialog Box
-        var choice2 = await showDialog(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            title: const Text(
-              'Recommender',
-            ),
-            content: const Text(
-              'Do you want to add this ?',
-              textAlign: TextAlign.center,
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  debugPrint('Yes');
-                  Navigator.pop(context, 'Yes');
-                },
-                child: const Text(
-                  'Yes',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  debugPrint('No');
-                  Navigator.pop(context, 'No');
-                },
-                child: const Text(
-                  'No',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-            ],
-            alignment: Alignment.center,
-            icon: const Icon(
-              Icons.recommend_rounded,
-              color: Colors.green,
-              size: 30,
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            actionsAlignment: MainAxisAlignment.spaceEvenly,
-          ),
-        );
-
-        debugPrint('=====Choice = $choice2 =============');
-
-        if (choice2 == 'Yes') {
-          _speak('Adding this to Database');
-        }
-      }
-
-      Navigator.pop(context);
-    } catch (e) {
-      print(e);
+  var _apiText = 'We recommend the silver, dimgray, gray Silk shirt';
+  var received = false;
+  Future<void> _fetchApiText() async {
+    final response = await http.get(Uri.parse('https://your-api-url.com/text'));
+    if (response.statusCode == 200) {
+      setState(() {
+        _apiText = response.body;
+      });
+      _speak(_apiText);
     }
   }
 
@@ -306,49 +166,31 @@ class _RecommenderState extends State<Recommender> {
         title: const Text('Recommender'),
         backgroundColor: const Color(0xFF106cb5),
       ),
-      body: FutureBuilder<void>(
-        future: _initializeControllerFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            // If the Future is complete, display the preview.
-            return CameraPreview(_controller);
-          } else {
-            // Otherwise, display a loading indicator.
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
-      ),
-      floatingActionButton: FloatingActionButton.large(
-        onPressed: () async {
-          await captureImage(context);
-        },
-        child: const Icon(Icons.camera_alt),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: Container(),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Center(
+              child: Text(
+                _apiText,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Container(),
+          ),
+        ],
       ),
     );
   }
 }
-
-class DisplayPictureScreen extends StatelessWidget {
-  final String imagePath;
-
-  const DisplayPictureScreen({super.key, required this.imagePath});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Display the Picture')),
-      // The image is stored as a file on the device. Use the `Image.file`
-      // constructor with the given path to display the image.
-      body: Image.file(File(imagePath)),
-    );
-  }
-}
-
-// class RecommendDialog extends StatelessWidget {
-//   const RecommendDialog({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return const TextButton();
-//   }
-// }

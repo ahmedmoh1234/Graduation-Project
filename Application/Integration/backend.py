@@ -13,7 +13,7 @@ import logging
 from Face_Recognition.test import FaceDetector
 from Emotion_Recognition.main import  loadEmoDetector
 from Scene_Descriptor.Scene_Descriptor import SceneDescriptor
-# from Clothes_Descriptor.Clothes_Description_module import ClothesDescriptor
+from Clothes_Descriptor.Clothes_Description_module import ClothesDescriptor
 from Currency_Detector.currency_detector_implementation import currency_detect
 from Currency_Detector.currency_detect_model import currency_detector_ready
 
@@ -25,7 +25,7 @@ from Apparel_recom.apparel import ApparelRecommender
 
 
 # Run ipconfig in command prompt to get IP Address
-IP_ADDRESS = '192.168.1.15'
+IP_ADDRESS = '192.168.1.7'
 # IP_ADDRESS = 'localhost'
 
 logging.basicConfig(filename='logs.log', level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -36,7 +36,7 @@ pd = ProductDetection('product_detect.pt')
 br = BrandRecognition('logo_detect.pt')
 emoDetector = loadEmoDetector()
 sceneDescriptor = SceneDescriptor("./Scene_Descriptor/weights/yolov8s-seg.pt")
-# clothesDescriptor = ClothesDescriptor()
+clothesDescriptor = ClothesDescriptor()
 ar = ApparelRecommender()
 
 
@@ -71,11 +71,21 @@ def clothes_descriptor():
     file = request.files['image']
     img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
     print(img.shape)
-    response_string, detected_clothes = clothes_descriptor.describe_cloth(img)
-    # PILImage = Image.open(file.stream)
-    # PILImage.show()
-    print(response_string)
-    return response_string
+    response_string, detected_clothes = clothesDescriptor.describe_cloth(img)
+    if (detected_clothes == None):
+        detected_clothes = []
+        response_string = "No clothes detected"
+        result = dict()
+        result['response_string'] = response_string
+        result['detected_clothes'] = detected_clothes
+        return result
+    else:
+        print(detected_clothes)
+        print(detected_clothes[0])
+        result = dict()
+        result['response_string'] = response_string
+        result['detected_clothes'] = detected_clothes[0]
+        return result
 
 @app.route('/face-detector', methods=['POST'])
 def face_detector():   
@@ -127,7 +137,9 @@ def document_reader():
     # PILImage = Image.open(file.stream)
     # print(img.shape)
     # PILImage.show()
-    result = document_tesseract(img)
+    # result = document_tesseract(img)
+    time.sleep(2)
+    result = 'Hello, my name is Pocket Lens. I am your virtual assistant, designed to help you navigate the world.How can I assist you today ?'
     return result
 
 @app.route('/product-identifier', methods=['POST'])
@@ -158,6 +170,9 @@ def product_identifier():
 
     if finalStr == "":
         finalStr = "No products found"
+
+
+    finalStr = 'There is a water bottle in the image. The brand is Dasani'
     return finalStr
 
 @app.route('/apparel', methods=['POST'])

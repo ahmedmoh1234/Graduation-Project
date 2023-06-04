@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:pocket_lens/currency_recognizer.dart';
 import 'package:pocket_lens/document_reader.dart';
 import 'package:pocket_lens/product-identifier.dart';
+import 'package:pocket_lens/recommender.dart';
 import 'config.dart';
 import 'how_it_works.dart';
 import 'menu.dart';
@@ -107,6 +108,16 @@ void _goToCurrencyRecognizer(BuildContext ctx) {
     MaterialPageRoute(
       builder: (_) {
         return const CurrencyRecognizer();
+      },
+    ),
+  );
+}
+
+void _goToRecommender(BuildContext ctx) {
+  Navigator.of(ctx).push(
+    MaterialPageRoute(
+      builder: (_) {
+        return const Recommender();
       },
     ),
   );
@@ -367,6 +378,9 @@ class _HomeState extends State<Home> {
         } else if (commandName == 'How it Works') {
           _speak('Going to How it Works');
           _goToHowItWorks(context);
+        } else if (commandName == 'Recommender') {
+          _speak('Going to Recommender');
+          _goToRecommender(context);
         } else if (commandName == 'Home') {
           _speak('Going to Home');
           _goToHome(context);

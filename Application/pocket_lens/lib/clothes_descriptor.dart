@@ -38,8 +38,9 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
   bool get isWindows => !kIsWeb && Platform.isWindows;
   bool get isWeb => kIsWeb;
 
-  late var detectedClothes = {};
-
+  late var detectedClothesList = [];
+  late var detectedClothesDict = {};
+  late var clothesDetected = false;
   Future _speak(voiceText) async {
     await flutterTts.setVolume(volume);
     await flutterTts.setSpeechRate(rate);
@@ -157,15 +158,25 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
     var streamedResponse = await request.send();
 
     var response = await http.Response.fromStream(streamedResponse);
-    var extractedInfo = json.decode(response.body) as Map<String, dynamic>;
+    debugPrint('************************ Response: ${response}');
+    debugPrint('************************ Response: ${response.body}');
 
+    var extractedInfo = json.decode(response.body) as Map<String, dynamic>;
     var responseString = extractedInfo['response_string'] as String;
     await _speak(responseString);
-    debugPrint('************************ ${extractedInfo['detected_clothes']}');
-    detectedClothes = extractedInfo['detected_clothes'] as Map<String, dynamic>;
-    var color = detectedClothes['color'] as String;
-    var texture = detectedClothes['texture'] as String;
-    var type = detectedClothes['type'] as String;
+
+    if (responseString == 'No clothes detected') {
+      clothesDetected = false;
+      return;
+    }
+    clothesDetected = true;
+
+    detectedClothesList = extractedInfo['detected_clothes'] as List<dynamic>;
+    detectedClothesDict['type'] = detectedClothesList[0];
+    detectedClothesDict['texture'] = detectedClothesList[1];
+    detectedClothesDict['color'] = detectedClothesList[2];
+    debugPrint('************************ ${detectedClothesDict}');
+    debugPrint('************************ ${clothesDetected}');
   }
 
   Future<void> _addPreference(Map<dynamic, dynamic> detectedClothes) async {
@@ -185,8 +196,8 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
 
-    final extractedMyInfo = json.decode(response.body) as Map<String, dynamic>;
-    debugPrint(extractedMyInfo.toString());
+    // final extractedMyInfo = json.decode(response.body) as Map<String, dynamic>;
+    // debugPrint(extractedMyInfo.toString());
   }
 
   Future<void> _addToDatabase(Map<dynamic, dynamic> detectedClothes) async {
@@ -232,79 +243,21 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
       //Send image to server
       await sendImagetoServer(image);
 
-      debugPrint('=====Detected Clothes = $detectedClothes =============');
+      if (clothesDetected) {
+        debugPrint(
+            '=====Detected Clothes = $detectedClothesDict =============');
+        _speak('Do you want to add this to your preferences ?');
 
-      _speak('Do you want to add this to your preferences ?');
-
-      // Show Dialog Box
-      // ignore: use_build_context_synchronously
-      var choice1 = await showDialog(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text(
-            'Future Recommendations',
-          ),
-          content: const Text(
-            'Do you want to add this to your preferences ?',
-            textAlign: TextAlign.center,
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                debugPrint('Yes');
-                Navigator.pop(context, 'Yes');
-              },
-              child: const Text(
-                'Yes',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.green,
-                  fontSize: 18,
-                ),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                debugPrint('No');
-                Navigator.pop(context, 'No');
-              },
-              child: const Text(
-                'No',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red,
-                  fontSize: 18,
-                ),
-              ),
-            ),
-          ],
-          alignment: Alignment.center,
-          icon: const Icon(
-            Icons.recommend_rounded,
-            color: Colors.green,
-            size: 30,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          actionsAlignment: MainAxisAlignment.spaceEvenly,
-        ),
-      );
-      debugPrint('=====Choice = $choice1 =============');
-
-      if (choice1 == 'Yes') {
-        _speak('Do you want to add this to the Wardrobe ?');
-        _addPreference(detectedClothes);
         // Show Dialog Box
         // ignore: use_build_context_synchronously
-        var choice2 = await showDialog(
+        var choice1 = await showDialog(
           context: context,
           builder: (BuildContext context) => AlertDialog(
             title: const Text(
               'Future Recommendations',
             ),
             content: const Text(
-              'Do you want to add this to the Wardrobe ?',
+              'Do you want to add this to your preferences ?',
               textAlign: TextAlign.center,
             ),
             actions: <Widget>[
@@ -339,8 +292,8 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
             ],
             alignment: Alignment.center,
             icon: const Icon(
-              Icons.man,
-              color: Colors.blue,
+              Icons.recommend_rounded,
+              color: Colors.green,
               size: 30,
             ),
             shape: RoundedRectangleBorder(
@@ -349,15 +302,74 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
             actionsAlignment: MainAxisAlignment.spaceEvenly,
           ),
         );
+        debugPrint('=====Choice = $choice1 =============');
 
-        debugPrint('=====Choice = $choice2 =============');
+        if (choice1 == 'Yes') {
+          _speak('Do you want to add this to the Wardrobe ?');
+          _addPreference(detectedClothesDict);
+          // Show Dialog Box
+          // ignore: use_build_context_synchronously
+          var choice2 = await showDialog(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              title: const Text(
+                'Future Recommendations',
+              ),
+              content: const Text(
+                'Do you want to add this to the Wardrobe ?',
+                textAlign: TextAlign.center,
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    debugPrint('Yes');
+                    Navigator.pop(context, 'Yes');
+                  },
+                  child: const Text(
+                    'Yes',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    debugPrint('No');
+                    Navigator.pop(context, 'No');
+                  },
+                  child: const Text(
+                    'No',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ],
+              alignment: Alignment.center,
+              icon: const Icon(
+                Icons.man,
+                color: Colors.blue,
+                size: 30,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              actionsAlignment: MainAxisAlignment.spaceEvenly,
+            ),
+          );
 
-        if (choice2 == 'Yes') {
-          _speak('Adding this to Database');
-          _addToDatabase(detectedClothes);
+          debugPrint('=====Choice = $choice2 =============');
+
+          if (choice2 == 'Yes') {
+            _speak('Adding this to Database');
+            _addToDatabase(detectedClothesDict);
+          }
         }
       }
-
       Navigator.pop(context);
     } catch (e) {
       print(e);
