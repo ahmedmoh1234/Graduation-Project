@@ -137,7 +137,7 @@ void _goToHowItWorks(BuildContext ctx) {
   Navigator.of(ctx).push(
     MaterialPageRoute(
       builder: (_) {
-        return const HowItWorks();
+        return HowItWorks();
       },
     ),
   );

@@ -2,6 +2,7 @@ import 'package:pocket_lens/ChangeIPAddress.dart';
 import 'package:pocket_lens/alan_chatbot.dart';
 import 'package:pocket_lens/barcode_reader.dart';
 import 'package:pocket_lens/clothes_descriptor.dart';
+import 'package:pocket_lens/contact-us.dart';
 import 'package:pocket_lens/currency_recognizer.dart';
 import 'package:pocket_lens/emotion_recognizer.dart';
 import 'package:pocket_lens/product-identifier.dart';
@@ -44,7 +45,17 @@ class Menu extends StatelessWidget {
     Navigator.of(ctx).push(
       MaterialPageRoute(
         builder: (_) {
-          return const HowItWorks();
+          return HowItWorks();
+        },
+      ),
+    );
+  }
+
+  void _goContactUs(BuildContext ctx) {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return ContactUS();
         },
       ),
     );
@@ -226,31 +237,31 @@ class Menu extends StatelessWidget {
           //   child: Text('Profile'), // mmkn n7ot hena el usernaame
           // ),
           // /*******************************/
-          ListTile(
-            leading: const Icon(
-              Icons.person,
-              size: 27,
-            ),
-            title: const Text(
-              'Profile',
-              style: TextStyle(
-                fontSize: 17,
-                fontFamily: 'RalewayMedium',
-              ),
-            ),
-            onTap: () {
-              // _goToUserProfile(
-              //   context,
-              //   widget.name,
-              //   widget.email,
-              //   widget.phone,
-              //   widget.gender,
-              //   widget.carLicense,
-              //   widget.carBrand,
-              //   widget.carColour,
-              // );
-            },
-          ),
+          // ListTile(
+          //   leading: const Icon(
+          //     Icons.person,
+          //     size: 27,
+          //   ),
+          //   title: const Text(
+          //     'Profile',
+          //     style: TextStyle(
+          //       fontSize: 17,
+          //       fontFamily: 'RalewayMedium',
+          //     ),
+          //   ),
+          //   onTap: () {
+          //     // _goToUserProfile(
+          //     //   context,
+          //     //   widget.name,
+          //     //   widget.email,
+          //     //   widget.phone,
+          //     //   widget.gender,
+          //     //   widget.carLicense,
+          //     //   widget.carBrand,
+          //     //   widget.carColour,
+          //     // );
+          //   },
+          // ),
           ListTile(
             onTap: () {
               _goToSceneDescriptor(context);
@@ -518,25 +529,25 @@ class Menu extends StatelessWidget {
               ),
             ),
             onTap: () {
-              // _goContactUs(context);
+              _goContactUs(context);
             },
           ),
-          ListTile(
-            leading: const Icon(
-              Icons.info,
-              size: 27,
-            ),
-            title: const Text(
-              'Change IP Address',
-              style: TextStyle(
-                fontSize: 17,
-                fontFamily: 'RalewayMedium',
-              ),
-            ),
-            onTap: () {
-              _goToChangeIPAddress(context);
-            },
-          ),
+          // ListTile(
+          //   leading: const Icon(
+          //     Icons.info,
+          //     size: 27,
+          //   ),
+          //   title: const Text(
+          //     'Change IP Address',
+          //     style: TextStyle(
+          //       fontSize: 17,
+          //       fontFamily: 'RalewayMedium',
+          //     ),
+          //   ),
+          //   onTap: () {
+          //     _goToChangeIPAddress(context);
+          //   },
+          // ),
           ListTile(
             leading: const Icon(
               Icons.logout,
