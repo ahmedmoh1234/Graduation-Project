@@ -34,3 +34,30 @@
 2023-06-04 17:37:30,902 - werkzeug - INFO -  * Restarting with stat
 2023-06-04 17:38:05,041 - werkzeug - WARNING -  * Debugger is active!
 2023-06-04 17:38:05,049 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-06-04 17:38:26,977 - werkzeug - INFO -  * Detected change in 'D:\\Senior II\\Graduation Project\\Graduation-Project\\Application\\Integration\\Document_scanner\\main.py', reloading
+2023-06-04 17:38:28,296 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 17:43:16,817 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-06-04 17:43:16,894 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 17:43:52,833 - werkzeug - WARNING -  * Debugger is active!
+2023-06-04 17:43:52,844 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-06-04 17:43:54,729 - root - INFO - Model loaded
+2023-06-04 17:43:54,742 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 17:43:54] "[35m[1mPOST /apparel-rec HTTP/1.1[0m" 500 -
+2023-06-04 17:44:05,011 - root - INFO - Model loaded
+2023-06-04 17:44:05,036 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 17:44:05] "[35m[1mPOST /apparel-rec HTTP/1.1[0m" 500 -
+2023-06-04 17:45:45,172 - werkzeug - INFO -  * Detected change in 'D:\\Senior II\\Graduation Project\\Graduation-Project\\Application\\Integration\\backend.py', reloading
+2023-06-04 17:45:47,151 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 17:46:34,015 - werkzeug - INFO -  * Running on http://192.168.1.7:5000 (Press CTRL+C to quit)
+2023-06-04 17:46:34,017 - werkzeug - INFO -  * Restarting with stat
+2023-06-04 17:47:10,876 - werkzeug - WARNING -  * Debugger is active!
+2023-06-04 17:47:10,895 - werkzeug - INFO -  * Debugger PIN: 126-111-704
+2023-06-04 17:51:15,115 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 17:51:15] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-06-04 17:51:34,163 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 17:51:34] "POST /clothes-descriptor HTTP/1.1" 200 -
+2023-06-04 17:51:40,157 - root - INFO - User preferences not loaded
+2023-06-04 17:51:40,261 - root - INFO - Saving user preference
+2023-06-04 17:51:40,261 - root - INFO - {'Silk': {'texture': 'dimgray, gray', 'color': 'short'}}
+2023-06-04 17:51:40,262 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 17:51:40] "POST /apparel-pref HTTP/1.1" 200 -
+2023-06-04 17:51:42,622 - root - INFO - User preferences loaded
+2023-06-04 17:51:42,622 - root - INFO - {'Silk': {'texture': 'dimgray, gray', 'color': 'short'}}
+2023-06-04 17:51:42,625 - root - INFO - Saving user preference
+2023-06-04 17:51:42,626 - root - INFO - {'Silk': {'texture': 'dimgray, gray', 'color': 'short'}}
+2023-06-04 17:51:42,626 - werkzeug - INFO - 192.168.1.6 - - [04/Jun/2023 17:51:42] "POST /apparel-pref HTTP/1.1" 200 -

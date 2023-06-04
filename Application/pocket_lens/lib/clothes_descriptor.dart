@@ -38,8 +38,8 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
   bool get isWindows => !kIsWeb && Platform.isWindows;
   bool get isWeb => kIsWeb;
 
-  late var detectedClothesList = [];
-  late var detectedClothesDict = {};
+  late var detectedClothes = {};
+
   late var clothesDetected = false;
   Future _speak(voiceText) async {
     await flutterTts.setVolume(volume);
@@ -158,10 +158,8 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
     var streamedResponse = await request.send();
 
     var response = await http.Response.fromStream(streamedResponse);
-    debugPrint('************************ Response: ${response}');
-    debugPrint('************************ Response: ${response.body}');
-
     var extractedInfo = json.decode(response.body) as Map<String, dynamic>;
+
     var responseString = extractedInfo['response_string'] as String;
     await _speak(responseString);
 
@@ -171,12 +169,10 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
     }
     clothesDetected = true;
 
-    detectedClothesList = extractedInfo['detected_clothes'] as List<dynamic>;
-    detectedClothesDict['type'] = detectedClothesList[0];
-    detectedClothesDict['texture'] = detectedClothesList[1];
-    detectedClothesDict['color'] = detectedClothesList[2];
-    debugPrint('************************ ${detectedClothesDict}');
-    debugPrint('************************ ${clothesDetected}');
+    detectedClothes = extractedInfo['detected_clothes'] as Map<String, dynamic>;
+    var color = detectedClothes['color'] as String;
+    var texture = detectedClothes['texture'] as String;
+    var type = detectedClothes['type'] as String;
   }
 
   Future<void> _addPreference(Map<dynamic, dynamic> detectedClothes) async {
@@ -195,9 +191,6 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
 
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
-
-    // final extractedMyInfo = json.decode(response.body) as Map<String, dynamic>;
-    // debugPrint(extractedMyInfo.toString());
   }
 
   Future<void> _addToDatabase(Map<dynamic, dynamic> detectedClothes) async {
@@ -244,8 +237,7 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
       await sendImagetoServer(image);
 
       if (clothesDetected) {
-        debugPrint(
-            '=====Detected Clothes = $detectedClothesDict =============');
+        debugPrint('=====Detected Clothes = $detectedClothes =============');
         _speak('Do you want to add this to your preferences ?');
 
         // Show Dialog Box
@@ -306,7 +298,7 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
 
         if (choice1 == 'No') {
           _speak('Do you want to add this to the Wardrobe ?');
-          _addPreference(detectedClothesDict);
+          _addPreference(detectedClothes);
           // Show Dialog Box
           // ignore: use_build_context_synchronously
           var choice2 = await showDialog(
@@ -366,7 +358,7 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
 
           if (choice2 == 'Yes') {
             _speak('Adding this to Database');
-            _addToDatabase(detectedClothesDict);
+            _addToDatabase(detectedClothes);
           }
         }
       }

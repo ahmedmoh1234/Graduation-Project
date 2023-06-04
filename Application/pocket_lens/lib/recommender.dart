@@ -146,17 +146,28 @@ class _RecommenderState extends State<Recommender> {
 
   var _recommandationString = '';
   Future<void> _fetchRecommendation() async {
-    final response =
-        await http.get(Uri.parse('http://$IP_ADDRESS/apparel-rec'));
+    final response = await http.post(
+      Uri.parse('http://$IP_ADDRESS/apparel-rec'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(
+        {
+          'clothesType': 'shirt',
+        },
+      ),
+    );
     debugPrint('==================================${response.body}');
     debugPrint(
         '==================================${response.statusCode.toString()}');
     if (response.statusCode == 200) {
-      setState(() {
-        _recommandationString = response.body;
-        debugPrint(_recommandationString);
-        _speak(_recommandationString);
-      });
+      setState(
+        () {
+          _recommandationString = response.body;
+          debugPrint(_recommandationString);
+          _speak(_recommandationString);
+        },
+      );
     }
   }
 
