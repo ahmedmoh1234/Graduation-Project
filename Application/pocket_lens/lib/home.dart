@@ -4,6 +4,7 @@ import 'package:pocket_lens/currency_recognizer.dart';
 import 'package:pocket_lens/document_reader.dart';
 import 'package:pocket_lens/product-identifier.dart';
 import 'config.dart';
+import 'how_it_works.dart';
 import 'menu.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_tts/flutter_tts.dart';
@@ -121,6 +122,16 @@ _goToProductIdentifier(BuildContext context) {
   );
 }
 
+void _goToHowItWorks(BuildContext ctx) {
+  Navigator.of(ctx).push(
+    MaterialPageRoute(
+      builder: (_) {
+        return const HowItWorks();
+      },
+    ),
+  );
+}
+
 _goToHome(BuildContext ctx) {
   Navigator.of(ctx).push(
     MaterialPageRoute(
@@ -153,12 +164,12 @@ class _HomeState extends State<Home> {
   bool get isWindows => !kIsWeb && Platform.isWindows;
   bool get isWeb => kIsWeb;
 
-  Future _speak() async {
+  Future _speak(String text) async {
     await flutterTts.setVolume(volume);
     await flutterTts.setSpeechRate(rate);
     await flutterTts.setPitch(pitch);
 
-    await flutterTts.speak(_greetingString);
+    await flutterTts.speak(text);
   }
 
   Future _setAwaitOptions() async {
@@ -330,24 +341,37 @@ class _HomeState extends State<Home> {
         debugPrint("got new command ${command.toString()}");
         var commandName = command.data["command"];
         if (commandName == 'Scene Descriptor') {
+          _speak('Going to Scene Descriptor');
           _goToSceneDescriptor(context);
         } else if (commandName == 'Face Recognizer') {
+          _speak('Going to Face Recognizer');
           _goToFaceDetector(context);
         } else if (commandName == 'Emotion Recognizer') {
+          _speak('Going to Emotion Recognizer');
           _goToEmotionRecognizer(context);
         } else if (commandName == 'Barcode') {
+          _speak('Going to Barcode Reader');
           _goToBarcodeReader(context);
         } else if (commandName == 'Clothes') {
+          _speak('Going to Clothes Descriptor');
           _goToClothesDescriptor(context);
         } else if (commandName == 'Currency Recognizer') {
+          _speak('Going to Currency Recognizer');
           _goToCurrencyRecognizer(context);
         } else if (commandName == 'Document Reader') {
+          _speak('Going to Document Reader');
           _goToDocumentReader(context);
         } else if (commandName == 'Product Identifier') {
+          _speak('Going to Product Identifier');
           _goToProductIdentifier(context);
+        } else if (commandName == 'How it Works') {
+          _speak('Going to How it Works');
+          _goToHowItWorks(context);
         } else if (commandName == 'Home') {
+          _speak('Going to Home');
           _goToHome(context);
         } else if (commandName == 'Menu') {
+          _speak('Opening Menu');
           // Scaffold.of(context).openDrawer();
           _scaffoldKey.currentState!.openDrawer();
         } else if (commandName == 'Back') {
@@ -360,6 +384,7 @@ class _HomeState extends State<Home> {
             Navigator.pop(context);
           }
         } else if (commandName == 'Exit') {
+          _speak('Goodbye !');
           AlanVoice.deactivate();
           //Exit application
           SystemChannels.platform.invokeMethod('SystemNavigator.pop');
@@ -395,7 +420,7 @@ class _HomeState extends State<Home> {
     _initSpeech();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
-        await _speak();
+        await _speak(_greetingString);
         // await _startListening();
       },
     );
