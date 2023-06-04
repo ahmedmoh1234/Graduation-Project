@@ -304,7 +304,7 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
         );
         debugPrint('=====Choice = $choice1 =============');
 
-        if (choice1 == 'Yes') {
+        if (choice1 == 'No') {
           _speak('Do you want to add this to the Wardrobe ?');
           _addPreference(detectedClothesDict);
           // Show Dialog Box

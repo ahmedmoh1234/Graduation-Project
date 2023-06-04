@@ -133,11 +133,10 @@ class ApparelRecommender:
         filename = filename.replace(':', '')
         filename = filename + '.pkl'
         try:
-
             self._user_preferences = pickle.load(open(PATH.resolve()/ "pref" / filename, 'rb'))
             return True
         except Exception as e:
-            print(e)
+            # print(e)
             return False
         
     def saveUserDataset(self,filename):
@@ -157,7 +156,7 @@ class ApparelRecommender:
             self._cosine_similarities = cosine_similarity(self._features_matrix)
             return True
         except Exception as e:
-            print(e)
+            # print(e)
             return False
     
     

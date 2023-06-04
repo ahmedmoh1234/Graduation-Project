@@ -141,19 +141,22 @@ class _RecommenderState extends State<Recommender> {
   void initState() {
     super.initState();
     initTts();
-    _speak(_apiText);
-    // _fetchApiText();
+    _fetchRecommendation();
   }
 
-  var _apiText = 'We recommend the silver, dimgray, gray Silk shirt';
-  var received = false;
-  Future<void> _fetchApiText() async {
-    final response = await http.get(Uri.parse('https://your-api-url.com/text'));
+  var _recommandationString = '';
+  Future<void> _fetchRecommendation() async {
+    final response =
+        await http.get(Uri.parse('http://$IP_ADDRESS/apparel-rec'));
+    debugPrint('==================================${response.body}');
+    debugPrint(
+        '==================================${response.statusCode.toString()}');
     if (response.statusCode == 200) {
       setState(() {
-        _apiText = response.body;
+        _recommandationString = response.body;
+        debugPrint(_recommandationString);
+        _speak(_recommandationString);
       });
-      _speak(_apiText);
     }
   }
 
@@ -177,7 +180,7 @@ class _RecommenderState extends State<Recommender> {
             padding: EdgeInsets.symmetric(horizontal: 16.0),
             child: Center(
               child: Text(
-                _apiText,
+                _recommandationString,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,
