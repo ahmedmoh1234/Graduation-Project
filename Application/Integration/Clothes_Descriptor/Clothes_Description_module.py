@@ -54,7 +54,7 @@ class ClothesDescriptor():
         bboxes, class_ids = self.ys.detect(image)
         
         if (bboxes is None or len(bboxes) == 0):
-            return "Canno detect any cloth in the image." , None
+            return "Cannot detect any cloth in the image." , None
         detected_clothes = []
         
         for i in range(len(bboxes)):

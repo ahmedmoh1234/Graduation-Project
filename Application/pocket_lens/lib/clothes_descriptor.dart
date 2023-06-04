@@ -163,16 +163,16 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
     var responseString = extractedInfo['response_string'] as String;
     await _speak(responseString);
 
-    if (responseString == 'No clothes detected') {
-      clothesDetected = false;
-      return;
-    }
-    clothesDetected = true;
-
     detectedClothes = extractedInfo['detected_clothes'] as Map<String, dynamic>;
     var color = detectedClothes['color'] as String;
     var texture = detectedClothes['texture'] as String;
     var type = detectedClothes['type'] as String;
+    if (color == 'None' || texture == 'None' || type == 'None') {
+      clothesDetected = false;
+      return;
+    }
+
+    clothesDetected = true;
   }
 
   Future<void> _addPreference(Map<dynamic, dynamic> detectedClothes) async {
