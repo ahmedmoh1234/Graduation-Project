@@ -339,12 +339,32 @@ class _HomeState extends State<Home> {
   }
 
   //===========================ALAN FUNCTIONS===================================
+  void _handleEvent(Map<String, dynamic> event) {
+    switch (event["name"]) {
+      case "parsed":
+        debugPrint("Sent msg: ${event["text"]}");
+        break;
+      case "text":
+        debugPrint("Received msg: ${event["text"]}");
+        _speak(event["text"]);
+        break;
+      default:
+        debugPrint("Unknown event");
+    }
+  }
 
   void _initAlan() {
     /// Init Alan Button with project key from Alan AI Studio
     AlanVoice.addButton(
         "95aec1209fe5ec07ce09fa461da220842e956eca572e1d8b807a3e2338fdd0dc/stage",
         buttonAlign: AlanVoice.BUTTON_ALIGN_RIGHT);
+
+    AlanVoice.onEvent.add(
+      (event) {
+        debugPrint('==========RECEIVED==========');
+        _handleEvent(event.data);
+      },
+    );
 
     /// Handle commands from Alan AI Studio
     AlanVoice.onCommand.add(
@@ -440,8 +460,8 @@ class _HomeState extends State<Home> {
     );
 
     _initAlan();
-    // _greetingByAlan();
-    // _deactivateAlan();
+
+    // AlanVoice.sendText('Where is Germany ?');
   }
 
   @override

@@ -5,10 +5,10 @@ packages:
     dependency: "direct main"
     description:
       name: alan_voice
-      sha256: b6486b7201691305aef48d4121a8b0f65e299d58a24f70bdd805cf7d5201080c
+      sha256: "9b77ffefb88c4fef31f2b8a856c3f1239dfdcd3bd6cf9ae8e8e8b99ced9554e2"
       url: "https://pub.dev"
     source: hosted
-    version: "3.12.0"
+    version: "4.1.1"
   async:
     dependency: transitive
     description:
@@ -172,10 +172,10 @@ packages:
     dependency: "direct main"
     description:
       name: http
-      sha256: "5895291c13fa8a3bd82e76d5627f69e0d85ca6a30dcac95c4ea19a5d555879c2"
+      sha256: "4c3f04bfb64d3efd508d06b41b825542f08122d30bda4933fb95c069d22a4fa3"
       url: "https://pub.dev"
     source: hosted
-    version: "0.13.6"
+    version: "1.0.0"
   http_parser:
     dependency: transitive
     description:
@@ -204,10 +204,10 @@ packages:
     dependency: transitive
     description:
       name: lints
-      sha256: "6b0206b0bf4f04961fc5438198ccb3a885685cd67d4d4a32cc20ad7f8adbe015"
+      sha256: "0a217c6c989d21039f1498c3ed9f3ed71b354e69873f13a8dfc3c9fe76f1b452"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   matcher:
     dependency: transitive
     description:
@@ -374,5 +374,5 @@ packages:
     source: hosted
     version: "2.1.4"
 sdks:
-  dart: ">=3.0.0-417 <4.0.0"
+  dart: ">=3.0.0 <4.0.0"
   flutter: ">=3.3.0"
