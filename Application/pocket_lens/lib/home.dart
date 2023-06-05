@@ -14,7 +14,6 @@ import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'dart:io' show Platform;
 import 'package:alan_voice/alan_voice.dart';
-
 import 'package:pocket_lens/ChangeIPAddress.dart';
 import 'package:pocket_lens/barcode_reader.dart';
 import 'package:pocket_lens/clothes_descriptor.dart';
@@ -278,6 +277,12 @@ class _HomeState extends State<Home> {
       onError: errorListener,
       onStatus: statusListener,
     );
+    var locales = await _speechToText.locales();
+    // var selectedLocale = locales[selectedLocale];
+    _speechToText.listen(
+        // onResult: resultListener,
+        // localeId: selectedLocale.localeId,
+        );
     setState(() {});
   }
 
@@ -339,14 +344,14 @@ class _HomeState extends State<Home> {
   }
 
   //===========================ALAN FUNCTIONS===================================
-  void _handleEvent(Map<String, dynamic> event) {
+  void _handleEvent(Map<String, dynamic> event) async {
     switch (event["name"]) {
       case "parsed":
         debugPrint("Sent msg: ${event["text"]}");
         break;
       case "text":
         debugPrint("Received msg: ${event["text"]}");
-        _speak(event["text"]);
+        await _speak(event["text"]);
         break;
       default:
         debugPrint("Unknown event");
@@ -450,18 +455,20 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+
     initTts();
     _initSpeech();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
-        await _speak(_greetingString);
+        List<dynamic> languages = await flutterTts.getLanguages;
+        await flutterTts.setLanguage("ar-EG");
+        // await _speak('مرحبا');
+        _initAlan();
+        AlanVoice.sendText('كيف الجو اليوم ؟');
+        // await _speak(_greetingString);
         // await _startListening();
       },
     );
-
-    _initAlan();
-
-    // AlanVoice.sendText('Where is Germany ?');
   }
 
   @override

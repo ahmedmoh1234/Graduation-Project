@@ -12,6 +12,7 @@ import 'package:pocket_lens/recommender.dart';
 import 'package:pocket_lens/test.dart';
 import 'package:pocket_lens/text-reader.dart';
 import 'package:pocket_lens/how_it_works.dart';
+import 'package:pocket_lens/translate.dart';
 import 'chatbot.dart';
 import 'TTSTest.dart';
 import 'scene_descriptor.dart';
@@ -46,6 +47,16 @@ class Menu extends StatelessWidget {
       MaterialPageRoute(
         builder: (_) {
           return HowItWorks();
+        },
+      ),
+    );
+  }
+
+  void _goToTranslate(BuildContext ctx) {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return Translate();
         },
       ),
     );
@@ -272,6 +283,22 @@ class Menu extends StatelessWidget {
             ),
             title: const Text(
               'Scene Descriptor',
+              style: TextStyle(
+                fontSize: 17,
+                fontFamily: 'RalewayMedium',
+              ),
+            ),
+          ),
+          ListTile(
+            onTap: () {
+              _goToTranslate(context);
+            },
+            leading: const Icon(
+              Icons.translate_rounded,
+              size: 27,
+            ),
+            title: const Text(
+              'Translate',
               style: TextStyle(
                 fontSize: 17,
                 fontFamily: 'RalewayMedium',
