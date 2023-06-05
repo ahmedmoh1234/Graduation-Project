@@ -277,12 +277,7 @@ class _HomeState extends State<Home> {
       onError: errorListener,
       onStatus: statusListener,
     );
-    var locales = await _speechToText.locales();
-    // var selectedLocale = locales[selectedLocale];
-    _speechToText.listen(
-        // onResult: resultListener,
-        // localeId: selectedLocale.localeId,
-        );
+
     setState(() {});
   }
 
