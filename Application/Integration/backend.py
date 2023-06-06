@@ -10,7 +10,6 @@ from PIL import Image
 import getmac
 import logging
 from googletrans import Translator
-
 from Face_Recognition.test import FaceDetector
 from Emotion_Recognition.main import  loadEmoDetector
 from Scene_Descriptor.Scene_Descriptor import SceneDescriptor
@@ -37,6 +36,7 @@ sceneDescriptor = SceneDescriptor("./Scene_Descriptor/weights/yolov8s-seg.pt")
 clothesDescriptor = ClothesDescriptor()
 ar = ApparelRecommender()
 translator = Translator()
+useArabic = False
 
 
 @app.route('/test', methods=['POST'])
@@ -64,8 +64,9 @@ def scene_descriptor():
     # PILImage = Image.open(file.stream)
     # PILImage.show()
     # print(f"Scene Descriptor: {response}")
-    translated_response = translator.translate(response, dest='ar').text
-    return translated_response
+    if (useArabic):
+        response = translator.translate(response, dest='ar').text
+    return response
 
 
 @app.route('/clothes-descriptor', methods=['POST'])
@@ -76,8 +77,9 @@ def clothes_descriptor():
     # PILImage = Image.open(file.stream)
     # PILImage.show()
     
-    
     response_string, detected_clothes_list = clothesDescriptor.describe_cloth(img)
+    if (useArabic):
+        response = translator.translate(response, dest='ar').text
     detected_clothes = dict()
     if (not(detected_clothes_list is None)):
         detected_clothes['color'] = detected_clothes_list[0][0]
@@ -109,7 +111,11 @@ def face_detector():
     # response = dict()
     # response['result'] = result
     # return jsonify(response)
-    return result
+    if (useArabic):
+        response = translator.translate(result, dest='ar').text
+    else: 
+        response = result
+    return response
 
 @app.route('/emotion-recognizer', methods=['POST'])
 def emotion_recognizer():    
@@ -120,7 +126,11 @@ def emotion_recognizer():
     # PILImage.show()
     img, result = emoDetector.executeWithImage(img)
     # print(f"Emotion: {result[0]}")
-    return result[0]
+    if (useArabic):
+        response = translator.translate(response[0], dest='ar').text
+    else:
+        response = result[0]
+    return response
 
 
 @app.route('/currency-recognizer', methods=['POST'])
@@ -180,7 +190,12 @@ def product_identifier():
 
 
     finalStr = 'There is a water bottle in the image. The brand is Dasani'
-    return finalStr
+
+    if (useArabic):
+        response = translator.translate(finalStr, dest='ar').text
+    else:
+        response = finalStr
+    return response
 
 @app.route('/apparel-rec', methods=['POST'])
 def apparel():    
@@ -228,8 +243,11 @@ def apparel():
             resultStr += str(result['color']) + ", " + str(result['texture']) +   " " + str(result['clothes_type'])
             result = resultStr
 
-
-    return result
+    if (useArabic):
+        response = translator.translate(result, dest='ar').text
+    else:
+        response = result
+    return response
 
 @app.route('/apparel-add', methods=['POST'])
 def apparelAdd(): 
@@ -308,6 +326,16 @@ def apparelSetPref():
     ar.saveUserPreference(mac_addr)
 
     return "Success"
+
+
+
+@app.route('/set-language', methods=['POST'])
+def setLanguage(): 
+    global useArabic
+    data = request.get_json()
+    useArabic = data.get('useArabic')
+    print(useArabic)
+    return {'result': 'Success'}
 
 
 if __name__ == "__main__":

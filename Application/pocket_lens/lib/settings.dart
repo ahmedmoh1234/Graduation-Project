@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'config.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class LanguageSettingsPage extends StatefulWidget {
   final VoidCallback changeLanguage;
@@ -21,6 +23,21 @@ class _LanguageSettingsPageState extends State<LanguageSettingsPage> {
     'الانجليزية',
     'العربية',
   ];
+
+  Future<void> setLanguageServer(bool value) async {
+    final url = Uri.parse('http://$IP_ADDRESS/set-language');
+    final headers = {'Content-Type': 'application/json'};
+    final body = json.encode(
+      {'useArabic': value},
+    );
+    final response = await http.post(url, headers: headers, body: body);
+    if (response.statusCode == 200) {
+      final result = json.decode(response.body);
+      print('Boolean value changed to $result');
+    } else {
+      print('Error changing boolean value: ${response.statusCode}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,11 +63,11 @@ class _LanguageSettingsPageState extends State<LanguageSettingsPage> {
                   _selectedLanguage = value.toString();
                   if (_selectedLanguage == 'Arabic') {
                     useArabic = true;
-                    widget.changeLanguage();
                   } else {
                     useArabic = false;
-                    widget.changeLanguage();
                   }
+                  widget.changeLanguage();
+                  setLanguageServer(useArabic);
                 },
               );
             },

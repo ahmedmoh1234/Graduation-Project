@@ -153,6 +153,7 @@ class _SceneDescriptorState extends State<SceneDescriptor> {
     request.files.add(multipartFile);
     var response = await request.send();
     final respStr = await response.stream.bytesToString();
+    debugPrint(respStr);
     await _speak(respStr);
   }
 
