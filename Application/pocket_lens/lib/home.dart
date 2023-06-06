@@ -459,7 +459,7 @@ class _HomeState extends State<Home> {
         await flutterTts.setLanguage("ar-EG");
         // await _speak('مرحبا');
         _initAlan();
-        AlanVoice.sendText('كيف الجو اليوم ؟');
+        // AlanVoice.sendText('كيف الجو اليوم ؟');
         // await _speak(_greetingString);
         // await _startListening();
       },
@@ -480,7 +480,7 @@ class _HomeState extends State<Home> {
       key: _scaffoldKey,
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('This is the Home Page'),
+        title: Text(useArabic ? 'الصفحة الرئيسية' : 'This is the Home Page'),
         backgroundColor: const Color(0xFF106cb5),
       ),
       body: Center(
@@ -496,11 +496,26 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
-      drawer: Menu(
-        name: 'Nader',
-        email: 'naderyouhanna@gmail.com',
-        gender: 'Male',
-      ),
+      drawer: !useArabic
+          ? Menu(
+              name: 'Nader',
+              email: 'naderyouhanna@gmail.com',
+              gender: 'Male',
+              changeLanguage: changeLanguage,
+            )
+          : null,
+      endDrawer: useArabic
+          ? Menu(
+              name: 'Nader',
+              email: 'naderyouhanna@gmail.com',
+              gender: 'Male',
+              changeLanguage: changeLanguage,
+            )
+          : null,
     );
+  }
+
+  void changeLanguage() {
+    setState(() {});
   }
 }
