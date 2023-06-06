@@ -74,7 +74,7 @@ class _ChatBotState extends State<ChatBot> {
           _speechEnabled = false;
         },
       );
-      await _startListening();
+      // await _startListening();
     }
   }
 
@@ -100,23 +100,23 @@ class _ChatBotState extends State<ChatBot> {
     });
   }
 
-  Future<void> _sendText(String text) async {
-    var url = Uri.parse('http://$IP_ADDRESS/command');
-    var response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(
-        <String, String>{
-          "command": text,
-        },
-      ),
-    );
+  // Future<void> _sendText(String text) async {
+  //   var url = Uri.parse('http://$IP_ADDRESS/command');
+  //   var response = await http.post(
+  //     url,
+  //     headers: <String, String>{
+  //       'Content-Type': 'application/json; charset=UTF-8',
+  //     },
+  //     body: jsonEncode(
+  //       <String, String>{
+  //         "command": text,
+  //       },
+  //     ),
+  //   );
 
-    // print('Response status: ${response.statusCode}');
-    debugPrint('Response body: ${response.body}');
-  }
+  //   // print('Response status: ${response.statusCode}');
+  //   debugPrint('Response body: ${response.body}');
+  // }
 
   @override
   void dispose() {

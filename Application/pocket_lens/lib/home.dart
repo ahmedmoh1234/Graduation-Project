@@ -452,13 +452,13 @@ class _HomeState extends State<Home> {
     super.initState();
 
     initTts();
-    _initSpeech();
+    // _initSpeech();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
         List<dynamic> languages = await flutterTts.getLanguages;
         await flutterTts.setLanguage("ar-EG");
         // await _speak('مرحبا');
-        _initAlan();
+        // _initAlan();
         // AlanVoice.sendText('كيف الجو اليوم ؟');
         // await _speak(_greetingString);
         // await _startListening();

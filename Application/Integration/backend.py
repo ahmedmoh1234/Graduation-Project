@@ -9,6 +9,7 @@ import time
 from PIL import Image
 import getmac
 import logging
+from googletrans import Translator
 
 from Face_Recognition.test import FaceDetector
 from Emotion_Recognition.main import  loadEmoDetector
@@ -35,7 +36,7 @@ emoDetector = loadEmoDetector()
 sceneDescriptor = SceneDescriptor("./Scene_Descriptor/weights/yolov8s-seg.pt")
 clothesDescriptor = ClothesDescriptor()
 ar = ApparelRecommender()
-
+translator = Translator()
 
 
 @app.route('/test', methods=['POST'])
@@ -63,7 +64,8 @@ def scene_descriptor():
     # PILImage = Image.open(file.stream)
     # PILImage.show()
     # print(f"Scene Descriptor: {response}")
-    return response
+    translated_response = translator.translate(response, dest='ar').text
+    return translated_response
 
 
 @app.route('/clothes-descriptor', methods=['POST'])

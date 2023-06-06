@@ -411,7 +411,7 @@ class Menu extends StatelessWidget {
               size: 27,
             ),
             title: Text(
-              useArabic ? 'شات بوت' : 'Face Recognizer',
+              useArabic ? 'شات بوت' : 'Chatbot',
               style: const TextStyle(
                 fontSize: 17,
                 fontFamily: 'RalewayMedium',
