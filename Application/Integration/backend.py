@@ -137,22 +137,15 @@ def emotion_recognizer():
 
 @app.route('/currency-recognizer', methods=['POST'])
 def currency_recognizer():    
-    # file = request.files['image']
-    # img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
+    file = request.files['image']
+    img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
     # PILImage = Image.open(file.stream)
     # PILImage.show()
     # img = cv2.imread('20LE_1.jpg')
     # result = currency_detect(img)
-<<<<<<< Updated upstream
-    # print('Result:', result)
-    print('Received')
-    time.sleep(1.5)
-    result = 'This is a 20 pounds note.'
-=======
     result = document_tesseract(img)
     # result = currency_detector_ready(img)
     print('Result:', result)
->>>>>>> Stashed changes
     return result
     
 @app.route('/document-reader', methods=['POST'])
