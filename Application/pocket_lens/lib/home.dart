@@ -374,6 +374,7 @@ class _HomeState extends State<Home> {
         debugPrint("got new command ${command.toString()}");
         var commandName = command.data["command"];
         if (commandName == 'Scene Descriptor') {
+          debugPrint('===============================SCENE DESCRIPTOR');
           _speak('Going to Scene Descriptor');
           _goToSceneDescriptor(context);
         } else if (commandName == 'Face Recognizer') {
@@ -459,9 +460,9 @@ class _HomeState extends State<Home> {
       (_) async {
         // await flutterTts.setLanguage("ar-EG");
         // await _speak('مرحبا');
+        await _speak(_greetingString);
         _initAlan();
         // AlanVoice.sendText('كيف الجو اليوم ؟');
-        // await _speak(_greetingString);
         // await _startListening();
       },
     );
