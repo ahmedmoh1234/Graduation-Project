@@ -26,6 +26,7 @@ from Apparel_recom.apparel import ApparelRecommender
 IP_ADDRESS = 'localhost'
 
 logging.basicConfig(filename='logs.log', level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.info("*" * 50)
 
 app = Flask(__name__)
 
@@ -207,39 +208,43 @@ def apparel():
     if ip_addr == '127.0.0.1': #localhost
         logging.info("User is localhost")
         mac_addr = getmac.get_mac_address() #get mac address of the server
+
+    if ar.loadUserDataset(mac_addr):
+        logging.info("User dataset loaded")
+        logging.info(str(ar._apparel_data))
+    else:
+        logging.info("User dataset not loaded")
     
     #Load the model using the mac address
     if not ar.loadUserPreference(mac_addr):
         return "Preference not set. Please set your preferences first"
     
-    #Get clothes type
-    clothesType = request.json['clothesType']
-
-    logging.info(f"Getting recommendation for {clothesType}")
 
 
-    prefProductType = clothesType
-    prefProductTexture = ar._user_preferences[clothesType][ApparelRecommender.TEXTURE]
-    prefProductColor = ar._user_preferences[clothesType][ApparelRecommender.COLOR]
 
-    preferenceID = ar.getProductID(prefProductTexture, prefProductColor, prefProductType)
+    result = "We recommend the "
+    rec = ar.getTopRecommendations()
+    if rec[0] == 0:
+        logging.info("Recommendations found")
+        
+        texture = rec[1][0]["texture"]
+        color = rec[1][0]["color"]
+        clothesType = rec[1][0]["clothes_type"]
 
+        result += f"{color}, {texture} {clothesType} and the "
 
-    if preferenceID[0] == -1 or preferenceID[0] == -2:
-        #This means that this is a new product (== -1) or the database is empty (== -2)
-        logging.error("Preference is not in database")
-        return "Preference is not in database"
-    
+        texture = rec[1][1]["texture"]
+        color = rec[1][1]["color"]
+        clothesType = rec[1][1]["clothes_type"]
+
+        result += f"{color}, {texture} {clothesType}"
     else:
-        logging.info("Preference is in database")
-        result = ar.getTopRecommendations(preferenceID[0])
+        logging.info(f"No recommendations found. Error code: {rec[0]}")
+        result= "There isn't enough data for a recommendation"
+    
 
-        if isinstance(result, str):
-            result = result
-        else:
-            resultStr = "We recommend the "
-            resultStr += str(result['color']) + ", " + str(result['texture']) +   " " + str(result['clothes_type'])
-            result = resultStr
+
+    
 
     if (useArabic):
         response = translator.translate(result, dest='ar').text

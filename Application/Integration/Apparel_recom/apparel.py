@@ -141,19 +141,54 @@ class ApparelRecommender:
 
         return True
 
-    def getTopRecommendations(self, product_id):
+    def getTopRecommendations(self):
         '''
         Returns the top n most similar products to a given product id
         '''
 
-        productType = self._apparel_data_PD.iloc[product_id][ApparelRecommender.CLOTHES_TYPE]
-        productTexture = self._apparel_data_PD.iloc[product_id][ApparelRecommender.TEXTURE]
-        productColor = self._apparel_data_PD.iloc[product_id][ApparelRecommender.COLOR]
+        #First get user preferences, if there are none, return a message
+        if len(self._user_preferences) == 0:
+            logger.info("There are no user preferences")
+            return (-1,"User preferences not set")
+        
+        if self._fashionModule._topClothes == None:
+            logger.info("Top clothes not set")
+            return (-2,"Top clothes not set")
 
+        if self._fashionModule._bottomClothes == None:
+            logger.info("Bottom clothes not set")
+            return (-3,"Bottom clothes not set")
+
+        usePreferences = True
+        if self._fashionModule.checkRules() == False:
+            logger.info(f"Current user preferences do not satisfy any rules: {self._fashionModule._topClothes}, {self._fashionModule._bottomClothes}")
+            usePreferences = False
+                 
+        items = []
+        topClothes = None
+        bottomClothes = None
+        if usePreferences:
+            topClothes = self._fashionModule._topClothes
+            bottomClothes = self._fashionModule._bottomClothes
+        else:
+            #select at random a top and bottom clothes that satisfy the rules
+            for key in self._user_preferences.keys():
+                if key == "trousers" or key == "shorts" or key == "jeans" or key == "skirt":
+                    bottomClothes = (self._user_preferences[key][ApparelRecommender.TEXTURE], self._user_preferences[key][ApparelRecommender.COLOR], key)
+                else:
+                    topClothes = (self._user_preferences[key][ApparelRecommender.TEXTURE], self._user_preferences[key][ApparelRecommender.COLOR], key)
+
+            if topClothes == None or bottomClothes == None:
+                logger.info("There isn't enough data to make a recommendation")
+                return (-4,"There isn't enough data to make a recommendation")
+            
+            logging.info(f"Randomly selected clothes: {topClothes}, {bottomClothes}")
+            
+            
         # get the index of the product with the given id
-        product_index = self._apparel_data_PD.index[(self._apparel_data_PD[ApparelRecommender.TEXTURE] == productTexture) 
-                                                    & (self._apparel_data_PD[ApparelRecommender.COLOR] == productColor)
-                                                    & (self._apparel_data_PD[ApparelRecommender.CLOTHES_TYPE] == productType)].tolist()[0]
+        product_index = self._apparel_data_PD.index[(self._apparel_data_PD[ApparelRecommender.TEXTURE] == topClothes[0]) 
+                                                    & (self._apparel_data_PD[ApparelRecommender.COLOR] == topClothes[1])
+                                                    & (self._apparel_data_PD[ApparelRecommender.CLOTHES_TYPE] == topClothes[2])].tolist()[0]
         
         # get the cosine similarity scores for the product
         product_cosine_scores = self._cosine_similarities[product_index]
@@ -161,19 +196,42 @@ class ApparelRecommender:
         # get the indices of the top n most similar products
         top_indices = product_cosine_scores.argsort()[::-1]
         
-        
-        print(top_indices)
-
         if len(top_indices) == 0:
             logger.info("There isn't enough data to make a recommendation")
-            return "There isn't enough data to make a recommendation"
+            return (-4,"There isn't enough data to make a recommendation")
         
         for ind in top_indices:
-            if productType == self._apparel_data_PD.iloc[ind][ApparelRecommender.CLOTHES_TYPE]:
-                return self._apparel_data_PD.iloc[ind]
+            if topClothes[2] == self._apparel_data_PD.iloc[ind][ApparelRecommender.CLOTHES_TYPE]:
+                items.append(self._apparel_data_PD.iloc[ind])
+                break
 
-        logger.info(f"There isn't enough clothes of type {productType} to make a recommendation")
-        return "There isn't enough data to make a recommendation"
+        # get the index of the product with the given id
+        product_index = self._apparel_data_PD.index[(self._apparel_data_PD[ApparelRecommender.TEXTURE] == bottomClothes[0]) 
+                                                    & (self._apparel_data_PD[ApparelRecommender.COLOR] == bottomClothes[1])
+                                                    & (self._apparel_data_PD[ApparelRecommender.CLOTHES_TYPE] == bottomClothes[2])].tolist()[0]
+        
+        # get the cosine similarity scores for the product
+        product_cosine_scores = self._cosine_similarities[product_index]
+        
+        # get the indices of the top n most similar products
+        top_indices = product_cosine_scores.argsort()[::-1]
+        
+        if len(top_indices) == 0:
+            logger.info("There isn't enough data to make a recommendation")
+            return (-4,"There isn't enough data to make a recommendation")
+        
+        for ind in top_indices:
+            if bottomClothes[2] == self._apparel_data_PD.iloc[ind][ApparelRecommender.CLOTHES_TYPE]:
+                items.append(self._apparel_data_PD.iloc[ind])
+                break
+
+        logger.info(f"Top recommendations: {items}")
+
+        return (0,items)
+       
+
+
+
     
     def getProductID(self, texture, color, clothes_type):
         '''
@@ -212,6 +270,11 @@ class ApparelRecommender:
         else:
             self.addApparelData(len(self._apparel_data_PD[ApparelRecommender.PRODUCT_ID]), texture, color, clothes_type)
 
+        if clothes_type == "trousers" or clothes_type == "shorts" or clothes_type == "jeans" or clothes_type == "skirt":
+            self._fashionModule.setBottomClothes(texture, color, clothes_type)
+        else:
+            self._fashionModule.setTopClothes(texture, color, clothes_type)
+
         logger.info(f"User preferences updated: texture: {texture}, color: {color}, clothes_type: {clothes_type}")
 
     def saveUserPreference(self, filename):
@@ -227,7 +290,16 @@ class ApparelRecommender:
         filename = filename + '.pkl'
         try:
             self._user_preferences = pickle.load(open(PATH.resolve()/ "pref" / filename, 'rb'))
-            logger.info(f"User preferences loaded from {filename}")
+
+            #Set the top and bottom clothes in the fashion module
+            for key in self._user_preferences.keys():
+                if key == "trousers" or key == "shorts" or key == "jeans" or key == "skirt":
+                    self._fashionModule.setBottomClothes(self._user_preferences[key][ApparelRecommender.TEXTURE], self._user_preferences[key][ApparelRecommender.COLOR], key)
+                else:
+                    self._fashionModule.setTopClothes(self._user_preferences[key][ApparelRecommender.TEXTURE], self._user_preferences[key][ApparelRecommender.COLOR], key)
+
+            logger.info(f"User preferences loaded : {self._user_preferences} from {filename}")
+            logging.info(f"Top clothes: {self._fashionModule._topClothes}, Bottom clothes: {self._fashionModule._bottomClothes}")
             return True
         except Exception as e:
             logger.info(f"User preferences could NOT be loaded from {filename}")
