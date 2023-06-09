@@ -95,37 +95,19 @@ class ClothesDescriptor():
             class_id = class_ids[i]
             detected_object = self.clothes_classes[class_id]
             
-            cloth_box_image = image[bboxes[i][1]:bboxes[i][3], bboxes[i][0]:bboxes[i][2],:] # 3D array (width, height, channels)
-            
+            box_cloth_image = image[bboxes[i][1]:bboxes[i][3], bboxes[i][0]:bboxes[i][2]]
             segmented_cloth = self.select_cloth_pixels(segmented_image, image, detected_object)
                           
             color = self.detect_color(segmented_cloth)
             
-            segmentation_inputs = self.segmentation_extractor(images=cloth_box_image, return_tensors="pt")
-            
-            segmentation_outputs = self.segmentation_model(**segmentation_inputs)
-            logits = segmentation_outputs.logits.cpu()
-            upsampled_logits = nn.functional.interpolate(
-                logits,
-                size=cloth_box_image.shape[:2],
-                mode="bilinear",
-                align_corners=False,
-            )
-        
-            segmented_box = upsampled_logits.argmax(dim=1)[0]
-            
-            segmented_box_image = self.select_cloth_pixels(segmented_box, cloth_box_image, detected_object)
-            
-            segmented_box_binary =  np.where(segmented_box_image == 0, 0, 255)[:,:,0].astype(np.uint8)
-            plt.imshow(segmented_box_binary)
-            plt.show()
-            print(f"segmented_box_binary shape: {segmented_box_binary.shape}")
-            
-            square_min_x, square_min_y, square_max_x, square_max_y = self.find_largest_square(segmented_box_binary)
-            cloth_region = cloth_box_image[square_min_y:square_max_y, square_min_x:square_max_x,:] # 3D array (width, height, channels)
+            cloth_region = None
+            try:
+                cloth_region = self.get_nonzero_rectangle(segmented_cloth)
+            except:
+                cloth_region = box_cloth_image
             plt.imshow(cloth_region)
             plt.show()
-
+             
             texture = ""
             
             try:            
@@ -156,7 +138,7 @@ class ClothesDescriptor():
         cloth_pixels = original_image.copy()
         cloth_pixels[~cloth_mask] = 0
         return cloth_pixels
-    
+
     def detect_texture(self,image):
         
         gray_image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
@@ -189,18 +171,21 @@ class ClothesDescriptor():
         sorted_indices = np.argsort(counts)[::-1]
         unique_colors = unique_colors[sorted_indices]
         counts = counts[sorted_indices]
-        dominant_colors = set()
+        # unordered set of dominant colors
+        dominant_colors =  dict()
+         
         
-        for i in range(len(unique_colors)):
-            try:
-                color = unique_colors[i]
-                named_color = self.rgb_to_name(color)
-                dominant_colors.add(named_color)
-                if(len(dominant_colors) == 3):
-                    break
-            except ValueError:
-                continue
-
+        # for i in range(len(unique_colors)):
+             # try:
+        color = unique_colors[0]
+        
+        named_color = self.rgb_to_name(color)
+        dominant_colors[ named_color ] = None
+                    # if(len(dominant_colors) == 3):
+                    #     break
+              # except ValueError:
+            
+        dominant_colors = list(dominant_colors.keys())
         dominant_colors_str = ', '.join(dominant_colors)
 
         return dominant_colors_str
@@ -220,8 +205,19 @@ class ClothesDescriptor():
             'pink',
             'brown',
             'gray',
-            'black'
+            'black',
+            'white',
+            'cyan',
+            'magenta',
+            'olive',
+            'teal',
+            'navy',
+            'salmon',
+            'gold',
+            'lavender',
+            'turquoise'
         ]
+
         
         for color_name in known_colors:
             try:
@@ -279,7 +275,7 @@ class YOLOSegmentation:
         return bboxes, class_ids
     
 clothes_detector = ClothesDescriptor()
-test_image = cv2.imread("./test3.jpg")
+test_image = cv2.imread("./test1.jpg")
 result = clothes_detector.describe_cloth(test_image)
 print(result[0])
 

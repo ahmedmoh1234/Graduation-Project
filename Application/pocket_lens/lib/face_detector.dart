@@ -164,7 +164,7 @@ class _FaceDetectorState extends State<FaceDetector> {
   @override
   void initState() {
     super.initState();
-    camera = cameras[1];
+    camera = cameras[0];
     _controller = CameraController(
       camera,
       ResolutionPreset.medium,

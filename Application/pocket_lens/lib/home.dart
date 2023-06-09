@@ -14,7 +14,6 @@ import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'dart:io' show Platform;
 import 'package:alan_voice/alan_voice.dart';
-
 import 'package:pocket_lens/ChangeIPAddress.dart';
 import 'package:pocket_lens/barcode_reader.dart';
 import 'package:pocket_lens/clothes_descriptor.dart';
@@ -137,7 +136,7 @@ void _goToHowItWorks(BuildContext ctx) {
   Navigator.of(ctx).push(
     MaterialPageRoute(
       builder: (_) {
-        return const HowItWorks();
+        return HowItWorks();
       },
     ),
   );
@@ -278,6 +277,7 @@ class _HomeState extends State<Home> {
       onError: errorListener,
       onStatus: statusListener,
     );
+
     setState(() {});
   }
 
@@ -339,6 +339,21 @@ class _HomeState extends State<Home> {
   }
 
   //===========================ALAN FUNCTIONS===================================
+  void _handleEvent(Map<String, dynamic> event) async {
+    switch (event["name"]) {
+      case "parsed":
+        debugPrint("Sent msg: ${event["text"]}");
+        break;
+      case "text":
+        debugPrint("Received msg: ${event["text"]}");
+        if (useArabic) {
+          await _speak(event["text"]);
+        }
+        break;
+      default:
+        debugPrint("Unknown event");
+    }
+  }
 
   void _initAlan() {
     /// Init Alan Button with project key from Alan AI Studio
@@ -346,12 +361,20 @@ class _HomeState extends State<Home> {
         "95aec1209fe5ec07ce09fa461da220842e956eca572e1d8b807a3e2338fdd0dc/stage",
         buttonAlign: AlanVoice.BUTTON_ALIGN_RIGHT);
 
+    AlanVoice.onEvent.add(
+      (event) {
+        debugPrint('==========RECEIVED==========');
+        _handleEvent(event.data);
+      },
+    );
+
     /// Handle commands from Alan AI Studio
     AlanVoice.onCommand.add(
       (command) {
         debugPrint("got new command ${command.toString()}");
         var commandName = command.data["command"];
         if (commandName == 'Scene Descriptor') {
+          debugPrint('===============================SCENE DESCRIPTOR');
           _speak('Going to Scene Descriptor');
           _goToSceneDescriptor(context);
         } else if (commandName == 'Face Recognizer') {
@@ -430,18 +453,19 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+
     initTts();
-    _initSpeech();
+    // _initSpeech();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
+        // await flutterTts.setLanguage("ar-EG");
+        // await _speak('مرحبا');
         await _speak(_greetingString);
+        _initAlan();
+        // AlanVoice.sendText('كيف الجو اليوم ؟');
         // await _startListening();
       },
     );
-
-    _initAlan();
-    // _greetingByAlan();
-    // _deactivateAlan();
   }
 
   @override
@@ -458,7 +482,7 @@ class _HomeState extends State<Home> {
       key: _scaffoldKey,
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('This is the Home Page'),
+        title: Text(useArabic ? 'الصفحة الرئيسية' : 'This is the Home Page'),
         backgroundColor: const Color(0xFF106cb5),
       ),
       body: Center(
@@ -474,11 +498,26 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
-      drawer: Menu(
-        name: 'Nader',
-        email: 'naderyouhanna@gmail.com',
-        gender: 'Male',
-      ),
+      drawer: !useArabic
+          ? Menu(
+              name: 'Nader',
+              email: 'naderyouhanna@gmail.com',
+              gender: 'Male',
+              changeLanguage: changeLanguage,
+            )
+          : null,
+      endDrawer: useArabic
+          ? Menu(
+              name: 'Nader',
+              email: 'naderyouhanna@gmail.com',
+              gender: 'Male',
+              changeLanguage: changeLanguage,
+            )
+          : null,
     );
+  }
+
+  void changeLanguage() {
+    setState(() {});
   }
 }

@@ -63,5 +63,6 @@ import colorama
 import random
 from webcolors import rgb_to_name
 import webcolors
+from scipy import ndimage
 import inflect
 from ultralytics import YOLO

@@ -6,7 +6,6 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-
 import 'package:flutter_tts/flutter_tts.dart';
 
 enum TtsState { playing, stopped, paused, continued }
@@ -154,6 +153,7 @@ class _SceneDescriptorState extends State<SceneDescriptor> {
     request.files.add(multipartFile);
     var response = await request.send();
     final respStr = await response.stream.bytesToString();
+    debugPrint(respStr);
     await _speak(respStr);
   }
 

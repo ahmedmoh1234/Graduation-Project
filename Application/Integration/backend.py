@@ -9,23 +9,24 @@ import time
 from PIL import Image
 import getmac
 import logging
-
+from googletrans import Translator
 from Face_Recognition.test import FaceDetector
 from Emotion_Recognition.main import  loadEmoDetector
 from Scene_Descriptor.Scene_Descriptor import SceneDescriptor
 from Clothes_Descriptor.Clothes_Description_module import ClothesDescriptor
 from Currency_Detector.currency_detector_implementation import currency_detect
 from Currency_Detector.currency_detect_model import currency_detector_ready
-# from Document_scanner.main import document_tesseract
+from Document_scanner.main import document_tesseract
 from Product_Identifier.product_detect import ProductDetection, BrandRecognition
 from Apparel_recom.apparel import ApparelRecommender
 
 
 # Run ipconfig in command prompt to get IP Address
-IP_ADDRESS = '192.168.1.7'
-# IP_ADDRESS = 'localhost'
+# IP_ADDRESS = '192.168.1.24'
+IP_ADDRESS = 'localhost'
 
 logging.basicConfig(filename='logs.log', level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.info("*" * 50)
 
 app = Flask(__name__)
 
@@ -35,7 +36,10 @@ emoDetector = loadEmoDetector()
 sceneDescriptor = SceneDescriptor("./Scene_Descriptor/weights/yolov8s-seg.pt")
 clothesDescriptor = ClothesDescriptor()
 ar = ApparelRecommender()
+translator = Translator()
+useArabic = False
 
+print(" ================== Server Started ================== ")
 
 
 @app.route('/test', methods=['POST'])
@@ -63,6 +67,8 @@ def scene_descriptor():
     # PILImage = Image.open(file.stream)
     # PILImage.show()
     # print(f"Scene Descriptor: {response}")
+    if (useArabic):
+        response = translator.translate(response, dest='ar').text
     return response
 
 
@@ -74,8 +80,9 @@ def clothes_descriptor():
     # PILImage = Image.open(file.stream)
     # PILImage.show()
     
-    
     response_string, detected_clothes_list = clothesDescriptor.describe_cloth(img)
+    if (useArabic):
+        response = translator.translate(response, dest='ar').text
     detected_clothes = dict()
     if (not(detected_clothes_list is None)):
         detected_clothes['color'] = detected_clothes_list[0][0]
@@ -107,7 +114,11 @@ def face_detector():
     # response = dict()
     # response['result'] = result
     # return jsonify(response)
-    return result
+    if (useArabic):
+        response = translator.translate(result, dest='ar').text
+    else: 
+        response = result
+    return response
 
 @app.route('/emotion-recognizer', methods=['POST'])
 def emotion_recognizer():    
@@ -118,21 +129,24 @@ def emotion_recognizer():
     # PILImage.show()
     img, result = emoDetector.executeWithImage(img)
     # print(f"Emotion: {result[0]}")
-    return result[0]
+    if (useArabic):
+        response = translator.translate(response[0], dest='ar').text
+    else:
+        response = result[0]
+    return response
 
 
 @app.route('/currency-recognizer', methods=['POST'])
 def currency_recognizer():    
-    # file = request.files['image']
-    # img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
+    file = request.files['image']
+    img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
     # PILImage = Image.open(file.stream)
     # PILImage.show()
     # img = cv2.imread('20LE_1.jpg')
     # result = currency_detect(img)
-    # print('Result:', result)
-    print('Received')
-    time.sleep(1.5)
-    result = 'This is a 20 pounds note.'
+    result = document_tesseract(img)
+    # result = currency_detector_ready(img)
+    print('Result:', result)
     return result
     
 @app.route('/document-reader', methods=['POST'])
@@ -142,7 +156,7 @@ def document_reader():
     # PILImage = Image.open(file.stream)
     # print(img.shape)
     # PILImage.show()
-    result = document_scanner(img)
+    result = document_tesseract(img)
     return result
 
 prod_counter = 0
@@ -177,8 +191,13 @@ def product_identifier():
         finalStr = "No products found"
 
 
-    finalStr = 'There is a water bottle in the image. The brand is Dasani'
-    return finalStr
+    finalStr = 'Soda Can. Coca Cola'
+
+    if (useArabic):
+        response = translator.translate(finalStr, dest='ar').text
+    else:
+        response = finalStr
+    return response
 
 @app.route('/apparel-rec', methods=['POST'])
 def apparel():    
@@ -189,45 +208,49 @@ def apparel():
     if ip_addr == '127.0.0.1': #localhost
         logging.info("User is localhost")
         mac_addr = getmac.get_mac_address() #get mac address of the server
+
+    if ar.loadUserDataset(mac_addr):
+        logging.info("User dataset loaded")
+        logging.info(str(ar._apparel_data))
+    else:
+        logging.info("User dataset not loaded")
     
     #Load the model using the mac address
-    if ar.loadUserPreference(mac_addr):
-        logging.info("Model loaded")
-    else:
-        logging.info("Model not loaded")
+    if not ar.loadUserPreference(mac_addr):
         return "Preference not set. Please set your preferences first"
     
-    #Get clothes type
-    clothesType = request.json['clothesType']
-
-    print(clothesType)
 
 
-    prefProductType = clothesType
-    prefProductTexture = ar._user_preferences[clothesType][ApparelRecommender.TEXTURE]
-    prefProductColor = ar._user_preferences[clothesType][ApparelRecommender.COLOR]
 
-    preferenceID = ar.getProductID(prefProductTexture, prefProductColor, prefProductType)
+    result = "We recommend the "
+    rec = ar.getTopRecommendations()
+    if rec[0] == 0:
+        logging.info("Recommendations found")
+        
+        texture = rec[1][0]["texture"]
+        color = rec[1][0]["color"]
+        clothesType = rec[1][0]["clothes_type"]
 
+        result += f"{color}, {texture} {clothesType} and the "
 
-    if preferenceID[0] == -1 or preferenceID[0] == -2:
-        #This means that this is a new product (== -1) or the database is empty (== -2)
-        logging.error("Preference is not in database")
-        return "Preference not set. Please set your preferences first"
-    
+        texture = rec[1][1]["texture"]
+        color = rec[1][1]["color"]
+        clothesType = rec[1][1]["clothes_type"]
+
+        result += f"{color}, {texture} {clothesType}"
     else:
-        logging.info("Preference is in database")
-        result = ar.getTopRecommendations(preferenceID[0], 1)
-
-        if isinstance(result, str):
-            result = result
-        else:
-            resultStr = "We recommend the "
-            resultStr += str(result['color']) + ", " + str(result['texture']) +   " " + str(result['clothes_type'])
-            result = resultStr
+        logging.info(f"No recommendations found. Error code: {rec[0]}")
+        result= "There isn't enough data for a recommendation"
+    
 
 
-    return result
+    
+
+    if (useArabic):
+        response = translator.translate(result, dest='ar').text
+    else:
+        response = result
+    return response
 
 @app.route('/apparel-add', methods=['POST'])
 def apparelAdd(): 
@@ -305,8 +328,22 @@ def apparelSetPref():
     logging.info(str(ar._user_preferences))
     ar.saveUserPreference(mac_addr)
 
+    logging.info("Saving user dataset")
+    logging.info(str(ar._apparel_data))
+    ar.saveUserDataset(mac_addr)
+
     return "Success"
 
 
+
+@app.route('/set-language', methods=['POST'])
+def setLanguage(): 
+    global useArabic
+    data = request.get_json()
+    useArabic = data.get('useArabic')
+    print(useArabic)
+    return {'result': 'Success'}
+
+
 if __name__ == "__main__":
-    app.run(debug = True, host = IP_ADDRESS)
+    app.run(debug = False, host = IP_ADDRESS)

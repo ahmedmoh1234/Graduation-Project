@@ -2,22 +2,27 @@ import 'package:pocket_lens/ChangeIPAddress.dart';
 import 'package:pocket_lens/alan_chatbot.dart';
 import 'package:pocket_lens/barcode_reader.dart';
 import 'package:pocket_lens/clothes_descriptor.dart';
+import 'package:pocket_lens/contact-us.dart';
 import 'package:pocket_lens/currency_recognizer.dart';
 import 'package:pocket_lens/emotion_recognizer.dart';
 import 'package:pocket_lens/product-identifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pocket_lens/recommender.dart';
+import 'package:pocket_lens/settings.dart';
 import 'package:pocket_lens/test.dart';
 import 'package:pocket_lens/text-reader.dart';
 import 'package:pocket_lens/how_it_works.dart';
+import 'package:pocket_lens/translate.dart';
 import 'chatbot.dart';
 import 'TTSTest.dart';
 import 'scene_descriptor.dart';
 import 'face_detector.dart';
+import 'config.dart';
 
 class Menu extends StatelessWidget {
   String token = "";
+  final VoidCallback changeLanguage;
 
   final String name;
   final String email;
@@ -28,6 +33,7 @@ class Menu extends StatelessWidget {
     required this.name,
     required this.email,
     required this.gender,
+    required this.changeLanguage,
   });
 
   void _goToCurrencyRecognizer(BuildContext ctx) {
@@ -40,11 +46,43 @@ class Menu extends StatelessWidget {
     );
   }
 
+  void _goToSettings(BuildContext ctx) {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return LanguageSettingsPage(
+            changeLanguage: changeLanguage,
+          );
+        },
+      ),
+    );
+  }
+
   void _goToHowItWorks(BuildContext ctx) {
     Navigator.of(ctx).push(
       MaterialPageRoute(
         builder: (_) {
-          return const HowItWorks();
+          return HowItWorks();
+        },
+      ),
+    );
+  }
+
+  void _goToTranslate(BuildContext ctx) {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return Translate();
+        },
+      ),
+    );
+  }
+
+  void _goContactUs(BuildContext ctx) {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return ContactUS();
         },
       ),
     );
@@ -226,31 +264,31 @@ class Menu extends StatelessWidget {
           //   child: Text('Profile'), // mmkn n7ot hena el usernaame
           // ),
           // /*******************************/
-          ListTile(
-            leading: const Icon(
-              Icons.person,
-              size: 27,
-            ),
-            title: const Text(
-              'Profile',
-              style: TextStyle(
-                fontSize: 17,
-                fontFamily: 'RalewayMedium',
-              ),
-            ),
-            onTap: () {
-              // _goToUserProfile(
-              //   context,
-              //   widget.name,
-              //   widget.email,
-              //   widget.phone,
-              //   widget.gender,
-              //   widget.carLicense,
-              //   widget.carBrand,
-              //   widget.carColour,
-              // );
-            },
-          ),
+          // ListTile(
+          //   leading: const Icon(
+          //     Icons.person,
+          //     size: 27,
+          //   ),
+          //   title: const Text(
+          //     'Profile',
+          //     style: TextStyle(
+          //       fontSize: 17,
+          //       fontFamily: 'RalewayMedium',
+          //     ),
+          //   ),
+          //   onTap: () {
+          //     // _goToUserProfile(
+          //     //   context,
+          //     //   widget.name,
+          //     //   widget.email,
+          //     //   widget.phone,
+          //     //   widget.gender,
+          //     //   widget.carLicense,
+          //     //   widget.carBrand,
+          //     //   widget.carColour,
+          //     // );
+          //   },
+          // ),
           ListTile(
             onTap: () {
               _goToSceneDescriptor(context);
@@ -259,9 +297,25 @@ class Menu extends StatelessWidget {
               Icons.camera_alt_rounded,
               size: 27,
             ),
-            title: const Text(
-              'Scene Descriptor',
-              style: TextStyle(
+            title: Text(
+              useArabic ? 'واصف المشهد' : 'Scene Descriptor',
+              style: const TextStyle(
+                fontSize: 17,
+                fontFamily: 'RalewayMedium',
+              ),
+            ),
+          ),
+          ListTile(
+            onTap: () {
+              _goToSettings(context);
+            },
+            leading: const Icon(
+              Icons.translate_rounded,
+              size: 27,
+            ),
+            title: Text(
+              useArabic ? 'اختيار اللغة' : 'Language',
+              style: const TextStyle(
                 fontSize: 17,
                 fontFamily: 'RalewayMedium',
               ),
@@ -275,9 +329,9 @@ class Menu extends StatelessWidget {
               Icons.face,
               size: 27,
             ),
-            title: const Text(
-              'Face Recognizer',
-              style: TextStyle(
+            title: Text(
+              useArabic ? 'التعرف على الوجه' : 'Face Recognizer',
+              style: const TextStyle(
                 fontSize: 17,
                 fontFamily: 'RalewayMedium',
               ),
@@ -291,8 +345,8 @@ class Menu extends StatelessWidget {
               Icons.favorite,
               size: 27,
             ),
-            title: const Text(
-              'Emotion Recognizer',
+            title: Text(
+              useArabic ? 'التعرف على المشاعر' : 'Emotion Recognizer',
               style: TextStyle(
                 fontSize: 17,
                 fontFamily: 'RalewayMedium',
@@ -307,8 +361,8 @@ class Menu extends StatelessWidget {
               Icons.man,
               size: 27,
             ),
-            title: const Text(
-              'Clothes Descriptor',
+            title: Text(
+              useArabic ? 'التعرف على الملابس' : 'Clothes Descriptor',
               style: TextStyle(
                 fontSize: 17,
                 fontFamily: 'RalewayMedium',
@@ -324,9 +378,9 @@ class Menu extends StatelessWidget {
               // color: Colors.green,
               size: 27,
             ),
-            title: const Text(
-              'Recommender',
-              style: TextStyle(
+            title: Text(
+              useArabic ? 'اقتراح الملابس' : 'Recommender',
+              style: const TextStyle(
                 fontSize: 17,
                 fontFamily: 'RalewayMedium',
               ),
@@ -348,22 +402,22 @@ class Menu extends StatelessWidget {
           //     ),
           //   ),
           // ),
-          // ListTile(
-          //   onTap: () {
-          //     _goToChatbot(context);
-          //   },
-          //   leading: const Icon(
-          //     Icons.textsms_rounded,
-          //     size: 27,
-          //   ),
-          //   title: const Text(
-          //     'Chatbot',
-          //     style: TextStyle(
-          //       fontSize: 17,
-          //       fontFamily: 'RalewayMedium',
-          //     ),
-          //   ),
-          // ),
+          ListTile(
+            onTap: () {
+              _goToChatbot(context);
+            },
+            leading: const Icon(
+              Icons.textsms_rounded,
+              size: 27,
+            ),
+            title: Text(
+              useArabic ? 'شات بوت' : 'Chatbot',
+              style: const TextStyle(
+                fontSize: 17,
+                fontFamily: 'RalewayMedium',
+              ),
+            ),
+          ),
           ListTile(
             onTap: () {
               _goToCurrencyRecognizer(context);
@@ -372,9 +426,9 @@ class Menu extends StatelessWidget {
               Icons.paid,
               size: 27,
             ),
-            title: const Text(
-              'Currency Recognizer',
-              style: TextStyle(
+            title: Text(
+              useArabic ? 'التعرف على النقود' : 'Currency Recognizer',
+              style: const TextStyle(
                 fontSize: 17,
                 fontFamily: 'RalewayMedium',
               ),
@@ -389,8 +443,8 @@ class Menu extends StatelessWidget {
               Icons.format_color_text_sharp,
               size: 27,
             ),
-            title: const Text(
-              'Text Reader',
+            title: Text(
+              useArabic ? 'قراءة النص' : 'Text Reader',
               style: TextStyle(
                 fontSize: 17,
                 fontFamily: 'RalewayMedium',
@@ -406,9 +460,9 @@ class Menu extends StatelessWidget {
               Icons.shopping_cart,
               size: 27,
             ),
-            title: const Text(
-              'Product Identifier',
-              style: TextStyle(
+            title: Text(
+              useArabic ? 'التعرف على المنتجات' : 'Product Identifier',
+              style: const TextStyle(
                 fontSize: 17,
                 fontFamily: 'RalewayMedium',
               ),
@@ -422,9 +476,9 @@ class Menu extends StatelessWidget {
               Icons.barcode_reader,
               size: 27,
             ),
-            title: const Text(
-              'Barcode Reader',
-              style: TextStyle(
+            title: Text(
+              useArabic ? 'قراءة الباركود' : 'Barcode Reader',
+              style: const TextStyle(
                 fontSize: 17,
                 fontFamily: 'RalewayMedium',
               ),
@@ -478,9 +532,9 @@ class Menu extends StatelessWidget {
               Icons.help,
               size: 27,
             ),
-            title: const Text(
-              'How it works',
-              style: TextStyle(
+            title: Text(
+              useArabic ? 'كيف يعمل' : 'How It Works',
+              style: const TextStyle(
                 fontSize: 17,
                 fontFamily: 'RalewayMedium',
               ),
@@ -489,36 +543,36 @@ class Menu extends StatelessWidget {
               _goToHowItWorks(context);
             },
           ),
-          ListTile(
-            leading: const Icon(
-              Icons.settings,
-              size: 27,
-            ),
-            title: const Text(
-              'Settings',
-              style: TextStyle(
-                fontSize: 17,
-                fontFamily: 'RalewayMedium',
-              ),
-            ),
-            onTap: () {
-              // _goToSettings(context, widget.token, widget.name);
-            },
-          ),
+          // ListTile(
+          //   leading: const Icon(
+          //     Icons.settings,
+          //     size: 27,
+          //   ),
+          //   title: const Text(
+          //     'Settings',
+          //     style: TextStyle(
+          //       fontSize: 17,
+          //       fontFamily: 'RalewayMedium',
+          //     ),
+          //   ),
+          //   onTap: () {
+          //     _goToSettings(context);
+          //   },
+          // ),
           ListTile(
             leading: const Icon(
               Icons.message,
               size: 27,
             ),
-            title: const Text(
-              'Contact Us',
-              style: TextStyle(
+            title: Text(
+              useArabic ? 'تواصل معنا' : 'Contact Us',
+              style: const TextStyle(
                 fontSize: 17,
                 fontFamily: 'RalewayMedium',
               ),
             ),
             onTap: () {
-              // _goContactUs(context);
+              _goContactUs(context);
             },
           ),
           ListTile(
@@ -542,9 +596,9 @@ class Menu extends StatelessWidget {
               Icons.logout,
               size: 27,
             ),
-            title: const Text(
-              'Logout',
-              style: TextStyle(
+            title: Text(
+              useArabic ? 'تسجيل خروج' : 'Logout',
+              style: const TextStyle(
                 fontSize: 17,
                 fontFamily: 'RalewayMedium',
               ),
@@ -558,9 +612,9 @@ class Menu extends StatelessWidget {
               Icons.exit_to_app,
               size: 27,
             ),
-            title: const Text(
-              'Exit',
-              style: TextStyle(
+            title: Text(
+              useArabic ? 'خروج من التطبيق' : 'Exit',
+              style: const TextStyle(
                 fontSize: 17,
                 fontFamily: 'RalewayMedium',
               ),

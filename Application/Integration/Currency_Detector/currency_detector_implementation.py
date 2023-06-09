@@ -194,7 +194,7 @@ def currency_detect(testImg):
     #use knn model
 
     # print("Training knn model...")
-    knn = KNeighborsClassifier(n_neighbors=15,metric='hamming')
+    knn = KNeighborsClassifier(n_neighbors=7)
 
 
     y_train = y_train.flatten()
@@ -205,11 +205,11 @@ def currency_detect(testImg):
     prediction_knn = knn.predict(test.T)
     # print(prediction_knn)
 
-    predictions_3 = KNN(test.T, x_train, y_train, 3)
-    predictions_5 = KNN(test.T, x_train, y_train, 5)
+    # predictions_3 = KNN(test.T, x_train, y_train, 3)
+    # predictions_5 = KNN(test.T, x_train, y_train, 5)
 
-    print("predictions_3",predictions_3)
-    print("predictions_5",predictions_5)
+    # print("predictions_3",predictions_3)
+    # print("predictions_5",predictions_5)
 
     return str(int(prediction_knn[0]))
 # imgpath20 = PATH.resolve()/'datasets/20/20.2.jpg'
