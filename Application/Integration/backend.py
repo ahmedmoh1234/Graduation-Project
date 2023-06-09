@@ -155,7 +155,7 @@ def document_reader():
     # PILImage = Image.open(file.stream)
     # print(img.shape)
     # PILImage.show()
-    result = document_scanner(img)
+    result = document_tesseract(img)
     return result
 
 prod_counter = 0
