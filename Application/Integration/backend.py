@@ -16,7 +16,7 @@ from Scene_Descriptor.Scene_Descriptor import SceneDescriptor
 from Clothes_Descriptor.Clothes_Description_module import ClothesDescriptor
 from Currency_Detector.currency_detector_implementation import currency_detect
 from Currency_Detector.currency_detect_model import currency_detector_ready
-# from Document_scanner.main import document_tesseract
+from Document_scanner.main import document_tesseract
 from Product_Identifier.product_detect import ProductDetection, BrandRecognition
 from Apparel_recom.apparel import ApparelRecommender
 
