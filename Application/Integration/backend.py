@@ -143,10 +143,16 @@ def currency_recognizer():
     # PILImage.show()
     # img = cv2.imread('20LE_1.jpg')
     # result = currency_detect(img)
+<<<<<<< Updated upstream
     # print('Result:', result)
     print('Received')
     time.sleep(1.5)
     result = 'This is a 20 pounds note.'
+=======
+    result = document_tesseract(img)
+    # result = currency_detector_ready(img)
+    print('Result:', result)
+>>>>>>> Stashed changes
     return result
     
 @app.route('/document-reader', methods=['POST'])
