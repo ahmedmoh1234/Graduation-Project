@@ -19,8 +19,75 @@ if not logger.hasHandlers():
 
     logger.addHandler(file_handler)
 
+class Rule():
+        
+    textStr = "texture"
+    colorStr = "color"
+    clothesTypeStr = "clothes_type"
+    
+    def __init__(self, op1:str, op2:str, ruleType:str):
+        self._op1 = None
+        self._op2 = None
+        self._type = None
+        self.setRule(op1, op2, ruleType)
 
+    def setRule(self, op1 : str, op2:str, ruleType:str):
+        #trim and lowercase the strings
+        self._op1 = op1.strip().lower()
+        self._op2 = op2.strip().lower()
+        #Rule type can be texture, color or clothes_type
+        self._type = ruleType.strip().lower()
+        
 
+    def __call__(self, topClothes, bottomClothes):
+        if self._op1 == None or self._op2 == None or self._type == None:
+            return False
+        
+        if self._type == Rule.textStr:
+            if topClothes[0] == self._op1:
+                return self._op2 == bottomClothes[0]
+            else:
+                return True
+            
+        elif self._type == Rule.colorStr:
+            if topClothes[1] == self._op1:
+                return self._op2 == bottomClothes[1]
+            else:
+                return True
+        elif self._type == Rule.clothesTypeStr:
+            if topClothes[2] == self._op1:
+                return self._op2 == bottomClothes[2]
+            else:
+                return True
+        
+    def __str__(self) -> str:
+        return f"Rule: {self._op1} == {self._op2} for {self._type}"
+     
+class FashionModule():
+
+    def __init__(self):
+        self._topClothes = None
+        self._bottomClothes = None
+        self._rules = []
+
+    def setTopClothes(self, texture, color, clothes_type):
+        self._topClothes = (texture, color, clothes_type)
+        logger.info(f"Top clothes set: texture: {texture}, color: {color}, clothes_type: {clothes_type}")
+
+    def setBottomClothes(self, texture, color, clothes_type):
+        self._bottomClothes = (texture, color, clothes_type)
+        logger.info(f"Bottom clothes set: texture: {texture}, color: {color}, clothes_type: {clothes_type}")
+
+    def addRule(self,rule):
+        self._rules.append(rule)
+        logger.info(f"Rule added: {rule}")
+
+    def checkRules(self) -> bool:
+        for rule in self._rules:
+            if not rule(self._topClothes, self._bottomClothes):
+                return False
+        return True
+    
 class ApparelRecommender:
     PRODUCT_ID = "product_id"
     TEXTURE = "texture"
@@ -28,7 +95,6 @@ class ApparelRecommender:
     CLOTHES_TYPE = "clothes_type"
     
     def __init__(self):
-        global logger
         self._user_preferences = dict()
 
         self._apparel_data :dict[list] = dict()
@@ -42,6 +108,10 @@ class ApparelRecommender:
         self._tfidf = TfidfVectorizer(stop_words='english')
         self._features_matrix = None
         self._cosine_similarities = None
+
+        self._fashionModule = FashionModule()
+
+        rules = []
 
         logger.info("ApparelRecommender initialized")
 
@@ -195,90 +265,26 @@ class ApparelRecommender:
             logger.info(f"User dataset could NOT be loaded from {filename}")
             return False
 
-#define a rule class
-class Rule():
-        
-    textStr = "texture"
-    colorStr = "color"
-    clothesTypeStr = "clothes_type"
-    
-    def __init__(self, op1:str, op2:str, ruleType:str):
-        self._op1 = None
-        self._op2 = None
-        self._type = None
-        self.setRule(op1, op2, ruleType)
-
-    def setRule(self, op1 : str, op2:str, ruleType:str):
-        #trim and lowercase the strings
-        self._op1 = op1.strip().lower()
-        self._op2 = op2.strip().lower()
-        #Rule type can be texture, color or clothes_type
-        self._type = ruleType.strip().lower()
-        
-
-    def __call__(self, topClothes, bottomClothes):
-        if self._op1 == None or self._op2 == None or self._type == None:
-            return False
-        
-        if self._type == Rule.textStr:
-            return self._op1 == topClothes[0] and self._op2 == bottomClothes[0]
-        elif self._type == Rule.colorStr:
-            return self._op1 == topClothes[1] and self._op2 == bottomClothes[1]
-        elif self._type == Rule.clothesTypeStr:
-            return self._op1 == topClothes[2] and self._op2 == bottomClothes[2]
-        
-    def __str__(self) -> str:
-        return f"Rule: {self._op1} == {self._op2} for {self._type}"
-                
-        
-        
-
-
-class FashionModule():
-
-    def __init__(self):
-        self._topClothes = None
-        self._bottomClothes = None
-        self._rules = []
-
-    def setTopClothes(self, texture, color, clothes_type):
-        self._topClothes = (texture, color, clothes_type)
-        logger.info(f"Top clothes set: texture: {texture}, color: {color}, clothes_type: {clothes_type}")
-
-    def setBottomClothes(self, texture, color, clothes_type):
-        self._bottomClothes = (texture, color, clothes_type)
-        logger.info(f"Bottom clothes set: texture: {texture}, color: {color}, clothes_type: {clothes_type}")
-
-    def addRule(self,rule):
-        self._rules.append(rule)
-        logger.info(f"Rule added: {rule}")
-
-    def checkRules(self) -> bool:
-        for rule in self._rules:
-            if not rule(self._topClothes, self._bottomClothes):
-                return False
-        return True
-    
 
 
 
 if __name__ == '__main__':
 
     #create a rule
-    rule = Rule("blue", "black", "color")
-    rule2 = Rule("cotton", "cotton", "texture")
-    rule3 = Rule("shirt", "pants", "clothes_type")
+    rules = [Rule("blue", "black", "color"),
+    Rule("cotton", "cotton", "texture"),
+    Rule("shirt", "pants", "clothes_type"),
+    Rule("green", "blue", "color")]
 
     #create a fashion module
     fashionModule = FashionModule()
 
     #add the rule to the fashion module
-    fashionModule.addRule(rule)
-    fashionModule.addRule(rule2)
-    fashionModule.addRule(rule3)
+    for rule in rules:
+        fashionModule.addRule(rule)
 
     #set the top clothes
-    fashionModule.setTopClothes("cotton", "blue", "shirt")
+    fashionModule.setTopClothes("cotton", "green", "shirt")
 
     #set the bottom clothes
     fashionModule.setBottomClothes("cotton", "black", "pants")
