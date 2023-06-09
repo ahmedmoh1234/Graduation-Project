@@ -9,6 +9,17 @@ PATH = pathlib.Path(__file__).parent
 
 logger = logging.getLogger(__name__)
 
+#check if loggers are already set
+if not logger.hasHandlers():
+    logger.setLevel(logging.INFO)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+    file_handler = logging.FileHandler(PATH.resolve() / "apparel.log")
+    file_handler.setFormatter(formatter)
+
+    logger.addHandler(file_handler)
+
+
 
 class ApparelRecommender:
     PRODUCT_ID = "product_id"
@@ -17,6 +28,7 @@ class ApparelRecommender:
     CLOTHES_TYPE = "clothes_type"
     
     def __init__(self):
+        global logger
         self._user_preferences = dict()
 
         self._apparel_data :dict[list] = dict()
@@ -182,40 +194,94 @@ class ApparelRecommender:
         except Exception as e:
             logger.info(f"User dataset could NOT be loaded from {filename}")
             return False
+
+#define a rule class
+class Rule():
+        
+    textStr = "texture"
+    colorStr = "color"
+    clothesTypeStr = "clothes_type"
     
+    def __init__(self, op1:str, op2:str, ruleType:str):
+        self._op1 = None
+        self._op2 = None
+        self._type = None
+        self.setRule(op1, op2, ruleType)
+
+    def setRule(self, op1 : str, op2:str, ruleType:str):
+        #trim and lowercase the strings
+        self._op1 = op1.strip().lower()
+        self._op2 = op2.strip().lower()
+        #Rule type can be texture, color or clothes_type
+        self._type = ruleType.strip().lower()
+        
+
+    def __call__(self, topClothes, bottomClothes):
+        if self._op1 == None or self._op2 == None or self._type == None:
+            return False
+        
+        if self._type == Rule.textStr:
+            return self._op1 == topClothes[0] and self._op2 == bottomClothes[0]
+        elif self._type == Rule.colorStr:
+            return self._op1 == topClothes[1] and self._op2 == bottomClothes[1]
+        elif self._type == Rule.clothesTypeStr:
+            return self._op1 == topClothes[2] and self._op2 == bottomClothes[2]
+        
+    def __str__(self) -> str:
+        return f"Rule: {self._op1} == {self._op2} for {self._type}"
+                
+        
+        
+
+
+class FashionModule():
+
+    def __init__(self):
+        self._topClothes = None
+        self._bottomClothes = None
+        self._rules = []
+
+    def setTopClothes(self, texture, color, clothes_type):
+        self._topClothes = (texture, color, clothes_type)
+        logger.info(f"Top clothes set: texture: {texture}, color: {color}, clothes_type: {clothes_type}")
+
+    def setBottomClothes(self, texture, color, clothes_type):
+        self._bottomClothes = (texture, color, clothes_type)
+        logger.info(f"Bottom clothes set: texture: {texture}, color: {color}, clothes_type: {clothes_type}")
+
+    def addRule(self,rule):
+        self._rules.append(rule)
+        logger.info(f"Rule added: {rule}")
+
+    def checkRules(self) -> bool:
+        for rule in self._rules:
+            if not rule(self._topClothes, self._bottomClothes):
+                return False
+        return True
     
 
-        
 
 
 if __name__ == '__main__':
 
+    #create a rule
+    rule = Rule("blue", "black", "color")
+    rule2 = Rule("cotton", "cotton", "texture")
+    rule3 = Rule("shirt", "pants", "clothes_type")
 
-    # define some example data
-    apparel_data = {
-        'product_id': [1, 2, 3, 4, 5],
-        'texture': ['soft', 'rough', 'smooth', 'silky', 'soft'],
-        'color': ['red', 'blue', 'black', 'green', 'red'],
-        'clothes_type': ['sweater', 'jeans', 't-shirt', 'dress', 't-shirt']
-    }
+    #create a fashion module
+    fashionModule = FashionModule()
 
-    # create an instance of the ApparelRecommender class
-    apparel_recommender = ApparelRecommender()
+    #add the rule to the fashion module
+    fashionModule.addRule(rule)
+    fashionModule.addRule(rule2)
+    fashionModule.addRule(rule3)
 
-    # add the apparel data to the recommender
-    for i in range(len(apparel_data[ApparelRecommender.PRODUCT_ID])):
-        apparel_recommender.addApparelData(apparel_data[ApparelRecommender.PRODUCT_ID][i], apparel_data[ApparelRecommender.TEXTURE][i], apparel_data[ApparelRecommender.COLOR][i], apparel_data[ApparelRecommender.CLOTHES_TYPE][i])
+    #set the top clothes
+    fashionModule.setTopClothes("cotton", "blue", "shirt")
 
-    product_id = apparel_recommender.getProductID('soft', 'red', 't-shirt')
+    #set the bottom clothes
+    fashionModule.setBottomClothes("cotton", "black", "pants")
 
-    # get the top recommendations for product 1
-    print(apparel_recommender.getTopRecommendations(product_id, 1))
-
-    # # save the apparel recommender
-    # apparel_recommender.save('apparel_recommender.pkl')
-
-    # # load the apparel recommender
-    # apparel_recommender.load('apparel_recommender.pkl')
-
-    # # get the top recommendations for product 1
-    # print(apparel_recommender.get_top_recommendations(product_id, 1))
+    #check the rules
+    print(fashionModule.checkRules())
