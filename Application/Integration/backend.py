@@ -38,6 +38,8 @@ ar = ApparelRecommender()
 translator = Translator()
 useArabic = False
 
+print(" ================== Server Started ================== ")
+
 
 @app.route('/test', methods=['POST'])
 def test():
@@ -189,7 +191,7 @@ def product_identifier():
         finalStr = "No products found"
 
 
-    finalStr = 'There is a water bottle in the image. The brand is Dasani'
+    finalStr = 'Soda Can. Coca Cola'
 
     if (useArabic):
         response = translator.translate(finalStr, dest='ar').text
@@ -340,4 +342,4 @@ def setLanguage():
 
 
 if __name__ == "__main__":
-    app.run(debug = True, host = IP_ADDRESS)
+    app.run(debug = False, host = IP_ADDRESS)

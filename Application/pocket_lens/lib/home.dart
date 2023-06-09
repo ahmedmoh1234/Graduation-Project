@@ -346,7 +346,9 @@ class _HomeState extends State<Home> {
         break;
       case "text":
         debugPrint("Received msg: ${event["text"]}");
-        await _speak(event["text"]);
+        if (useArabic) {
+          await _speak(event["text"]);
+        }
         break;
       default:
         debugPrint("Unknown event");
@@ -457,7 +459,7 @@ class _HomeState extends State<Home> {
       (_) async {
         // await flutterTts.setLanguage("ar-EG");
         // await _speak('مرحبا');
-        // _initAlan();
+        _initAlan();
         // AlanVoice.sendText('كيف الجو اليوم ؟');
         // await _speak(_greetingString);
         // await _startListening();

@@ -575,22 +575,22 @@ class Menu extends StatelessWidget {
               _goContactUs(context);
             },
           ),
-          // ListTile(
-          //   leading: const Icon(
-          //     Icons.info,
-          //     size: 27,
-          //   ),
-          //   title: const Text(
-          //     'Change IP Address',
-          //     style: TextStyle(
-          //       fontSize: 17,
-          //       fontFamily: 'RalewayMedium',
-          //     ),
-          //   ),
-          //   onTap: () {
-          //     _goToChangeIPAddress(context);
-          //   },
-          // ),
+          ListTile(
+            leading: const Icon(
+              Icons.info,
+              size: 27,
+            ),
+            title: const Text(
+              'Change IP Address',
+              style: TextStyle(
+                fontSize: 17,
+                fontFamily: 'RalewayMedium',
+              ),
+            ),
+            onTap: () {
+              _goToChangeIPAddress(context);
+            },
+          ),
           ListTile(
             leading: const Icon(
               Icons.logout,
