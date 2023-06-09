@@ -22,8 +22,8 @@ from Apparel_recom.apparel import ApparelRecommender
 
 
 # Run ipconfig in command prompt to get IP Address
-IP_ADDRESS = '192.168.1.7'
-# IP_ADDRESS = 'localhost'
+# IP_ADDRESS = '192.168.1.24'
+IP_ADDRESS = 'localhost'
 
 logging.basicConfig(filename='logs.log', level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
@@ -208,16 +208,13 @@ def apparel():
         mac_addr = getmac.get_mac_address() #get mac address of the server
     
     #Load the model using the mac address
-    if ar.loadUserPreference(mac_addr):
-        logging.info("Model loaded")
-    else:
-        logging.info("Model not loaded")
+    if not ar.loadUserPreference(mac_addr):
         return "Preference not set. Please set your preferences first"
     
     #Get clothes type
     clothesType = request.json['clothesType']
 
-    print(clothesType)
+    logging.info(f"Getting recommendation for {clothesType}")
 
 
     prefProductType = clothesType
@@ -230,11 +227,11 @@ def apparel():
     if preferenceID[0] == -1 or preferenceID[0] == -2:
         #This means that this is a new product (== -1) or the database is empty (== -2)
         logging.error("Preference is not in database")
-        return "Preference not set. Please set your preferences first"
+        return "Preference is not in database"
     
     else:
         logging.info("Preference is in database")
-        result = ar.getTopRecommendations(preferenceID[0], 1)
+        result = ar.getTopRecommendations(preferenceID[0])
 
         if isinstance(result, str):
             result = result
@@ -324,6 +321,10 @@ def apparelSetPref():
     logging.info("Saving user preference")
     logging.info(str(ar._user_preferences))
     ar.saveUserPreference(mac_addr)
+
+    logging.info("Saving user dataset")
+    logging.info(str(ar._apparel_data))
+    ar.saveUserDataset(mac_addr)
 
     return "Success"
 

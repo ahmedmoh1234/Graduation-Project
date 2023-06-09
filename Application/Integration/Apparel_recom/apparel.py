@@ -2,11 +2,12 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import pickle
-import os
 import pathlib
+import logging
 
 PATH = pathlib.Path(__file__).parent
 
+logger = logging.getLogger(__name__)
 
 
 class ApparelRecommender:
@@ -29,6 +30,8 @@ class ApparelRecommender:
         self._tfidf = TfidfVectorizer(stop_words='english')
         self._features_matrix = None
         self._cosine_similarities = None
+
+        logger.info("ApparelRecommender initialized")
 
     def addApparelData(self, product_id, texture, color, clothes_type) -> bool:
 
@@ -59,9 +62,16 @@ class ApparelRecommender:
             
         #update the cosine similarities
         self._cosine_similarities = cosine_similarity(self._features_matrix)
+
+        logger.info(f"Added product_id: {product_id}, texture: {texture}, color: {color}, clothes_type: {clothes_type}")
+
         return True
 
-    def getTopRecommendations(self, product_id, n=5):
+    def getTopRecommendations(self, product_id):
+
+        '''
+        Returns the top n most similar products to a given product id
+        '''
 
         productType = self._apparel_data_PD.iloc[product_id][ApparelRecommender.CLOTHES_TYPE]
         productTexture = self._apparel_data_PD.iloc[product_id][ApparelRecommender.TEXTURE]
@@ -82,16 +92,22 @@ class ApparelRecommender:
         print(top_indices)
 
         if len(top_indices) == 0:
+            logger.info("There isn't enough data to make a recommendation")
             return "There isn't enough data to make a recommendation"
         
         for ind in top_indices:
             if productType == self._apparel_data_PD.iloc[ind][ApparelRecommender.CLOTHES_TYPE]:
                 return self._apparel_data_PD.iloc[ind]
 
-
+        logger.info(f"There isn't enough clothes of type {productType} to make a recommendation")
         return "There isn't enough data to make a recommendation"
     
     def getProductID(self, texture, color, clothes_type):
+        '''
+        Returns a tuple of either the product_id and 0 if the product is found 
+        or -1 and new product id if the product is not found
+        or -2 and 0 if there is no data
+        '''
         if self._apparel_data_PD is None:
             return (-2, 0)
         
@@ -123,20 +139,25 @@ class ApparelRecommender:
         else:
             self.addApparelData(len(self._apparel_data_PD[ApparelRecommender.PRODUCT_ID]), texture, color, clothes_type)
 
+        logger.info(f"User preferences updated: texture: {texture}, color: {color}, clothes_type: {clothes_type}")
+
     def saveUserPreference(self, filename):
         #Remove all colons from filename
         filename = filename.replace(':', '')
         filename = filename + '.pkl'
         pickle.dump(self._user_preferences, open(PATH.resolve()/ "pref" / filename, 'wb'))
 
+        logger.info(f"User preferences saved to {filename}")
+
     def loadUserPreference(self, filename) -> bool:
         filename = filename.replace(':', '')
         filename = filename + '.pkl'
         try:
             self._user_preferences = pickle.load(open(PATH.resolve()/ "pref" / filename, 'rb'))
+            logger.info(f"User preferences loaded from {filename}")
             return True
         except Exception as e:
-            # print(e)
+            logger.info(f"User preferences could NOT be loaded from {filename}")
             return False
         
     def saveUserDataset(self,filename):
@@ -144,6 +165,8 @@ class ApparelRecommender:
         filename = filename.replace(':', '')
         filename = filename + '.pkl'
         pickle.dump(self._apparel_data, open(PATH.resolve()/"dataset" / filename, 'wb'))
+
+        logger.info(f"User dataset saved to {filename}")
 
     def loadUserDataset(self, filename) -> bool:
         filename = filename.replace(':', '')
@@ -154,9 +177,10 @@ class ApparelRecommender:
             self._apparel_data_PD = pd.DataFrame(self._apparel_data)
             self._features_matrix = self._tfidf.fit_transform(self._apparel_data_PD[ApparelRecommender.TEXTURE] + ' ' + self._apparel_data_PD[ApparelRecommender.COLOR] + ' ' + self._apparel_data_PD[ApparelRecommender.CLOTHES_TYPE])
             self._cosine_similarities = cosine_similarity(self._features_matrix)
+            logger.info(f"User dataset loaded from {filename}")
             return True
         except Exception as e:
-            # print(e)
+            logger.info(f"User dataset could NOT be loaded from {filename}")
             return False
     
     
