@@ -151,11 +151,11 @@ class _RecommenderState extends State<Recommender> {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(
-        {
-          'clothesType': 'shirt',
-        },
-      ),
+      // body: jsonEncode(
+      //   {
+      //     'clothesType': 'shirt',
+      //   },
+      // ),
     );
     debugPrint('==================================${response.body}');
     debugPrint(

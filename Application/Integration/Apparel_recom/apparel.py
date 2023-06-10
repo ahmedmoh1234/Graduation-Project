@@ -103,7 +103,7 @@ class ApparelRecommender:
 
         self._fashionModule = FashionModule()
 
-        rules = []
+        rules = [Rule(("cotton", "green",None),("cotton", "black", "pants"))]
 
         for rule in rules:
             self._fashionModule.addRule(rule)
@@ -177,7 +177,7 @@ class ApparelRecommender:
         else:
             #select at random a top and bottom clothes that satisfy the rules
             for key in self._user_preferences.keys():
-                if key == "trousers" or key == "shorts" or key == "jeans" or key == "skirt":
+                if key == "trousers" or key == "short" or key == "jeans" or key == "skirt":
                     bottomClothes = (self._user_preferences[key][ApparelRecommender.TEXTURE], self._user_preferences[key][ApparelRecommender.COLOR], key)
                 else:
                     topClothes = (self._user_preferences[key][ApparelRecommender.TEXTURE], self._user_preferences[key][ApparelRecommender.COLOR], key)
@@ -274,7 +274,7 @@ class ApparelRecommender:
         else:
             self.addApparelData(len(self._apparel_data_PD[ApparelRecommender.PRODUCT_ID]), texture, color, clothes_type)
 
-        if clothes_type == "trousers" or clothes_type == "shorts" or clothes_type == "jeans" or clothes_type == "skirt":
+        if clothes_type == "trousers" or clothes_type == "short" or clothes_type == "jeans" or clothes_type == "skirt":
             self._fashionModule.setBottomClothes(texture, color, clothes_type)
         else:
             self._fashionModule.setTopClothes(texture, color, clothes_type)
@@ -297,7 +297,7 @@ class ApparelRecommender:
 
             #Set the top and bottom clothes in the fashion module
             for key in self._user_preferences.keys():
-                if key == "trousers" or key == "shorts" or key == "jeans" or key == "skirt":
+                if key == "trousers" or key == "short" or key == "jeans" or key == "skirt":
                     self._fashionModule.setBottomClothes(self._user_preferences[key][ApparelRecommender.TEXTURE], self._user_preferences[key][ApparelRecommender.COLOR], key)
                 else:
                     self._fashionModule.setTopClothes(self._user_preferences[key][ApparelRecommender.TEXTURE], self._user_preferences[key][ApparelRecommender.COLOR], key)

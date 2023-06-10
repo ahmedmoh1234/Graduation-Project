@@ -22,8 +22,8 @@ from Apparel_recom.apparel import ApparelRecommender
 
 
 # Run ipconfig in command prompt to get IP Address
-# IP_ADDRESS = '192.168.1.24'
-IP_ADDRESS = 'localhost'
+IP_ADDRESS = '192.168.1.13'
+# IP_ADDRESS = 'localhost'
 
 logging.basicConfig(filename='logs.log', level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logging.info("*" * 50)
@@ -85,9 +85,9 @@ def clothes_descriptor():
         response = translator.translate(response, dest='ar').text
     detected_clothes = dict()
     if (not(detected_clothes_list is None)):
-        detected_clothes['color'] = detected_clothes_list[0][0]
-        detected_clothes['type'] = detected_clothes_list[0][1]
-        detected_clothes['texture'] = detected_clothes_list[0][2]
+        detected_clothes['type'] = detected_clothes_list[0][0]
+        detected_clothes['texture'] = detected_clothes_list[0][1]
+        detected_clothes['color'] = detected_clothes_list[0][2]
     else:
         detected_clothes['color'] = "None"
         detected_clothes['type'] = "None"
@@ -95,6 +95,7 @@ def clothes_descriptor():
     result = dict()
     result['response_string'] = response_string 
     result['detected_clothes'] = detected_clothes
+    print(detected_clothes)
     return result
 
 @app.route('/face-detector', methods=['POST'])

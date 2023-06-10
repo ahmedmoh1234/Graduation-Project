@@ -460,8 +460,8 @@ class _HomeState extends State<Home> {
       (_) async {
         // await flutterTts.setLanguage("ar-EG");
         // await _speak('مرحبا');
-        await _speak(_greetingString);
         _initAlan();
+        await _speak(_greetingString);
         // AlanVoice.sendText('كيف الجو اليوم ؟');
         // await _startListening();
       },

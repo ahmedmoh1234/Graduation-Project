@@ -295,10 +295,10 @@ class _ClothesDescriptorState extends State<ClothesDescriptor> {
           ),
         );
         debugPrint('=====Choice = $choice1 =============');
-
-        if (choice1 == 'No') {
-          _speak('Do you want to add this to the Wardrobe ?');
+        if (choice1 == 'Yes') {
           _addPreference(detectedClothes);
+        } else if (choice1 == 'No') {
+          _speak('Do you want to add this to the Wardrobe ?');
           // Show Dialog Box
           // ignore: use_build_context_synchronously
           var choice2 = await showDialog(
