@@ -18,7 +18,7 @@ clothes_to_segmentation_classes = {
     "bracelet": [],
     "tie": [],
     "bag": [16],
-    "watch": [],
+    "watche": [],
     "scarf": [17],
     "boot": [9, 10],
     "sportshoes": [9, 10],
@@ -90,6 +90,7 @@ class ClothesDescriptor():
         )
         
         segmented_image = upsampled_logits.argmax(dim=1)[0]
+
         
         for i in range(len(bboxes)):
             class_id = class_ids[i]
@@ -97,7 +98,12 @@ class ClothesDescriptor():
             
             box_cloth_image = image[bboxes[i][1]:bboxes[i][3], bboxes[i][0]:bboxes[i][2]]
             segmented_cloth = self.select_cloth_pixels(segmented_image, image, detected_object)
-                          
+            plt.imshow(segmented_cloth)
+            plt.show()
+            if(clothes_to_segmentation_classes[detected_object] == []):
+                detected_clothes.append((detected_object,"",""))
+                continue
+
             color = self.detect_color(segmented_cloth)
             
             cloth_region = None
@@ -105,8 +111,6 @@ class ClothesDescriptor():
                 cloth_region = self.get_nonzero_rectangle(segmented_cloth)
             except:
                 cloth_region = box_cloth_image
-            plt.imshow(cloth_region)
-            plt.show()
              
             texture = ""
             
@@ -275,7 +279,7 @@ class YOLOSegmentation:
         return bboxes, class_ids
     
 clothes_detector = ClothesDescriptor()
-test_image = cv2.imread("./test1.jpg")
+test_image = cv2.imread("./test6.jpg")
 result = clothes_detector.describe_cloth(test_image)
 print(result[0])
 
