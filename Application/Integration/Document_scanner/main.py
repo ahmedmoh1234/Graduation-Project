@@ -16,12 +16,12 @@ def document_tesseract(img):
     
 
     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-
     # image_path = "image.jpg"
     # img = Image.open(image_path)
-    print(type(img))
+    # print(type(img))
     # i = cv2.imread(image_path)
     # print(type(i))
     text = pytesseract.image_to_string(img)
+    text.replace('\n', '')
     print("Extracted text:\n", text)
     return text
