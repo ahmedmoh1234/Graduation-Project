@@ -148,17 +148,30 @@ def currency_recognizer():
     result = document_tesseract(img)
     # result = currency_detector_ready(img)
     print('Result:', result)
-    return result
+    if (useArabic):
+        response = translator.translate(result, dest='ar').text
+    else:
+        response = result
+    return response
     
 @app.route('/document-reader', methods=['POST'])
 def document_reader():    
+    print('Document Reader')
     file = request.files['image']
     img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
+    # print(img.shape)
     # PILImage = Image.open(file.stream)
     # print(img.shape)
     # PILImage.show()
     result = document_tesseract(img)
-    return result
+    if (result == ''):
+        result = 'No text detected'
+
+    if (useArabic):
+        response = translator.translate(result, dest='ar').text
+    else:
+        response = result
+    return response
 
 prod_counter = 0
 @app.route('/product-identifier', methods=['POST'])
