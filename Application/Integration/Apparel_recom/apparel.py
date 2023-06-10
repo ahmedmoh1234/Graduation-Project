@@ -4,6 +4,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import pickle
 import pathlib
 import logging
+import matplotlib.pyplot as plt
 
 PATH = pathlib.Path(__file__).parent
 
@@ -136,6 +137,9 @@ class ApparelRecommender:
             
         #update the cosine similarities
         self._cosine_similarities = cosine_similarity(self._features_matrix)
+
+            
+
 
         logger.info(f"Added product_id: {product_id}, texture: {texture}, color: {color}, clothes_type: {clothes_type}")
 
@@ -353,3 +357,20 @@ if __name__ == '__main__':
 
     #check the rules
     print(fashionModule.checkRules())
+
+    #create an apparel recommender
+    apparelRecommender = ApparelRecommender()
+
+    #add some data
+    apparelRecommender.addApparelData(0, "cotton", "green", "t-shirt")
+    apparelRecommender.addApparelData(1, "cotton", "black", "t-shirt")
+    apparelRecommender.addApparelData(2, "silk", "black", "t-shirt")
+    apparelRecommender.addApparelData(3, "cotton", "black", "pants")
+    apparelRecommender.addApparelData(4, "silk", "black", "pants")
+    apparelRecommender.addApparelData(5, "cotton", "black", "shorts")
+
+    #set the user preferences
+    apparelRecommender.setUserPreferences("silk", "white", "t-shirt")
+    apparelRecommender.setUserPreferences("jeans", "black", "pants")
+
+
