@@ -22,7 +22,7 @@ class _ChatBotState extends State<ChatBot> {
   @override
   void initState() {
     super.initState();
-    _initSpeech();
+    // _initSpeech();
   }
 
   void _initSpeech() async {
@@ -136,42 +136,42 @@ class _ChatBotState extends State<ChatBot> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Container(
-              padding: const EdgeInsets.all(16),
-              child: const Text(
-                'Recognized words:',
-                style: TextStyle(fontSize: 20.0),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  // If listening is active show the recognized words
-                  _speechToText.isListening
-                      ? _lastWords
-                      // If listening isn't active but could be tell the user
-                      // how to start it, otherwise indicate that speech
-                      // recognition is not yet ready or not supported on
-                      // the target device
-                      : _speechEnabled
-                          ? _lastWords == ''
-                              ? 'Tap the microphone to start listening...'
-                              : _lastWords
-                          : 'Speech not available',
-                ),
-              ),
-            ),
+            // Container(
+            //   padding: const EdgeInsets.all(16),
+            //   child: const Text(
+            //     'Recognized words:',
+            //     style: TextStyle(fontSize: 20.0),
+            //   ),
+            // ),
+            // Expanded(
+            //   child: Container(
+            //     padding: const EdgeInsets.all(16),
+            //     child: Text(
+            //       // If listening is active show the recognized words
+            //       _speechToText.isListening
+            //           ? _lastWords
+            //           // If listening isn't active but could be tell the user
+            //           // how to start it, otherwise indicate that speech
+            //           // recognition is not yet ready or not supported on
+            //           // the target device
+            //           : _speechEnabled
+            //               ? _lastWords == ''
+            //                   ? 'Tap the microphone to start listening...'
+            //                   : _lastWords
+            //               : 'Speech not available',
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed:
-            // If not yet listening for speech start, otherwise stop
-            _speechToText.isNotListening ? _startListening : _stopListening,
-        tooltip: 'Listen',
-        child: Icon(_speechToText.isNotListening ? Icons.mic_off : Icons.mic),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed:
+      //       // If not yet listening for speech start, otherwise stop
+      //       _speechToText.isNotListening ? _startListening : _stopListening,
+      //   tooltip: 'Listen',
+      //   child: Icon(_speechToText.isNotListening ? Icons.mic_off : Icons.mic),
+      // ),
     );
   }
 }
