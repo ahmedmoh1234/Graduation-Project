@@ -55,4 +55,4 @@ def currency_detector_ready(currencyImg):
 
 
 
-# currency_detector_ready(cv2.imread(createAbsolutePaths('/100LE_1.jpg')))
+currency_detector_ready(cv2.imread(createAbsolutePaths('/100LE_1.jpg')))

@@ -22,7 +22,7 @@ from Apparel_recom.apparel import ApparelRecommender
 
 
 # Run ipconfig in command prompt to get IP Address
-IP_ADDRESS = '192.168.1.13'
+IP_ADDRESS = '192.168.1.17'
 # IP_ADDRESS = 'localhost'
 
 logging.basicConfig(filename='logs.log', level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -62,8 +62,8 @@ def command():
 def scene_descriptor():
     file = request.files['image']
     img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
+    print(img.shape)
     response = sceneDescriptor.estimate_depth(img)
-    # print(img.shape)
     # PILImage = Image.open(file.stream)
     # PILImage.show()
     # print(f"Scene Descriptor: {response}")
@@ -72,12 +72,15 @@ def scene_descriptor():
     return response
 
 
+
 @app.route('/clothes-descriptor', methods=['POST'])
 def clothes_descriptor():    
     file = request.files['image']
     img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
     # print(img.shape)
     # PILImage = Image.open(file.stream)
+    # PILImage.save(f'{np.random.rand()}.jpg')
+
     # PILImage.show()
     
     response_string, detected_clothes_list = clothesDescriptor.describe_cloth(img)
@@ -141,12 +144,13 @@ def emotion_recognizer():
 def currency_recognizer():    
     file = request.files['image']
     img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
+    print(img.shape)
     # PILImage = Image.open(file.stream)
     # PILImage.show()
     # img = cv2.imread('20LE_1.jpg')
     # result = currency_detect(img)
-    result = document_tesseract(img)
-    # result = currency_detector_ready(img)
+    # result = document_tesseract(img)
+    result = currency_detector_ready(img)
     print('Result:', result)
     if (useArabic):
         response = translator.translate(result, dest='ar').text
