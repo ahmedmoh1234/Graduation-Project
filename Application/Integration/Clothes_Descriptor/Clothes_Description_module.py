@@ -8,14 +8,10 @@ import pickle
 import torch
 import cv2
 from matplotlib import pyplot as plt
-from mrcnn.config import Config
-from mrcnn.model import MaskRCNN
 import warnings
-from feature_selection.feature_selection import FeatureSelector
-from feature_extraction.feature_extraction import FeatureExtractor
 from sklearn.cluster import KMeans
 from webcolors import rgb_to_name
-from imports import *
+
 
 warnings.filterwarnings("ignore")
 
@@ -26,6 +22,15 @@ PATH = pathlib.Path(__file__)
 PARENT = PATH.parent
 
 sys.path.append(str(PATH.parent))
+
+
+from feature_selection.feature_selection import FeatureSelector
+from feature_extraction.feature_extraction import FeatureExtractor
+from sklearn.cluster import KMeans
+from webcolors import rgb_to_name
+from imports import *
+from mrcnn.config import Config
+from mrcnn.model import MaskRCNN
 
 import warnings
 
@@ -66,14 +71,15 @@ class ClothesDescriptor:
 
         self.ys = YOLOSegmentation(PARENT.resolve() / "clothes_detection.pt")
         self.segmentation_model = pickle.load(
-            open("clothes_segmentation_model.pkl", "rb")
+            open(PARENT.resolve() / "clothes_segmentation_model.pkl", "rb")
         )
         self.segmentation_extractor = AutoFeatureExtractor.from_pretrained(
             "mattmdjaga/segformer_b2_clothes"
         )
 
+        
         self.rcnn = MaskRCNN(mode="inference", model_dir="./", config=TestConfig())
-        self.rcnn.load_weights("./mask_rcnn_deepfashion2_0100.h5", by_name=True)
+        self.rcnn.load_weights( 'D:\Senior II\Graduation Project\Graduation-Project\Application\Integration\Clothes_Descriptor\mask_rcnn_deepfashion2_0100.h5', by_name=True)
 
         self.deepfashion_clothes_classes = [
             "T_shirt",
@@ -172,8 +178,8 @@ class ClothesDescriptor:
         )
 
         segmented_image = upsampled_logits.argmax(dim=1)[0]
-        plt.imshow(segmented_image)
-        plt.show()
+        # plt.imshow(segmented_image)
+        # plt.show()
         if not (bboxes is None):
             for i in range(len(bboxes)):
                 class_id = class_ids[i]
@@ -185,8 +191,8 @@ class ClothesDescriptor:
                 segmented_cloth = self.select_cloth_pixels(
                     segmented_image, image, detected_object, 0
                 )
-                plt.imshow(segmented_cloth)
-                plt.show()
+                # plt.imshow(segmented_cloth)
+                # plt.show()
 
                 if self.ecommerce_clothes_to_segmentation_classes[detected_object] == []:
                     detected_clothes.append((detected_object, "", ""))
@@ -208,8 +214,8 @@ class ClothesDescriptor:
                 except:
                     cloth_region = box_cloth_image
 
-                plt.imshow(cloth_region)
-                plt.show()
+                # plt.imshow(cloth_region)
+                # plt.show()
                 texture = ""
 
                 try:
@@ -240,8 +246,8 @@ class ClothesDescriptor:
                     segmented_cloth = self.select_cloth_pixels(
                         segmented_image, image, detected_object, 1
                     )
-                    plt.imshow(segmented_cloth)
-                    plt.show()
+                    # plt.imshow(segmented_cloth)
+                    # plt.show()
                     color = self.detect_color(segmented_cloth)
 
                     cloth_region = None
@@ -250,8 +256,8 @@ class ClothesDescriptor:
                     except:
                         cloth_region = box_cloth_image
 
-                    plt.imshow(cloth_region)
-                    plt.show()
+                    # plt.imshow(cloth_region)
+                    # plt.show()
                     texture = ""
                     
                     try:
@@ -271,8 +277,8 @@ class ClothesDescriptor:
             result = (
                 "There is "
                 + self.p.a(detected_clothes[0][2])
-                + detected_clothes[0][1]
-                + detected_clothes[0][0]
+                + ' ' + detected_clothes[0][1]
+                + ' ' + detected_clothes[0][0]
                 + " in the image."
             )
 
@@ -483,6 +489,6 @@ class YOLOSegmentation:
         return bboxes, class_ids
 
 
-clothes_detector = ClothesDescriptor()
-test_image = cv2.imread("./test6.jpg")
-result = clothes_detector.describe_cloth(test_image)
+# clothes_detector = ClothesDescriptor()
+# test_image = cv2.imread("./test6.jpg")
+# result = clothes_detector.describe_cloth(test_image)

@@ -22,7 +22,7 @@ from Apparel_recom.apparel import ApparelRecommender
 
 
 # Run ipconfig in command prompt to get IP Address
-IP_ADDRESS = '192.168.1.17'
+IP_ADDRESS = '192.168.166.247'
 # IP_ADDRESS = 'localhost'
 
 logging.basicConfig(filename='logs.log', level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -30,10 +30,10 @@ logging.info("*" * 50)
 
 app = Flask(__name__)
 
-pd = ProductDetection('product_detect.pt')
-br = BrandRecognition('logo_detect.pt')
-emoDetector = loadEmoDetector()
-sceneDescriptor = SceneDescriptor("./Scene_Descriptor/weights/yolov8s-seg.pt")
+# pd = ProductDetection('product_detect.pt')
+# br = BrandRecognition('logo_detect.pt')
+# emoDetector = loadEmoDetector()
+# sceneDescriptor = SceneDescriptor("./Scene_Descriptor/weights/yolov8s-seg.pt")
 clothesDescriptor = ClothesDescriptor()
 ar = ApparelRecommender()
 translator = Translator()
@@ -77,11 +77,11 @@ def scene_descriptor():
 def clothes_descriptor():    
     file = request.files['image']
     img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
-    # print(img.shape)
-    # PILImage = Image.open(file.stream)
+    print(img.shape)
+    PILImage = Image.open(file.stream)
     # PILImage.save(f'{np.random.rand()}.jpg')
 
-    # PILImage.show()
+    PILImage.show()
     
     response_string, detected_clothes_list = clothesDescriptor.describe_cloth(img)
     if (useArabic):
