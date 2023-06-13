@@ -1,9 +1,13 @@
+from transformers import AutoFeatureExtractor, SegformerForSemanticSegmentation
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.utils import to_categorical
 from keras import regularizers
+import torch.nn as nn
+import torch
+
 
 from sklearn.decomposition import PCA
 from sklearn.model_selection import train_test_split
@@ -57,3 +61,8 @@ import hmmlearn.hmm as hmm
 import datetime
 import colorama
 import random
+from webcolors import rgb_to_name
+import webcolors
+from scipy import ndimage
+import inflect
+from ultralytics import YOLO

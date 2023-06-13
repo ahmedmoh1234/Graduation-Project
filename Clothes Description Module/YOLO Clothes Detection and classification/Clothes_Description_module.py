@@ -109,6 +109,8 @@ class ClothesDescriptor():
             cloth_region = None
             try:
                 cloth_region = self.get_nonzero_rectangle(segmented_cloth)
+                if(cloth_region.shape[0] <160 or cloth_region.shape[1] <160):
+                    cloth_region = box_cloth_image
             except:
                 cloth_region = box_cloth_image
              
@@ -164,6 +166,23 @@ class ClothesDescriptor():
         
         return predicted_texture
     
+    def get_nonzero_rectangle(self, image):
+        contours, _ = cv2.findContours(image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        largest_contour = max(contours, key=cv2.contourArea)
+
+        rect = cv2.minAreaRect(largest_contour)
+        box = cv2.boxPoints(rect)
+        box = np.int0(box)
+
+        min_x = max(np.min(box[:, 0]), 0)
+        max_x = min(np.max(box[:, 0]), image.shape[1])
+
+        min_y = max(np.min(box[:, 1]), 0)
+        max_y = min(np.max(box[:, 1]), image.shape[0])
+        
+        cloth_region = image[min_y:max_y, min_x:max_x]
+        return cloth_region
 
     def detect_color(self, image):
 

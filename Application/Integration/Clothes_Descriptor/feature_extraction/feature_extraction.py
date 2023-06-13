@@ -36,7 +36,7 @@ class FeatureExtractor:
         descs_features = []
         
         for image in images:
-            # image = self.data_loader.crop_center(image,width,height)
+            image = self.data_loader.crop_center(image,width,height)
             descs = daisy(  image, 
                             step=180,
                             radius=58,
