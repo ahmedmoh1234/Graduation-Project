@@ -12,10 +12,10 @@ import logging
 from googletrans import Translator
 from Face_Recognition.test import FaceDetector
 from Emotion_Recognition.main import  loadEmoDetector
-from Scene_Descriptor.Scene_Descriptor import SceneDescriptor
-from Clothes_Descriptor.Clothes_Description_module import ClothesDescriptor
+# from Scene_Descriptor.Scene_Descriptor import SceneDescriptor
+# from Clothes_Descriptor.Clothes_Description_module import ClothesDescriptor
 from Currency_Detector.currency_detector_implementation import currency_detect
-from Currency_Detector.currency_detect_model import currency_detector_ready
+# from Currency_Detector.currency_detect_model import currency_detector_ready
 from Document_scanner.main import document_tesseract
 from Product_Identifier.product_detect import ProductDetection, BrandRecognition, NewProductDetection
 from Apparel_recom.apparel import ApparelRecommender
@@ -33,10 +33,10 @@ app = Flask(__name__)
 # pd = ProductDetection('product_detect.pt')
 # br = BrandRecognition('logo_detect.pt')
 npd = NewProductDetection()
-emoDetector = loadEmoDetector()
-sceneDescriptor = SceneDescriptor("./Scene_Descriptor/weights/yolov8s-seg.pt")
-clothesDescriptor = ClothesDescriptor()
-ar = ApparelRecommender()
+# emoDetector = loadEmoDetector()
+# sceneDescriptor = SceneDescriptor("./Scene_Descriptor/weights/yolov8s-seg.pt")
+# clothesDescriptor = ClothesDescriptor()
+# ar = ApparelRecommender()
 translator = Translator()
 useArabic = False
 
@@ -151,7 +151,8 @@ def currency_recognizer():
     # img = cv2.imread('20LE_1.jpg')
     # result = currency_detect(img)
     # result = document_tesseract(img)
-    result = currency_detector_ready(img)
+    # result = currency_detector_ready(img)
+    result = ""
     print('Result:', result)
     if (useArabic):
         response = translator.translate(result, dest='ar').text
