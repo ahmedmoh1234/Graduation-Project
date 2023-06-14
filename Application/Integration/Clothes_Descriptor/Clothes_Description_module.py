@@ -270,7 +270,8 @@ class ClothesDescriptor:
             pass
         
         if len(detected_clothes) == 0:
-            return "Cannot detect any cloth in the image."
+            print("[FUNC] Cannot detect any cloth in the image.")
+            return "Cannot detect any cloth in the image.", []
              
         result = ""
         if len(detected_clothes) == 1:
