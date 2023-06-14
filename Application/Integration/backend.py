@@ -17,12 +17,12 @@ from Clothes_Descriptor.Clothes_Description_module import ClothesDescriptor
 from Currency_Detector.currency_detector_implementation import currency_detect
 from Currency_Detector.currency_detect_model import currency_detector_ready
 from Document_scanner.main import document_tesseract
-from Product_Identifier.product_detect import ProductDetection, BrandRecognition
+from Product_Identifier.product_detect import ProductDetection, BrandRecognition, NewProductDetection
 from Apparel_recom.apparel import ApparelRecommender
 
 
 # Run ipconfig in command prompt to get IP Address
-IP_ADDRESS = '192.168.166.247'
+IP_ADDRESS = '192.168.1.11'
 # IP_ADDRESS = 'localhost'
 
 logging.basicConfig(filename='logs.log', level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -32,8 +32,9 @@ app = Flask(__name__)
 
 # pd = ProductDetection('product_detect.pt')
 # br = BrandRecognition('logo_detect.pt')
-# emoDetector = loadEmoDetector()
-# sceneDescriptor = SceneDescriptor("./Scene_Descriptor/weights/yolov8s-seg.pt")
+npd = NewProductDetection()
+emoDetector = loadEmoDetector()
+sceneDescriptor = SceneDescriptor("./Scene_Descriptor/weights/yolov8s-seg.pt")
 clothesDescriptor = ClothesDescriptor()
 ar = ApparelRecommender()
 translator = Translator()
@@ -184,32 +185,31 @@ def product_identifier():
     global br
     file = request.files['image']
     img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
-    cv2.imwrite(f"product{prod_counter}.jpg", img)
+    # cv2.imwrite(f"product{prod_counter}.jpg", img)
     # PILImage = Image.open(file.stream)
     # print(img.shape)
     # PILImage.show()
-    product = {"soda can":["pepsi","coca cola"],
-               "water bottle" : ["nestle", "aquafina"],
-               "No logo detected" : ["no logo detected"]}
-    foundObjects = pd.predict(img)
-    finalStr = ""
-    for i in range(len(foundObjects)):
-        finalStr += foundObjects[i][1]
-        if finalStr == "":
-            finalStr = "No products found"
-            return finalStr
-        finalStr += " , "
-        temp = br.predict(img)
-        if temp in product[foundObjects[i][1]]:
-            finalStr += temp
-        else:
-            finalStr += "no logo detected"
+    # product = {"soda can":["pepsi","coca cola"],
+    #            "water bottle" : ["nestle", "aquafina"],
+    #            "No logo detected" : ["no logo detected"]}
+    # foundObjects = pd.predict(img)
+    # finalStr = ""
+    # for i in range(len(foundObjects)):
+    #     finalStr += foundObjects[i][1]
+    #     if finalStr == "":
+    #         finalStr = "No products found"
+    #         return finalStr
+    #     finalStr += " , "
+    #     temp = br.predict(img)
+    #     if temp in product[foundObjects[i][1]]:
+    #         finalStr += temp
+    #     else:
+    #         finalStr += "no logo detected"
 
-    if finalStr == "":
-        finalStr = "No products found"
+    # if finalStr == "":
+    #     finalStr = "No products found"
 
-
-    finalStr = 'Soda Can. Coca Cola'
+    finalStr = npd.predict(img)
 
     if (useArabic):
         response = translator.translate(finalStr, dest='ar').text

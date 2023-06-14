@@ -71,6 +71,51 @@ class ProductDetection():
         #     cv2.waitKey(0) 
 
         return foundObjects
+    
+
+class NewProductDetection():
+    def __init__(self) -> None:
+        self.orb = cv2.ORB_create(nfeatures=1000)
+        self.dataset = self.loadDataset(Path(__file__).parent.resolve() / "water_bottle", self.orb)
+        self.bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
+
+
+
+    def loadDataset(self, path, orb) -> dict:
+        dataset= dict()
+        path = str(path)
+        for filename in os.listdir(path):
+            #if it is a folder
+            if os.path.isdir(path + '/' + filename):
+                dataset[filename] = list()
+                for img in os.listdir(path + '/' + filename):
+                    #read the image
+                    image = cv2.imread(path + '/' + filename + '/' + img, cv2.IMREAD_GRAYSCALE)
+                    #detect the keypoints
+                    kp, des = orb.detectAndCompute(image, None)
+                    #add the keypoints and descriptors to the dataset
+                    dataset[filename].append((image,kp, des))
+        return dataset
+    
+    def predict(self, img) -> str:
+        kpTest, desTest = self.orb.detectAndCompute(img, None)
+        maxMatches = 0
+        match = None
+        for key in self.dataset.keys():
+            for _,kp, des in self.dataset[key]:
+                matches = self.bf.match(des, desTest)
+                if len(matches) > maxMatches:
+                    maxMatches = len(matches)
+                    match = key
+
+        if maxMatches < 200:
+            return "No product detected"
+        
+        #replace _ with space
+        print(maxMatches)
+        match = match.replace("_", " ")
+        result = f"This is a {match} water bottle"
+        return result
 
 
 if __name__ == "__main__":
